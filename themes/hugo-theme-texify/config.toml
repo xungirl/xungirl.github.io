@@ -77,7 +77,7 @@ toc = false               # whether to enable table of contents in posts
 [params.giscus]
 enable = false # whether to enable giscus
 # paste giscus' <script></script> configuration between the triple quotes
-script = """
+script = """ 784
 """
 
 [params.math]

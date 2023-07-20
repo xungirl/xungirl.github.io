@@ -1,2 +1,6 @@
 ../config.toml
 theme = "hugo-theme-texify"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
