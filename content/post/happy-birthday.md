@@ -9,8 +9,10 @@ tags: ["life"]
 
 
 
-<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/3636969143396D5C95B5B18FFB4C73D3.png" style="zoom: 25%;" />
+![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/3636969143396D5C95B5B18FFB4C73D3.png)
 
-<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/776D11D4CF792A4A3ADA259F286EE38F.png" style="zoom: 25%;" />
 
-<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/166D693630529A1E8FB15F0A6304EE0A.png" style="zoom: 25%;" />
+
+![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/776D11D4CF792A4A3ADA259F286EE38F.png)
+
+![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/166D693630529A1E8FB15F0A6304EE0A.png)
