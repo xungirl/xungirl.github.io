@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>index on My New Hugo Site</title>
+    <title>index on Blog by Maggie</title>
     <link>http://example.org/tags/index/</link>
-    <description>Recent content in index on My New Hugo Site</description>
+    <description>Recent content in index on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="http://example.org/tags/index/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Posts</title>
       <link>http://example.org/post/</link>
-      <pubDate>Tue, 18 Jul 2023 11:56:56 +0800</pubDate>
+      <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>http://example.org/post/</guid>
       

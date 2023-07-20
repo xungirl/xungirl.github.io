@@ -21,11 +21,10 @@ name = "Xunxun Zhang"          # your name
 
 # https://gohugo.io/getting-started/configuration-markup
 [markup]
-defaultMarkdownHandler = "goldmark"
-[markup.goldmark.renderer]
-unsafe = true # enable html in markdown
-[markup.highlight]
-style = "emacs" # syntax highlight style, see https://xyproto.github.io/splash/docs/
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 
 # https://gohugo.io/content-management/menus/
 [[menu.main]]
