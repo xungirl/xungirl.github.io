@@ -15,4 +15,4 @@ tags: ["life"]
 
 ![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/776D11D4CF792A4A3ADA259F286EE38F.png)
 
-![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/166D693630529A1E8FB15F0A6304EE0A.png)
+<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/166D693630529A1E8FB15F0A6304EE0A.png" style="zoom:50%;" />
