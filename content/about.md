@@ -32,7 +32,16 @@ author = "Hugo Authors"
 
 <ul>
   <li>React.js</li>
+  <li>Flask back-end framework</li>
+  <li>Leetcode exercise</li>
 </ul>
+
+<div>
+  <img src="E:\maggieblog\static\img\react-logo.svg" alt="react logo" height="100" style="margin-right:50px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="flask logo" height="100" style="margin-right:50px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/LeetCode_Logo_black_with_text.svg" alt="flask logo" height="100" >
+</div>
+
 
 <h2>Education</h2>
 
@@ -42,4 +51,8 @@ author = "Hugo Authors"
 
 <h2>Contact Me</h2>
 
-<a href="mailto:xungirl1024@gmail.com">xungirl1024@gmail.com</a>
+<a href="mailto:xungirl1024@gmail.com">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_(2020).svg" alt="Gmail logo" width="20" height="20">
+  xungirl1024@gmail.com
+</a>
+
