@@ -2,3 +2,7 @@ baseURL = 'http://example.org/'
 languageCode = 'en-us'
 title = 'Blog by Maggie'
 theme = "hugo-theme-texify"
+
+
+[markup.goldmark.renderer]
+unsafe = true
