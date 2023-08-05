@@ -53,8 +53,17 @@ author = "Hugo Authors"
 
 <h2>Contact Me</h2>
 
-<a href="mailto:xungirl1024@gmail.com">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_(2020).svg" alt="Gmail logo" width="20" height="20">
-  xungirl1024@gmail.com
-</a>
+<p style="margin-left: 40px;">
+  <a href="mailto:xungirl1024@gmail.com" style="color: #000000; text-decoration-color: #87CEFA;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_(2020).svg" alt="Gmail logo" width="20" height="20">
+    xungirl1024@gmail.com
+  </a>
+</p><br>
+<p style="margin-left: 40px;">
+  <a href="https://github.com/xungirl" style="color: #000000; text-decoration-color: #90ee90;">
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/github-mark.svg" alt="Github logo" width="20" height="20">
+    Maggie
+  </a>
+</p>
+
 
