@@ -17,14 +17,21 @@ author = "Hugo Authors"
 
 <ul>
   <li>Python & data analysis</li>
-  <li>VUE & Front-end Development</li>
+  <li>VUE.js & Front-end Development</li>
   <li>Machine Learning</li>
 </ul>
 <div>
-  <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg" alt="Python logo" height="130">
-  <img src="https://vuejs.org/images/logo.png" alt="Vue logo" height="130">
+  <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg" alt="Python logo" height="130" style="margin-right:50px;">
+  <img src="https://vuejs.org/images/logo.png" alt="Vue logo" height="130" style="margin-right:50px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Ubuntu-logo-2022.svg" alt="Vue logo" height="130" style="margin-right:50px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="Vue logo" height="130">
 </div>
 
+<h2>Ongoing</h2>
+
+<ul>
+  <li>React.js</li>
+</ul>
 
 <h2>Education</h2>
 
