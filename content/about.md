@@ -31,16 +31,18 @@ author = "Hugo Authors"
 <h2>Ongoing</h2>
 
 <ul>
-  <li>React.js</li>
-  <li>Flask back-end framework</li>
-  <li>Leetcode exercise</li>
+    <li>React.js</li>
+    <li>Flask back-end framework</li>
+    <li>Leetcode exercise</li>
 </ul>
-
 <div>
-  <img src="E:\maggieblog\static\img\react-logo.svg" alt="react logo" height="100" style="margin-right:50px;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="flask logo" height="100" style="margin-right:50px;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/LeetCode_Logo_black_with_text.svg" alt="flask logo" height="100" >
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg" alt="react logo" height="80" style="margin-right:50px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" alt="flask logo" height="80" style="margin-right:50px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/LeetCode_Logo_black_with_text.svg" alt="flask logo" height="80" >
 </div>
+
+
+
 
 
 <h2>Education</h2>
