@@ -9,8 +9,26 @@ tags: ["life"]
 
 <!--more-->
 
-<script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-<div class="elfsight-app-4a0f0ea7-15e0-4c8c-a4b8-7dfedcb4e51b"></div>
+<!-- 天气显示区域 -->
+<div id="weather-info">
+    <p>南京天气: <span id="temperature"></span>°C, <span id="description"></span></p>
+</div>
+
+<script>
+    const API_KEY = "13014273332be0f221173b22cb4db50d"; // 替换为你的 API 密钥
+    const CITY = "Nanjing";
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("temperature").textContent = data.main.temp;
+        document.getElementById("description").textContent = data.weather[0].description;
+    })
+    .catch(error => {
+        console.error("Error fetching weather data:", error);
+    });
+</script>
+
 
 
 #  Meal
