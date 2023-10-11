@@ -9,6 +9,29 @@ tags: ["life"]
 
 <!--more-->
 
+<!-- 天气显示区域 -->
+<div id="weather-info">
+    <p>南京天气: <span id="temperature"></span>°C, <span id="description"></span></p>
+</div>
+
+<!-- JavaScript 代码 -->
+
+<script>
+    const API_KEY = "13014273332be0f221173b22cb4db50d"; // 替换为你的 API 密钥
+    const CITY = "Nanjing";
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("temperature").textContent = data.main.temp;
+        document.getElementById("description").textContent = data.weather[0].description;
+    })
+    .catch(error => {
+        console.error("Error fetching weather data:", error);
+    });
+</script>
+
+
 #  Meal
 
 - 海底捞
