@@ -62,7 +62,5 @@ tags: ["life"]
 
 
 
-![](https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/201901071546843938345812.jpg)
-
 
 
