@@ -11,7 +11,7 @@ tags: ["life"]
 
 <!-- 天气显示区域 -->
 <div id="weather-info">
-    <p>南京天气: <span id="temperature"></span>°C, <span id="description"></span></p>
+    <p>南京天气: <span id="temperature"></span>°C, <span id="description"></span>（实时监测）</p>
 </div>
 
 <script>
