@@ -1,8 +1,7 @@
 ---
 title: "Merry Christmas"
-date: "2023-12-25"
+date: "2023-12-24"
 tags: ["life"]
-
 ---
 
 <!-- 在这里插入您的 HTML 代码 -->
@@ -11,7 +10,7 @@ tags: ["life"]
 <head>
 	<meta charset="utf-8" />
 	<title>圣诞快乐</title>
-	
+
 	<!-- <link rel="stylesheet" type="text/css" href="index.css"/> -->
 	<style>
 		html,
