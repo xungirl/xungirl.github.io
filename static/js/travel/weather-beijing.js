@@ -1,4 +1,4 @@
-const API_KEY = "13014273332be0f221173b22cb4db50d";
+const API_KEY = "98eea154d90a973c9308bc1ad870d145";
 const CITY = "Beijing";
 
 fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`)
