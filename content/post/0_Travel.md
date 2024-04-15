@@ -19,7 +19,7 @@ tags: ["life"]
 <div id="weather-info-beijing">
     <p>北京天气: <span id="temperature-beijing"></span>°C, <span id="description-beijing"></span>(real time)</p>
 </div>
-<script src="/js/weather-beijing.js"></script>
+<script src="/js/travel/weather-beijing.js"></script>
 
 
 
