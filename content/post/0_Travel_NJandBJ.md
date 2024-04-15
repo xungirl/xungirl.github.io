@@ -1,5 +1,5 @@
 ---
-title: "Travel | NanKing"
+title: "Travel "
 date: "2023-10-10"
 tags: ["life"]
 
@@ -10,6 +10,7 @@ tags: ["life"]
 <!--more-->
 
 <!-- 天气显示区域 -->
+
 <div id="weather-info-nanjing">
     <p>南京天气: <span id="temperature-nanjing"></span>°C, <span id="description-nanjing"></span></p>
 </div>
