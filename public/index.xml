@@ -6,19 +6,156 @@
     <description>Recent content on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Happy Birthday | 21</title>
-      <link>http://example.org/post/happy-birthday/</link>
-      <pubDate>Thu, 20 Jul 2023 00:00:00 +0000</pubDate>
+      <title>Site log| PIN</title>
+      <link>http://example.org/post/0_history-version/</link>
+      <pubDate>Tue, 16 Apr 2024 11:20:39 +0800</pubDate>
       
-      <guid>http://example.org/post/happy-birthday/</guid>
+      <guid>http://example.org/post/0_history-version/</guid>
       
-      <description>&lt;p&gt;&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/F4BCF6FBD0CBD77BDB32C8C54FFE68FF.png&#34; alt=&#34;From my friend&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/3636969143396D5C95B5B18FFB4C73D3.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/776D11D4CF792A4A3ADA259F286EE38F.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+      <description>&lt;!DOCTYPE html&gt;
+&lt;html lang=&#34;en&#34;&gt;
+&lt;head&gt;
+&lt;meta charset=&#34;UTF-8&#34;&gt;
+&lt;title&gt;Site Log | PIN&lt;/title&gt;
+&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;
+&lt;style&gt;
+    .version-history {
+        margin-top: 20px;
+        font-size: 16px;
+        text-align: center;
+    }
+    .entry {
+        margin-bottom: 10px;
+        overflow: auto;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+    .entry-header {
+        font-weight: bold;
+    }
+    .entry-header span:first-child {
+        float: left;
+    }
+    .entry-header span:last-child {
+        float: right;
+    }
+    .entry-content {
+        clear: both;
+        padding-top: 5px;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h5 class=&#34;version-history&#34;&gt;Version History&lt;/h5&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.2&lt;/span&gt;
+        &lt;span&gt;Apr. 16th, 24&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Submitted website to Google Search Console, changed language to English completely, added site log inspired by the AppStore.
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.1&lt;/span&gt;
+        &lt;span&gt;Aug. 5th, 23&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Filled and decorated the about page, introduced the technology stack.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.0&lt;/span&gt;
+        &lt;span&gt;Jul. 17th, 23&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Created this site inspiration from &lt;a href=&#34;https://blog.preminstrel.com/&#34;&gt;sun&#39;s blog&lt;/a&gt;, less is more.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.2.1&lt;/span&gt;
+        &lt;span&gt;Jun. 7th, 22&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Changed the theme to &lt;a href=&#34;https://github.com/fluid-dev/hexo-theme-fluid&#34;&gt;Fluid&lt;/a&gt; by Hexo, simplified site, added red-heart icon in footer.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.2.0&lt;/span&gt;
+        &lt;span&gt;Jun. 1st, 22&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Changed the theme to next by Hexo, set domain from &lt;a href=&#34;https://buy.cloud.tencent.com/domain&#34;&gt;Tencent Cloud&lt;/a&gt;, added comments by waline+LeanCloud. (&lt;a href=&#34;http://xungirl.cn&#34;&gt;previous blog&lt;/a&gt;)
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.1.0&lt;/span&gt;
+        &lt;span&gt;Oct. 5st, 21&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Established a personal site by Hexo &amp; Github for the first,because the article on CSDN was deleted for no reason,sad and determined to move to github.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.0.0&lt;/span&gt;
+        &lt;span&gt;Jul. 6st, 21&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Determined to write a personal blog, after learning C and starting to learn Python.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
 </description>
+      
+    </item>
+    
+    <item>
+      <title>Graduation| Latex OCR by Pytorch</title>
+      <link>http://example.org/post/1_graduation_project/</link>
+      <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/1_graduation_project/</guid>
+      
+      <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Travel </title>
+      <link>http://example.org/post/0_travel_njandbj/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/0_travel_njandbj/</guid>
+      
+      <description>&lt;!-- 天气显示区域 --&gt;
+&lt;p&gt;&lt;strong&gt;Temperature&lt;/strong&gt;&lt;/p&gt;
+&lt;div id=&#34;weather-info-beijing&#34;&gt;
+    &lt;p&gt;PeiKing: &lt;span id=&#34;temperature-beijing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-beijing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
+&lt;/div&gt;
+&lt;script src=&#34;http://example.org/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
+&lt;div id=&#34;weather-info-nanjing&#34;&gt;
+    &lt;p&gt;NanJing: &lt;span id=&#34;temperature-nanjing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-nanjing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
+&lt;/div&gt;
+&lt;script src=&#34;http://example.org/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
       
     </item>
     
@@ -29,21 +166,54 @@
       
       <guid>http://example.org/about/</guid>
       
-      <description>&lt;h2 id=&#34;about-me&#34;&gt;About Me&lt;/h2&gt;
-&lt;h3 id=&#34;xunxun--zhang---张讯迅&#34;&gt;Xunxun · Zhang |  张讯迅&lt;/h3&gt;
-&lt;p&gt;I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school&amp;rsquo;s Baidu &lt;em&gt;pp&lt;/em&gt; AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.&lt;/p&gt;
-&lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
+      <description>&lt;h2&gt;About Me&lt;/h2&gt;
+&lt;h3&gt;Xunxun · Zhang&lt;/h3&gt;
+&lt;p&gt;I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school&#39;s Baidu &lt;em&gt;pp&lt;/em&gt; AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.&lt;/p&gt;
+&lt;!-- 引入 Chart.js --&gt;
+&lt;script src=&#34;https://cdn.jsdelivr.net/npm/chart.js&#34;&gt;&lt;/script&gt;
+&lt;!-- 雷达图的 HTML --&gt;
+&lt;p&gt;&lt;canvas id=&#34;myChart&#34; width=&#34;100&#34; height=&#34;100&#34;&gt;&lt;/canvas&gt;&lt;/p&gt;
+&lt;!-- 引入雷达图的 JavaScript --&gt;
+&lt;script src=&#34;http://example.org/js/radarChart.js&#34;&gt;&lt;/script&gt;
+&lt;h2&gt;Skills&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Python &amp;amp; data analysis&lt;/li&gt;
-&lt;li&gt;VUE &amp;amp; Front-end Development&lt;/li&gt;
-&lt;li&gt;Machine Learning&lt;/li&gt;
+  &lt;li&gt;Python &amp; Data analysis&lt;/li&gt;
+  &lt;li&gt;VUE.js &amp; Front-end Development&lt;/li&gt;
+  &lt;li&gt;Machine Learning&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;education&#34;&gt;Education&lt;/h2&gt;
+&lt;div&gt;
+  &lt;img src=&#34;https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg&#34; alt=&#34;Python logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Matlab_Logo%20(1).png&#34; alt=&#34; matlab logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
+  &lt;img src=&#34;https://vuejs.org/images/logo.png&#34; alt=&#34;Vue logo&#34; height=&#34;80&#34; style=&#34;margin-right:30px;&#34;&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Ubuntu-logo-2022.svg&#34; alt=&#34;ubuntu logo&#34; height=&#34;80&#34; style=&#34;margin-right:30px;&#34;&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg&#34; alt=&#34;typescript logo&#34; height=&#34;80&#34; &gt;&lt;/div&gt;
+&lt;h2&gt;Ongoing&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Bachelor of Science in information management, University of Zhengzhou, 2020 - 2024&lt;/li&gt;
+    &lt;li&gt;React.js&lt;/li&gt;
+    &lt;li&gt;Digital Circuits&lt;/li&gt;
+    &lt;li&gt;Leetcode exercise&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;contact-me&#34;&gt;Contact Me&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;mailto:xungirl1024@gmail.com&#34;&gt;xungirl1024@gmail.com&lt;/a&gt;&lt;/p&gt;
+&lt;div&gt;
+    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg&#34; alt=&#34;react logo&#34; height=&#34;80&#34; style=&#34;margin-right:50px;&#34;&gt;
+    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Leetcode.svg&#34; alt=&#34;flask logo&#34; height=&#34;80&#34; &gt;
+&lt;/div&gt;
+&lt;h2&gt;Education&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Bachelor of Science in information management, University of Zhengzhou, 2020 - 2024&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Contact Me&lt;/h2&gt;
+&lt;p style=&#34;margin-left: 40px;&#34;&gt;
+  &lt;a href=&#34;mailto:xungirl1024@gmail.com&#34; style=&#34;color: #000000; text-decoration-color: #87CEFA;&#34;&gt;
+    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Gmail_icon_(2020).svg&#34; alt=&#34;Gmail logo&#34; width=&#34;20&#34; height=&#34;20&#34;&gt;
+    xungirl1024@gmail.com
+  &lt;/a&gt;
+&lt;/p&gt;&lt;br&gt;
+&lt;p style=&#34;margin-left: 40px;&#34;&gt;
+  &lt;a href=&#34;https://github.com/xungirl&#34; style=&#34;color: #000000; text-decoration-color: #90ee90;&#34;&gt;
+    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/github-mark.svg&#34; alt=&#34;Github logo&#34; width=&#34;20&#34; height=&#34;20&#34;&gt;
+    Maggie
+  &lt;/a&gt;
+&lt;/p&gt;
 </description>
       
     </item>
