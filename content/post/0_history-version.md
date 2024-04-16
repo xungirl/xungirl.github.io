@@ -14,6 +14,8 @@ weight: 1
 <span style="float:left; font-weight:bold;">1.3.2</span><span style="float:right; font-weight:bold;">Apr. 16th,24</span>
 Submitted website to Google Search Console,changed language to English completely,added site log inspired by the AppStore.
 
+<!--more-->
+
 -----------
 <span style="float:left; font-weight:bold;">1.3.1</span><span style="float:right; font-weight:bold;">Aug. 5th,23</span>
 Filled and decorated the about page,introduced the technology stack.
