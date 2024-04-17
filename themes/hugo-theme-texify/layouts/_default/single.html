@@ -17,9 +17,6 @@
   {{ end }}
   <h1>
     {{ .Title }}
-    {{ if eq .Params.weight 1 }}
-      <i class="bi bi-pin-angle-fill"></i> <!-- 替换成你想要的图标类 -->
-    {{ end }}
   </h1>
   {{ if ne .Params.tags nil }}
   <div>
