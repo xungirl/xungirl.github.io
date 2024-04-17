@@ -17,6 +17,9 @@
   {{ end }}
   <h1>
     {{ .Title }}
+    {{ if eq .Params.weight 1 }}
+      <i class="bi bi-pin-angle"></i> <!-- 这里使用了 Bootstrap Icons 的 'pin-fill' 图标 -->
+    {{ end }}
   </h1>
   {{ if ne .Params.tags nil }}
   <div>

@@ -9,6 +9,9 @@
   <div class="post">
     <h2>
       <a href="{{ .Permalink }}">{{ .Title }}</a>
+      {{ if eq .Params.weight 1 }}
+      <i class="bi bi-pin-angle" icon-spacing></i>
+      {{ end }}
       <time>{{ .PublishDate.Format .Site.Params.dateFormat }}</time>
     </h2>
     {{ if ne .Params.tags nil }}
