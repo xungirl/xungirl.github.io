@@ -15,7 +15,12 @@
   <div class="warning">{{ printf .Site.Params.outdated.warning $days | safeHTML }}</div>
   {{ end }}
   {{ end }}
-  <h1>{{ .Title }}</h1>
+  <h1>
+    {{ .Title }}
+    {{ if eq .Params.weight 1 }}
+      <i class="fas fa-thumbtack"></i> <!-- 替换成你想要的图标类 -->
+    {{ end }}
+  </h1>
   {{ if ne .Params.tags nil }}
   <div>
     <b>Keywords: </b>
