@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Blog by Maggie</title>
+    <link>http://example.org/post/</link>
+    <description>Recent content in Posts on Blog by Maggie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="http://example.org/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Site log| PIN</title>
+      <link>http://example.org/post/0_history-version/</link>
+      <pubDate>Tue, 16 Apr 2024 11:20:39 +0800</pubDate>
+      
+      <guid>http://example.org/post/0_history-version/</guid>
+      
+      <description>&lt;!DOCTYPE html&gt;
+&lt;html lang=&#34;en&#34;&gt;
+&lt;head&gt;
+&lt;meta charset=&#34;UTF-8&#34;&gt;
+&lt;title&gt;Site Log | PIN&lt;/title&gt;
+&lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34;&gt;
+&lt;style&gt;
+    .version-history {
+        margin-top: 20px;
+        font-size: 16px;
+        text-align: center;
+    }
+    .entry {
+        margin-bottom: 10px;
+        overflow: auto;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+    .entry-header {
+        font-weight: bold;
+    }
+    .entry-header span:first-child {
+        float: left;
+    }
+    .entry-header span:last-child {
+        float: right;
+    }
+    .entry-content {
+        clear: both;
+        padding-top: 5px;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h5 class=&#34;version-history&#34;&gt;Version History&lt;/h5&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.2&lt;/span&gt;
+        &lt;span&gt;Apr. 16th, 24&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Submitted website to Google Search Console, changed language to English completely, added site log inspired by the AppStore.
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.1&lt;/span&gt;
+        &lt;span&gt;Aug. 5th, 23&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Filled and decorated the about page, introduced the technology stack.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.0&lt;/span&gt;
+        &lt;span&gt;Jul. 17th, 23&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Created this site inspiration from &lt;a href=&#34;https://blog.preminstrel.com/&#34;&gt;sun&#39;s blog&lt;/a&gt;, less is more.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.2.1&lt;/span&gt;
+        &lt;span&gt;Jun. 7th, 22&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Changed the theme to &lt;a href=&#34;https://github.com/fluid-dev/hexo-theme-fluid&#34;&gt;Fluid&lt;/a&gt; by Hexo, simplified site, added red-heart icon in footer.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.2.0&lt;/span&gt;
+        &lt;span&gt;Jun. 1st, 22&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Changed the theme to next by Hexo, set domain from &lt;a href=&#34;https://buy.cloud.tencent.com/domain&#34;&gt;Tencent Cloud&lt;/a&gt;, added comments by waline+LeanCloud. (&lt;a href=&#34;http://xungirl.cn&#34;&gt;previous blog&lt;/a&gt;)
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.1.0&lt;/span&gt;
+        &lt;span&gt;Oct. 5st, 21&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Established a personal site by Hexo &amp; Github for the first,because the article on CSDN was deleted for no reason,sad and determined to move to github.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.0.0&lt;/span&gt;
+        &lt;span&gt;Jul. 6st, 21&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Determined to write a personal blog, after learning C and starting to learn Python.
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Graduation| Latex OCR by Pytorch</title>
+      <link>http://example.org/post/1_graduation_project/</link>
+      <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/1_graduation_project/</guid>
+      
+      <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Travel </title>
+      <link>http://example.org/post/0_travel_njandbj/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/0_travel_njandbj/</guid>
+      
+      <description>&lt;!-- 天气显示区域 --&gt;
+&lt;p&gt;&lt;strong&gt;Temperature&lt;/strong&gt;&lt;/p&gt;
+&lt;div id=&#34;weather-info-beijing&#34;&gt;
+    &lt;p&gt;PeiKing: &lt;span id=&#34;temperature-beijing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-beijing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
+&lt;/div&gt;
+&lt;script src=&#34;http://example.org/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
+&lt;div id=&#34;weather-info-nanjing&#34;&gt;
+    &lt;p&gt;NanJing: &lt;span id=&#34;temperature-nanjing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-nanjing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
+&lt;/div&gt;
+&lt;script src=&#34;http://example.org/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>
