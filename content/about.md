@@ -31,11 +31,13 @@ author = "Hugo Authors"
   <li>Machine Learning</li>
 </ul>
 <div>
-  <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg" alt="Python logo" height="80" style="margin-right:20px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/python-logo-only.svg" alt="Python logo" height="80" style="margin-right:20px;">
   <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Matlab_Logo%20(1).png" alt=" matlab logo" height="80" style="margin-right:20px;">
-  <img src="https://vuejs.org/images/logo.png" alt="Vue logo" height="80" style="margin-right:30px;">
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Ubuntu-logo-2022.svg" alt="ubuntu logo" height="80" style="margin-right:30px;">
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg" alt="typescript logo" height="80" ></div>
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg" alt="typescript logo" height="80" style="margin-right:30px;">
+  <img src="https://vuejs.org/images/logo.png" alt="Vue logo" height="80" style="margin-right:20px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg" alt="react logo" height="80">
+  </div>
+
 
 
 
@@ -43,14 +45,13 @@ author = "Hugo Authors"
 <h2>Ongoing</h2>
 
 <ul>
-    <li>React.js</li>
-    <li>Digital Circuits</li>
-    <li>Leetcode exercise</li>
+    <li>Data Science</li>
 </ul>
 <div>
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg" alt="react logo" height="80" style="margin-right:50px;">
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Leetcode.svg" alt="flask logo" height="80" >
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/site-logo.svg" alt="kaggle logo" height="60" style="margin-right:30px;">
 </div>
+
+
 
 
 
