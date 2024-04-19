@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>this site on Blog by Maggie</title>
-    <link>http://example.org/tags/this-site/</link>
+    <link>https://xun.best/tags/this-site/</link>
     <description>Recent content in this site on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="http://example.org/tags/this-site/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="https://xun.best/tags/this-site/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Site log| PIN</title>
-      <link>http://example.org/post/0_history-version/</link>
+      <title>Site Log</title>
+      <link>https://xun.best/post/0_history-version/</link>
       <pubDate>Tue, 16 Apr 2024 11:20:39 +0800</pubDate>
       
-      <guid>http://example.org/post/0_history-version/</guid>
+      <guid>https://xun.best/post/0_history-version/</guid>
       
       <description>&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
@@ -50,6 +50,16 @@
 &lt;body&gt;
 
 &lt;h5 class=&#34;version-history&#34;&gt;Version History&lt;/h5&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.4&lt;/span&gt;
+        &lt;span&gt;Apr. 18th, 24&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Config hugo.mod,added icons support &lt;a href=&#34;https://icons.hugomods.com/&#34;&gt;icons support&lt;/a&gt;,altered the theme files(layouts) for &#39;pin&#39; icon.
+    &lt;/div&gt;
+&lt;/div&gt;
 
 &lt;div class=&#34;entry&#34;&gt;
     &lt;div class=&#34;entry-header&#34;&gt;

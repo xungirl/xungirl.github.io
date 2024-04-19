@@ -2,41 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/post/0_history-version/</loc>
+    <loc>https://xun.best/post/0_history-version/</loc>
     <lastmod>2024-04-16T11:20:39+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>https://xun.best/</loc>
     <lastmod>2024-04-16T11:20:39+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/post/</loc>
+    <loc>https://xun.best/post/</loc>
     <lastmod>2024-04-16T11:20:39+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://xun.best/tags/</loc>
     <lastmod>2024-04-16T11:20:39+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/this-site/</loc>
+    <loc>https://xun.best/tags/this-site/</loc>
     <lastmod>2024-04-16T11:20:39+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/cs/</loc>
+    <loc>https://xun.best/tags/cs/</loc>
     <lastmod>2023-11-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/post/1_graduation_project/</loc>
+    <loc>https://xun.best/post/1_graduation_project/</loc>
     <lastmod>2023-11-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/life/</loc>
+    <loc>https://xun.best/tags/life/</loc>
     <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/post/0_travel_njandbj/</loc>
+    <loc>https://xun.best/post/0_travel_njandbj/</loc>
     <lastmod>2023-10-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/about/</loc>
+    <loc>https://xun.best/about/</loc>
     <lastmod>2023-07-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/archives/</loc>
+    <loc>https://xun.best/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://xun.best/categories/</loc>
   </url><url>
-    <loc>http://example.org/tags/index/</loc>
+    <loc>https://xun.best/tags/index/</loc>
   </url>
 </urlset>

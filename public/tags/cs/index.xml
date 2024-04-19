@@ -2,19 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CS on Blog by Maggie</title>
-    <link>http://example.org/tags/cs/</link>
+    <link>https://xun.best/tags/cs/</link>
     <description>Recent content in CS on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/tags/cs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xun.best/tags/cs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Graduation| Latex OCR by Pytorch</title>
-      <link>http://example.org/post/1_graduation_project/</link>
+      <link>https://xun.best/post/1_graduation_project/</link>
       <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/1_graduation_project/</guid>
+      <guid>https://xun.best/post/1_graduation_project/</guid>
       
       <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
+&lt;svg aria-hidden=&#34;true&#34; class=&#34;bi bi-house hi-svg-inline&#34; fill=&#34;currentColor&#34; height=&#34;1em&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;1em&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;
+  &lt;path d=&#34;M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z&#34;/&gt;
+&lt;/svg&gt;
+
 </description>
       
     </item>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog by Maggie</title>
-    <link>http://example.org/</link>
+    <link>https://xun.best/</link>
     <description>Recent content on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="https://xun.best/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Site log| PIN</title>
-      <link>http://example.org/post/0_history-version/</link>
+      <title>Site Log</title>
+      <link>https://xun.best/post/0_history-version/</link>
       <pubDate>Tue, 16 Apr 2024 11:20:39 +0800</pubDate>
       
-      <guid>http://example.org/post/0_history-version/</guid>
+      <guid>https://xun.best/post/0_history-version/</guid>
       
       <description>&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
@@ -50,6 +50,16 @@
 &lt;body&gt;
 
 &lt;h5 class=&#34;version-history&#34;&gt;Version History&lt;/h5&gt;
+
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.4&lt;/span&gt;
+        &lt;span&gt;Apr. 18th, 24&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Config hugo.mod,added icons support &lt;a href=&#34;https://icons.hugomods.com/&#34;&gt;icons support&lt;/a&gt;,altered the theme files(layouts) for &#39;pin&#39; icon.
+    &lt;/div&gt;
+&lt;/div&gt;
 
 &lt;div class=&#34;entry&#34;&gt;
     &lt;div class=&#34;entry-header&#34;&gt;
@@ -139,42 +149,46 @@
     
     <item>
       <title>Graduation| Latex OCR by Pytorch</title>
-      <link>http://example.org/post/1_graduation_project/</link>
+      <link>https://xun.best/post/1_graduation_project/</link>
       <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/1_graduation_project/</guid>
+      <guid>https://xun.best/post/1_graduation_project/</guid>
       
       <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
+&lt;svg aria-hidden=&#34;true&#34; class=&#34;bi bi-house hi-svg-inline&#34; fill=&#34;currentColor&#34; height=&#34;1em&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;1em&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;
+  &lt;path d=&#34;M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z&#34;/&gt;
+&lt;/svg&gt;
+
 </description>
       
     </item>
     
     <item>
       <title>Travel </title>
-      <link>http://example.org/post/0_travel_njandbj/</link>
+      <link>https://xun.best/post/0_travel_njandbj/</link>
       <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/0_travel_njandbj/</guid>
+      <guid>https://xun.best/post/0_travel_njandbj/</guid>
       
       <description>&lt;!-- 天气显示区域 --&gt;
 &lt;p&gt;&lt;strong&gt;Temperature&lt;/strong&gt;&lt;/p&gt;
 &lt;div id=&#34;weather-info-beijing&#34;&gt;
     &lt;p&gt;PeiKing: &lt;span id=&#34;temperature-beijing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-beijing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
 &lt;/div&gt;
-&lt;script src=&#34;http://example.org/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://xun.best/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
 &lt;div id=&#34;weather-info-nanjing&#34;&gt;
     &lt;p&gt;NanJing: &lt;span id=&#34;temperature-nanjing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-nanjing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
 &lt;/div&gt;
-&lt;script src=&#34;http://example.org/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
+&lt;script src=&#34;https://xun.best/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
       
     </item>
     
     <item>
       <title>About</title>
-      <link>http://example.org/about/</link>
+      <link>https://xun.best/about/</link>
       <pubDate>Thu, 13 Jul 2023 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/about/</guid>
+      <guid>https://xun.best/about/</guid>
       
       <description>&lt;h2&gt;About Me&lt;/h2&gt;
 &lt;h3&gt;Xunxun · Zhang&lt;/h3&gt;
@@ -184,7 +198,7 @@
 &lt;!-- 雷达图的 HTML --&gt;
 &lt;p&gt;&lt;canvas id=&#34;myChart&#34; width=&#34;100&#34; height=&#34;100&#34;&gt;&lt;/canvas&gt;&lt;/p&gt;
 &lt;!-- 引入雷达图的 JavaScript --&gt;
-&lt;script src=&#34;http://example.org/js/radarChart.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://xun.best/js/radarChart.js&#34;&gt;&lt;/script&gt;
 &lt;h2&gt;Skills&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;Python &amp; Data analysis&lt;/li&gt;
@@ -192,20 +206,18 @@
   &lt;li&gt;Machine Learning&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div&gt;
-  &lt;img src=&#34;https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/files/python-logo-only.svg&#34; alt=&#34;Python logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/python-logo-only.svg&#34; alt=&#34;Python logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
   &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Matlab_Logo%20(1).png&#34; alt=&#34; matlab logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
-  &lt;img src=&#34;https://vuejs.org/images/logo.png&#34; alt=&#34;Vue logo&#34; height=&#34;80&#34; style=&#34;margin-right:30px;&#34;&gt;
-  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Ubuntu-logo-2022.svg&#34; alt=&#34;ubuntu logo&#34; height=&#34;80&#34; style=&#34;margin-right:30px;&#34;&gt;
-  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg&#34; alt=&#34;typescript logo&#34; height=&#34;80&#34; &gt;&lt;/div&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg&#34; alt=&#34;typescript logo&#34; height=&#34;80&#34; style=&#34;margin-right:30px;&#34;&gt;
+  &lt;img src=&#34;https://vuejs.org/images/logo.png&#34; alt=&#34;Vue logo&#34; height=&#34;80&#34; style=&#34;margin-right:20px;&#34;&gt;
+  &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg&#34; alt=&#34;react logo&#34; height=&#34;80&#34;&gt;
+  &lt;/div&gt;
 &lt;h2&gt;Ongoing&lt;/h2&gt;
 &lt;ul&gt;
-    &lt;li&gt;React.js&lt;/li&gt;
-    &lt;li&gt;Digital Circuits&lt;/li&gt;
-    &lt;li&gt;Leetcode exercise&lt;/li&gt;
+    &lt;li&gt;Data Science&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div&gt;
-    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg&#34; alt=&#34;react logo&#34; height=&#34;80&#34; style=&#34;margin-right:50px;&#34;&gt;
-    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Leetcode.svg&#34; alt=&#34;flask logo&#34; height=&#34;80&#34; &gt;
+    &lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/site-logo.svg&#34; alt=&#34;kaggle logo&#34; height=&#34;60&#34; style=&#34;margin-right:30px;&#34;&gt;
 &lt;/div&gt;
 &lt;h2&gt;Education&lt;/h2&gt;
 &lt;ul&gt;
@@ -230,10 +242,10 @@
     
     <item>
       <title></title>
-      <link>http://example.org/archives/</link>
+      <link>https://xun.best/archives/</link>
       <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/archives/</guid>
+      <guid>https://xun.best/archives/</guid>
       
       <description></description>
       
