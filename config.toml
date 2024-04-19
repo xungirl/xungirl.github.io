@@ -3,7 +3,7 @@ post###################################################
 # https://gohugo.io/getting-started/configuration #
 ###################################################
 
-baseURL = "https://xungirl.github.io/" # website root path
+baseURL = "https://xungirl.github.io/"    # website root path
 disqusShortname = ""                      # disqus shortcode
 enableGitInfo = false                     # retrieve last modified date from git commits
 enableRobotsTXT = true                    # /robots.txt
