@@ -11,7 +11,7 @@ author = "Hugo Authors"
 
 <h3>Xunxun · Zhang</h3>
 
-<p>I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school's Baidu <em>pp</em> AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.</p>
+<p>I am a senior at the School of Information Management of Zhengzhou University. I self-learn Python during the summer vacation of my freshman year. In  sophomore , joined the school's Baidu <em>pp</em> AI Lab and acquired machine learning and algorithm. Arrived junior,participated in CUMCM and MCM applying Machine Learning.Then,I had learned software development skills,like Vue.js,React etc.And did some front-end and data analysis projects.Now I hope to become a front-end engineer as soon as possible and make up for my shortcomings in mathematics.</p>
 
 <!-- 引入 Chart.js -->
 
