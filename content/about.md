@@ -14,6 +14,7 @@ author = "Hugo Authors"
 <p>I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school's Baidu <em>pp</em> AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.</p>
 
 <!-- 引入 Chart.js -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- 雷达图的 HTML -->
@@ -21,22 +22,25 @@ author = "Hugo Authors"
 <canvas id="myChart" width="100" height="100"></canvas>
 
 <!-- 引入雷达图的 JavaScript -->
+
 <script src="/js/radarChart.js"></script>
 
 <h2>Skills</h2>
 
 <ul>
-  <li>Python & Data analysis</li>
-  <li>VUE.js & Front-end Development</li>
-  <li>Machine Learning</li>
+  <li>Machine Learning & Data analysis</li>
+  <li>Front-end Development</li>
 </ul>
 <div>
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/python-logo-only.svg" alt="Python logo" height="80" style="margin-right:20px;">
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Matlab_Logo%20(1).png" alt=" matlab logo" height="80" style="margin-right:20px;">
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Typescript_logo_2020.svg" alt="typescript logo" height="80" style="margin-right:30px;">
-  <img src="https://vuejs.org/images/logo.png" alt="Vue logo" height="80" style="margin-right:20px;">
-  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/react-logo.svg" alt="react logo" height="80">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/flutter.svg" alt="flutter logo" height="80" style="margin-right:25px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/vue.svg" alt="Vue logo" height="80" style="margin-right:25px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/React-logo-vector.svg" alt="react logo" height="80" style="margin-right:25px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/tensorflow.svg" alt="tensorflow logo" height="80" style="margin-right:25px;">
+  <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/pytorch-icon.svg" alt=" pytorch logo" height="80">
   </div>
+
+
+
 
 
 
