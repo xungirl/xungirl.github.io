@@ -1,4 +1,4 @@
-baseURL = 'http://example.com'
+baseURL = 'http://example.org'
 languageCode = 'en-us'
 title = 'Blog by Maggie'
 theme = "hugo-theme-texify"
