@@ -15,15 +15,20 @@ author = "Hugo Authors"
 
 <!-- 引入 Chart.js -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    canvas {
+        width: 61.8%; 
+        height: auto;
+    }
 
-<!-- 雷达图的 HTML -->
+</style>
 
-<canvas id="myChart" width="100" height="100"></canvas>
-
-<!-- 引入雷达图的 JavaScript -->
+<div style="width:100%; max-width:600px; margin:auto;">
+    <canvas id="myChart"></canvas>
+</div>
 
 <script src="/js/radarChart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <h2>Skills</h2>
 

@@ -5,5 +5,3 @@ tags: ["CS"]
 ---
 
 # Introduce
-
-{{< ico bootstrap house >}}
