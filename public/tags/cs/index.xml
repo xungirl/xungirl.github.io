@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CS on Blog by Maggie</title>
-    <link>https://xun.best/tags/cs/</link>
+    <link>https://xungirl.github.io/tags/cs/</link>
     <description>Recent content in CS on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xun.best/tags/cs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://xungirl.github.io/tags/cs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Graduation| Latex OCR by Pytorch</title>
-      <link>https://xun.best/post/1_graduation_project/</link>
+      <link>https://xungirl.github.io/post/1_graduation_project/</link>
       <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://xun.best/post/1_graduation_project/</guid>
+      <guid>https://xungirl.github.io/post/1_graduation_project/</guid>
       
       <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
 &lt;svg aria-hidden=&#34;true&#34; class=&#34;bi bi-house hi-svg-inline&#34; fill=&#34;currentColor&#34; height=&#34;1em&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;1em&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;

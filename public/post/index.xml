@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Blog by Maggie</title>
-    <link>https://xun.best/post/</link>
+    <link>https://xungirl.github.io/post/</link>
     <description>Recent content in Posts on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="https://xun.best/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="https://xungirl.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Site Log</title>
-      <link>https://xun.best/post/0_history-version/</link>
+      <link>https://xungirl.github.io/post/0_history-version/</link>
       <pubDate>Tue, 16 Apr 2024 11:20:39 +0800</pubDate>
       
-      <guid>https://xun.best/post/0_history-version/</guid>
+      <guid>https://xungirl.github.io/post/0_history-version/</guid>
       
       <description>&lt;!DOCTYPE html&gt;
 &lt;html lang=&#34;en&#34;&gt;
@@ -149,10 +149,10 @@
     
     <item>
       <title>Graduation| Latex OCR by Pytorch</title>
-      <link>https://xun.best/post/1_graduation_project/</link>
+      <link>https://xungirl.github.io/post/1_graduation_project/</link>
       <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://xun.best/post/1_graduation_project/</guid>
+      <guid>https://xungirl.github.io/post/1_graduation_project/</guid>
       
       <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
 &lt;svg aria-hidden=&#34;true&#34; class=&#34;bi bi-house hi-svg-inline&#34; fill=&#34;currentColor&#34; height=&#34;1em&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;1em&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;
@@ -165,21 +165,21 @@
     
     <item>
       <title>Travel </title>
-      <link>https://xun.best/post/0_travel_njandbj/</link>
+      <link>https://xungirl.github.io/post/0_travel_njandbj/</link>
       <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://xun.best/post/0_travel_njandbj/</guid>
+      <guid>https://xungirl.github.io/post/0_travel_njandbj/</guid>
       
       <description>&lt;!-- 天气显示区域 --&gt;
 &lt;p&gt;&lt;strong&gt;Temperature&lt;/strong&gt;&lt;/p&gt;
 &lt;div id=&#34;weather-info-beijing&#34;&gt;
     &lt;p&gt;PeiKing: &lt;span id=&#34;temperature-beijing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-beijing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
 &lt;/div&gt;
-&lt;script src=&#34;https://xun.best/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://xungirl.github.io/js/travel/weather-beijing.js&#34;&gt;&lt;/script&gt;
 &lt;div id=&#34;weather-info-nanjing&#34;&gt;
     &lt;p&gt;NanJing: &lt;span id=&#34;temperature-nanjing&#34;&gt;&lt;/span&gt;°C, &lt;span id=&#34;description-nanjing&#34;&gt;&lt;/span&gt;(real time)&lt;/p&gt;
 &lt;/div&gt;
-&lt;script src=&#34;https://xun.best/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
+&lt;script src=&#34;https://xungirl.github.io/js/travel/weather-nanjing.js&#34;&gt;&lt;/script&gt;</description>
       
     </item>
     
