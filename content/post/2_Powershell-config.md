@@ -69,7 +69,7 @@ path is location of on-my-posh.if your username is Chinese,it will be garbled an
 
 open this link [Nerd Fonts - Iconic font aggregator, glyphs/icons collection, & fonts patcher](https://www.nerdfonts.com/) select one satisfying yourself and download it.After downloaded it ,click and run it to install on your PC.
 
-4.open your terminal, setting.json,find the following code.Insert front name your select.
+4.open your terminal, setting.json,find the following code.Insert font name your select.
 
 ```json
 {
