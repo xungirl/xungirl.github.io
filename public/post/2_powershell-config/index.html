@@ -11,7 +11,7 @@
 
   
   
-  <meta name="description" content="an example site for hugo theme TeXify">
+  <meta name="description" content="我是你迅姐姐🍕">
   
 
   
@@ -123,14 +123,14 @@
 <li>
 <p>Install Powershell7 by using Winget</p>
 <p>running the command to seach available versions</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget search Microsoft.PowerShell
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget search Microsoft.PowerShell
 </span></span></code></pre></div><p>it will output</p>
 <pre tabindex="0"><code>Name               Id                           Version   Source
 -----------------------------------------------------------------
 PowerShell         Microsoft.PowerShell         7.4.2.0   winget
 PowerShell Preview Microsoft.PowerShell.Preview 7.5.0.2   winget
 </code></pre><p>you can use <code>id</code> to choose</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install --id Microsoft.Powershell --source winget
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install --id Microsoft.Powershell --source winget
 </span></span><span style="display:flex;"><span>winget install --id Microsoft.Powershell.Preview --source winget
 </span></span></code></pre></div></li>
 <li>
@@ -143,37 +143,37 @@ PowerShell Preview Microsoft.PowerShell.Preview 7.5.0.2   winget
 <p>Now we install Poweshell7 successfully,but for a patient with OCD, beautifying it is necessary.</p>
 <p>Achieving it we need to install a package <a href="https://ohmyposh.dev/">Home | Oh My Posh</a>,it provide some themes which are selected and makes your interface more colorful.</p>
 <p>1.Open your Powershell and run this cmd</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install JanDeDobbeleer.OhMyPosh -s winget
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install JanDeDobbeleer.OhMyPosh -s winget
 </span></span></code></pre></div><p>2.Run another amd to config environment variables</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$env:Path += <span style="color:#e6db74">&#34;;C:\Users\user\AppData\Local\Programs\oh-my-posh\bin&#34;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#b8860b">$env:Path</span> += <span style="color:#b44">&#34;;C:\Users\user\AppData\Local\Programs\oh-my-posh\bin&#34;</span>
 </span></span></code></pre></div><p>path is location of on-my-posh.if your username is Chinese,it will be garbled and the environment variables will be invalid,so I advise you move it to another location and config location variables.</p>
 <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240421203821.png" alt="微信图片_20240421203821" style="zoom: 67%;" />
 <p>3.on-my-posh is compatible nerd font</p>
 <p>open this link <a href="https://www.nerdfonts.com/">Nerd Fonts - Iconic font aggregator, glyphs/icons collection, &amp; fonts patcher</a> select one satisfying yourself and download it.After downloaded it ,click and run it to install on your PC.</p>
 <p>4.open your terminal, setting.json,find the following code.Insert font name your select.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;profiles&#34;</span>:
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008000;font-weight:bold">&#34;profiles&#34;</span>:
 </span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;defaults&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008000;font-weight:bold">&#34;defaults&#34;</span>:
 </span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;font&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#008000;font-weight:bold">&#34;font&#34;</span>:
 </span></span><span style="display:flex;"><span>            {
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;face&#34;</span>: <span style="color:#e6db74">&#34;MesloLGM Nerd Font&#34;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#008000;font-weight:bold">&#34;face&#34;</span>: <span style="color:#b44">&#34;MesloLGM Nerd Font&#34;</span>
 </span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>5.config your termnal</p>
 <p>1)input this cmd to open the config file</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>notepad $PROFILE
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>notepad <span style="color:#b8860b">$PROFILE</span>
 </span></span></code></pre></div><p>2)paste this code to the nodepad</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>oh-my-posh init pwsh --config <span style="color:#e6db74">&#34;</span>$env:POSH_THEMES_PATH<span style="color:#e6db74">\jandedobbeleer.omp.json&#34;</span> | Invoke-Expression 
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#a2f">oh-my</span>-posh init pwsh --config <span style="color:#b44">&#34;</span><span style="color:#b8860b">$env:POSH_THEMES_PATH</span><span style="color:#b44">\jandedobbeleer.omp.json&#34;</span> | <span style="color:#a2f">Invoke-Expression</span> 
 </span></span></code></pre></div><p>3)run this code to list themes</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-PoshThemes
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#a2f">Get-PoshThemes</span>
 </span></span></code></pre></div><p>4)choose what you like and replace<code>jandedobbeleer</code>,like me</p>
 <pre tabindex="0"><code>oh-my-posh init pwsh --config &#34;$env:POSH_THEMES_PATH\atomic.omp.json&#34; | Invoke-Expression 
 </code></pre><p>6.install icons</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Install-Module -Name Terminal-Icons -Repository PSGallery
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span><span style="color:#a2f">Install-Module</span> -Name <span style="color:#a2f">Terminal-Icons</span> -Repository PSGallery
 </span></span></code></pre></div><p>import to profile</p>
 <pre tabindex="0"><code>Import-Module -Name Terminal-Icons
 </code></pre><p>Finally,restart your windows terminal and powershell.</p>
