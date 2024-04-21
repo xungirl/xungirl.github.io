@@ -55,7 +55,7 @@ tags = "tags"
 ########################
 
 [params]
-description = "an example site for hugo theme TeXify" # website description
+description = "我是你迅姐姐🍕" # website description
 favicon = "favicon.ico" # path to website icon, relative to ./static
 footnote = """
 Follow me on <a class=link href=https://github.com/xungirl>GitHub</a>,
