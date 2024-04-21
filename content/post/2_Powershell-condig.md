@@ -2,7 +2,7 @@
 title: "Powershell Config"
 date: 2024-04-21T11:26:19+08:00
 draft: false
-tags: ["Shell","Termainl"]
+tags: ["Shell","Terminal"]
 ---
 
 <!--more-->
