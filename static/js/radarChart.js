@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
             responsive: true,
             maintainAspectRatio: false,
             animation: {
-                duration: 1000, // 设置动画持续时间为1秒
+                duration: 3000, // 设置动画持续时间为1秒
                 easing: 'easeInOutQuart' // 使用缓动函数使动画更加自然
             },
             scale: {
