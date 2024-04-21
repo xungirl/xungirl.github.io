@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  
+  <meta name="author" content="">
+
+  
+  
+  <meta name="description" content="an example site for hugo theme TeXify">
+  
+
+  
+  <link rel="icon" href="https://xungirl.github.io/favicon.ico">
+
+  
+  
+  <meta name="keywords" content=" hugo  latex  theme ">
+  
+
+  
+  
+
+  
+  <meta property="og:title" content="Powershell Config" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://xungirl.github.io/post/2_powershell-config/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-04-21T11:26:19+08:00" />
+<meta property="article:modified_time" content="2024-04-21T11:26:19+08:00" />
+
+
+  
+  <link rel="canonical" href="https://xungirl.github.io/post/2_powershell-config/">
+
+  
+  
+  <meta itemprop="name" content="Powershell Config">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2024-04-21T11:26:19+08:00" />
+<meta itemprop="dateModified" content="2024-04-21T11:26:19+08:00" />
+<meta itemprop="wordCount" content="324">
+<meta itemprop="keywords" content="Shell,Terminal," />
+
+  
+  <link media="screen" rel="stylesheet" href='https://xungirl.github.io/css/common.css'>
+  <link media="screen" rel="stylesheet" href='https://xungirl.github.io/css/content.css'>
+
+  
+  
+  <title>Powershell Config - Blog by Maggie</title>
+  
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Powershell Config"/>
+<meta name="twitter:description" content=""/>
+
+
+  
+<link rel="stylesheet" href='https://xungirl.github.io/css/single.css'>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link href="/css/pin.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1>
+    <a href="https://xungirl.github.io/">Blog by Maggie</a>
+  </h1>
+
+  <nav>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/">Post</a>
+    </span>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/post/">Archives</a>
+    </span>
+    
+    <span class="nav-bar-item">
+      <a class="link" href="/about/">About</a>
+    </span>
+    
+  </nav>
+  
+
+</header>
+
+    
+<main id="main" class="post">
+  
+  
+  <h1>
+    Powershell Config
+    
+  </h1>
+  
+  <div>
+    <b>Keywords: </b>
+    
+    <a class="link" href='https://xungirl.github.io/tags/shell'>#Shell</a>
+    
+    <a class="link" href='https://xungirl.github.io/tags/terminal'>#Terminal</a>
+    
+  </div>
+  
+  
+  <article class="content">
+    
+    <h1 id="download">Download</h1>
+<p>First,you need to download <code>Powershell7</code> to replace Windows PowerShell5.1,Powershell7 has been designed specially for cloud,local and mix environment.For example,it provides based SSH remote processing,Docker containers,cross platform etc.</p>
+<p>Recommend three main ways to acquire it:</p>
+<ul>
+<li>
+<p>Install Powershell7 by using Winget</p>
+<p>running the command to seach available versions</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget search Microsoft.PowerShell
+</span></span></code></pre></div><p>it will output</p>
+<pre tabindex="0"><code>Name               Id                           Version   Source
+-----------------------------------------------------------------
+PowerShell         Microsoft.PowerShell         7.4.2.0   winget
+PowerShell Preview Microsoft.PowerShell.Preview 7.5.0.2   winget
+</code></pre><p>you can use <code>id</code> to choose</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install --id Microsoft.Powershell --source winget
+</span></span><span style="display:flex;"><span>winget install --id Microsoft.Powershell.Preview --source winget
+</span></span></code></pre></div></li>
+<li>
+<p>Install Powershell7 by releases on Github</p>
+<p><a href="https://github.com/PowerShell/powershell/releases">Click</a> and choose the latest to install,it provides MSI  and ZIP.</p>
+<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/image-20240421184336361.png" alt="image-20240421184336361" style="zoom:80%;" />
+</li>
+</ul>
+<h1 id="beautify">Beautify</h1>
+<p>Now we install Poweshell7 successfully,but for a patient with OCD, beautifying it is necessary.</p>
+<p>Achieving it we need to install a package <a href="https://ohmyposh.dev/">Home | Oh My Posh</a>,it provide some themes which are selected and makes your interface more colorful.</p>
+<p>1.Open your Powershell and run this cmd</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>winget install JanDeDobbeleer.OhMyPosh -s winget
+</span></span></code></pre></div><p>2.Run another amd to config environment variables</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$env:Path += <span style="color:#e6db74">&#34;;C:\Users\user\AppData\Local\Programs\oh-my-posh\bin&#34;</span>
+</span></span></code></pre></div><p>path is location of on-my-posh.if your username is Chinese,it will be garbled and the environment variables will be invalid,so I advise you move it to another location and config location variables.</p>
+<img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240421203821.png" alt="微信图片_20240421203821" style="zoom: 67%;" />
+<p>3.on-my-posh is compatible nerd font</p>
+<p>open this link <a href="https://www.nerdfonts.com/">Nerd Fonts - Iconic font aggregator, glyphs/icons collection, &amp; fonts patcher</a> select one satisfying yourself and download it.After downloaded it ,click and run it to install on your PC.</p>
+<p>4.open your terminal, setting.json,find the following code.Insert font name your select.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;profiles&#34;</span>:
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;defaults&#34;</span>:
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;font&#34;</span>:
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;face&#34;</span>: <span style="color:#e6db74">&#34;MesloLGM Nerd Font&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>5.config your termnal</p>
+<p>1)input this cmd to open the config file</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>notepad $PROFILE
+</span></span></code></pre></div><p>2)paste this code to the nodepad</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>oh-my-posh init pwsh --config <span style="color:#e6db74">&#34;</span>$env:POSH_THEMES_PATH<span style="color:#e6db74">\jandedobbeleer.omp.json&#34;</span> | Invoke-Expression 
+</span></span></code></pre></div><p>3)run this code to list themes</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Get-PoshThemes
+</span></span></code></pre></div><p>4)choose what you like and replace<code>jandedobbeleer</code>,like me</p>
+<pre tabindex="0"><code>oh-my-posh init pwsh --config &#34;$env:POSH_THEMES_PATH\atomic.omp.json&#34; | Invoke-Expression 
+</code></pre><p>6.install icons</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>Install-Module -Name Terminal-Icons -Repository PSGallery
+</span></span></code></pre></div><p>import to profile</p>
+<pre tabindex="0"><code>Import-Module -Name Terminal-Icons
+</code></pre><p>Finally,restart your windows terminal and powershell.</p>
+<p><img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/image-20240421210119245.png" alt="display" title="product display"></p>
+    
+  </article>
+  <div class="paginator">
+    
+    <a class="link" href="https://xungirl.github.io/post/1_graduation_project/">← prev</a>
+    
+    
+    <a class="link" href="https://xungirl.github.io/post/0_history-version/">next →</a>
+    
+  </div>
+  <div class="comment">
+    
+    
+    
+    
+    
+    
+  </div>
+  
+</main>
+
+    <footer id="footer">
+  <div>
+    <span>Powered by </span>
+    <a class="link" href="https://git-scm.com/">
+      <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Git-Icon-1788C.svg" alt="git Logo" style="height: 20px; width: auto;"/>
+    </a>
+    <span>and</span>
+    <a class="link" href="https://docs.github.com/en/actions/">
+      <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/github-actions.svg" alt="Hugo Logo" style="height: 20px; width: auto;"/>
+    </a>
+    
+
+    
+  </div>
+  <div id="running-time">Running safely <span id="time">0d0h0min0s</span></div>
+  
+  <script src="/js/runningtime.js"></script>
+  
+  </div>
+
+  
+  
+
+  
+  
+
+  
+  
+
+</body>
+
+</html>

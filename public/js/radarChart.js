@@ -1,26 +1,58 @@
-// radarChart.js
-document.addEventListener('DOMContentLoaded', function () {
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+// chart-setup.js
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['前端', '数据库', '算法', '硬件', '底层', '人工智能'],
+            labels: ['Front-end', 'Fundamentals', 'Hardware', 'Back-end', 'Mathematik', 'AI'],
             datasets: [{
-                label: '技能评分',
-                data: [30, 10, 20, 0, 20, 40],
+                label: 'AI algorithm engineer',
+                data: [40, 85, 75, 70, 95, 100],
                 fill: true,
-                backgroundColor: 'rgba(118, 238, 198, 0.2)',
-                borderColor: 'rgb(84 255 159)',
-                pointBackgroundColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(135, 206, 235, 0.2)', // 天蓝色背景
+                borderColor: 'rgb(135, 206, 235)', // 天蓝色边框
+                pointBackgroundColor: 'rgb(135, 206, 235)',
                 pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 99, 132)'
+                pointRadius: 2 ,// 设置点的大小
+                borderWidth: 1
+            }, {
+                label: 'Software development engineer',
+                data: [70, 90, 60, 85, 60, 50],
+                fill: true,
+                backgroundColor: 'rgba(147, 197, 114, 0.2)', // 开心果绿背景
+                borderColor: 'rgb(147, 197, 114)', // 开心果绿边框
+                pointBackgroundColor: 'rgb(147, 197, 114)',
+                pointBorderColor: '#fff',
+                pointRadius: 2 ,// 设置点的大小
+                borderWidth: 1
             }]
         },
         options: {
-            elements: {
-                line: {
-                    borderWidth: 1
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 3000, // 设置动画持续时间为1秒
+                easing: 'easeInOutQuart' // 使用缓动函数使动画更加自然
+            },
+            scale: {
+                ticks: {
+                    beginAtZero: true,
+                    display: false
+                },
+                gridLines: {
+                    color: 'rgba(0,0,0,0)' // 使网格线透明
+                },
+                angleLines: {
+                    color: 'rgba(0,0,0,0)' // 使角度线透明
+                },
+                backgroundColor: 'rgba(255, 165, 0, 0.2)', // 设置雷达图六边形内部背景为浅橙色
+                pointLabels: {
+                    fontSize: 20
+                },
+            },
+            plugins:{
+                legend: {
+                    display: false 
                 }
             }
         }

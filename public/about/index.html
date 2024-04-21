@@ -42,7 +42,7 @@
   <meta itemprop="name" content="About">
 <meta itemprop="description" content="Hugo, the world&#39;s fastest framework for building websites"><meta itemprop="datePublished" content="2023-07-13T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-07-13T00:00:00+00:00" />
-<meta itemprop="wordCount" content="107">
+<meta itemprop="wordCount" content="115">
 <meta itemprop="keywords" content="" />
 
   
@@ -101,13 +101,20 @@
   <article class="content">
     <h2>About Me</h2>
 <h3>Xunxun · Zhang</h3>
-<p>I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school's Baidu <em>pp</em> AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.</p>
+<p>I am a senior at the School of Information Management of Zhengzhou University. I self-learn Python during the summer vacation of my freshman year. In  sophomore , joined the school's Baidu <em>pp</em> AI Lab and acquired machine learning and algorithm. Arrived junior,participated in CUMCM and MCM applying Machine Learning.Then,I had learned software development skills,like Vue.js,React etc.And did some front-end and data analysis projects.Now I hope to become a front-end engineer as soon as possible and make up for my shortcomings in mathematics.</p>
 <!-- 引入 Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- 雷达图的 HTML -->
-<p><canvas id="myChart" width="100" height="100"></canvas></p>
-<!-- 引入雷达图的 JavaScript -->
+<style>
+    canvas {
+        width: 61.8%; 
+        height: auto;
+    }
+
+</style>
+<div style="width:100%; max-width:600px; margin:auto;">
+    <canvas id="myChart"></canvas>
+</div>
 <script src="/js/radarChart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <h2>Skills</h2>
 <ul>
   <li>Machine Learning & Data analysis</li>
@@ -149,15 +156,24 @@
   
 </main>
 
-    
+    <footer id="footer">
   <div>
     <span>Powered by </span>
-    <a class="link" href="https://gohugo.io/">Hugo</a>
-    <span> 🍦 Theme </span>
-    <a class="link" href="https://github.com/queensferryme/hugo-theme-texify">TeXify</a>
+    <a class="link" href="https://git-scm.com/">
+      <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Git-Icon-1788C.svg" alt="git Logo" style="height: 20px; width: auto;"/>
+    </a>
+    <span>and</span>
+    <a class="link" href="https://docs.github.com/en/actions/">
+      <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/github-actions.svg" alt="Hugo Logo" style="height: 20px; width: auto;"/>
+    </a>
+    
+
+    
   </div>
-
-
+  <div id="running-time">Running safely <span id="time">0d0h0min0s</span></div>
+  
+  <script src="/js/runningtime.js"></script>
+  
   </div>
 
   

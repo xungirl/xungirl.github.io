@@ -6,7 +6,7 @@
     <description>Recent content on Blog by Maggie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Apr 2024 11:20:39 +0800</lastBuildDate><atom:link href="https://xungirl.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Apr 2024 11:26:19 +0800</lastBuildDate><atom:link href="https://xungirl.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Site Log</title>
       <link>https://xungirl.github.io/post/0_history-version/</link>
@@ -50,6 +50,15 @@
 &lt;body&gt;
 
 &lt;h5 class=&#34;version-history&#34;&gt;Version History&lt;/h5&gt;
+&lt;div class=&#34;entry&#34;&gt;
+    &lt;div class=&#34;entry-header&#34;&gt;
+        &lt;span&gt;1.3.5&lt;/span&gt;
+        &lt;span&gt;Apr. 19th, 24&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&#34;entry-content&#34;&gt;
+        Set DNS and decorated the footer.
+    &lt;/div&gt;
+&lt;/div&gt;
 
 &lt;div class=&#34;entry&#34;&gt;
     &lt;div class=&#34;entry-header&#34;&gt;
@@ -148,6 +157,78 @@
     </item>
     
     <item>
+      <title>Powershell Config</title>
+      <link>https://xungirl.github.io/post/2_powershell-config/</link>
+      <pubDate>Sun, 21 Apr 2024 11:26:19 +0800</pubDate>
+      
+      <guid>https://xungirl.github.io/post/2_powershell-config/</guid>
+      
+      <description>&lt;h1 id=&#34;download&#34;&gt;Download&lt;/h1&gt;
+&lt;p&gt;First,you need to download &lt;code&gt;Powershell7&lt;/code&gt; to replace Windows PowerShell5.1,Powershell7 has been designed specially for cloud,local and mix environment.For example,it provides based SSH remote processing,Docker containers,cross platform etc.&lt;/p&gt;
+&lt;p&gt;Recommend three main ways to acquire it:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Install Powershell7 by using Winget&lt;/p&gt;
+&lt;p&gt;running the command to seach available versions&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;winget search Microsoft.PowerShell
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;it will output&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Name               Id                           Version   Source
+-----------------------------------------------------------------
+PowerShell         Microsoft.PowerShell         7.4.2.0   winget
+PowerShell Preview Microsoft.PowerShell.Preview 7.5.0.2   winget
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;you can use &lt;code&gt;id&lt;/code&gt; to choose&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;winget install --id Microsoft.Powershell --source winget
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;winget install --id Microsoft.Powershell.Preview --source winget
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install Powershell7 by releases on Github&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/PowerShell/powershell/releases&#34;&gt;Click&lt;/a&gt; and choose the latest to install,it provides MSI  and ZIP.&lt;/p&gt;
+&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/image-20240421184336361.png&#34; alt=&#34;image-20240421184336361&#34; style=&#34;zoom:80%;&#34; /&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;beautify&#34;&gt;Beautify&lt;/h1&gt;
+&lt;p&gt;Now we install Poweshell7 successfully,but for a patient with OCD, beautifying it is necessary.&lt;/p&gt;
+&lt;p&gt;Achieving it we need to install a package &lt;a href=&#34;https://ohmyposh.dev/&#34;&gt;Home | Oh My Posh&lt;/a&gt;,it provide some themes which are selected and makes your interface more colorful.&lt;/p&gt;
+&lt;p&gt;1.Open your Powershell and run this cmd&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;winget install JanDeDobbeleer.OhMyPosh -s winget
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;2.Run another amd to config environment variables&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$env:Path += &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;;C:\Users\user\AppData\Local\Programs\oh-my-posh\bin&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;path is location of on-my-posh.if your username is Chinese,it will be garbled and the environment variables will be invalid,so I advise you move it to another location and config location variables.&lt;/p&gt;
+&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240421203821.png&#34; alt=&#34;微信图片_20240421203821&#34; style=&#34;zoom: 67%;&#34; /&gt;
+&lt;p&gt;3.on-my-posh is compatible nerd font&lt;/p&gt;
+&lt;p&gt;open this link &lt;a href=&#34;https://www.nerdfonts.com/&#34;&gt;Nerd Fonts - Iconic font aggregator, glyphs/icons collection, &amp;amp; fonts patcher&lt;/a&gt; select one satisfying yourself and download it.After downloaded it ,click and run it to install on your PC.&lt;/p&gt;
+&lt;p&gt;4.open your terminal, setting.json,find the following code.Insert font name your select.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;profiles&amp;#34;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;defaults&amp;#34;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;font&amp;#34;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;face&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;MesloLGM Nerd Font&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;5.config your termnal&lt;/p&gt;
+&lt;p&gt;1)input this cmd to open the config file&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;notepad $PROFILE
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;2)paste this code to the nodepad&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;oh-my-posh init pwsh --config &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$env:POSH_THEMES_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;\jandedobbeleer.omp.json&amp;#34;&lt;/span&gt; | Invoke-Expression 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;3)run this code to list themes&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Get-PoshThemes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;4)choose what you like and replace&lt;code&gt;jandedobbeleer&lt;/code&gt;,like me&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;oh-my-posh init pwsh --config &amp;#34;$env:POSH_THEMES_PATH\atomic.omp.json&amp;#34; | Invoke-Expression 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;6.install icons&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-powershell&#34; data-lang=&#34;powershell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Install-Module -Name Terminal-Icons -Repository PSGallery
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;import to profile&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Import-Module -Name Terminal-Icons
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Finally,restart your windows terminal and powershell.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/image-20240421210119245.png&#34; alt=&#34;display&#34; title=&#34;product display&#34;&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>Graduation| Latex OCR by Pytorch</title>
       <link>https://xungirl.github.io/post/1_graduation_project/</link>
       <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
@@ -155,10 +236,6 @@
       <guid>https://xungirl.github.io/post/1_graduation_project/</guid>
       
       <description>&lt;h1 id=&#34;introduce&#34;&gt;Introduce&lt;/h1&gt;
-&lt;svg aria-hidden=&#34;true&#34; class=&#34;bi bi-house hi-svg-inline&#34; fill=&#34;currentColor&#34; height=&#34;1em&#34; viewBox=&#34;0 0 16 16&#34; width=&#34;1em&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;
-  &lt;path d=&#34;M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z&#34;/&gt;
-&lt;/svg&gt;
-
 </description>
       
     </item>
@@ -192,13 +269,20 @@
       
       <description>&lt;h2&gt;About Me&lt;/h2&gt;
 &lt;h3&gt;Xunxun · Zhang&lt;/h3&gt;
-&lt;p&gt;I am a senior at the School of Information Management of Zhengzhou University. After learning C plus plus language in my freshman year, I decided to switch to coding. In my sophomore year, I self-studied Python and joined the school&#39;s Baidu &lt;em&gt;pp&lt;/em&gt; AI Lab. In my junior year, I successively learned Java and full-stack development. Software development is my current direction. Now, I am an IELTS candidate and a supporter of the LGBTQ+ community.&lt;/p&gt;
+&lt;p&gt;I am a senior at the School of Information Management of Zhengzhou University. I self-learn Python during the summer vacation of my freshman year. In  sophomore , joined the school&#39;s Baidu &lt;em&gt;pp&lt;/em&gt; AI Lab and acquired machine learning and algorithm. Arrived junior,participated in CUMCM and MCM applying Machine Learning.Then,I had learned software development skills,like Vue.js,React etc.And did some front-end and data analysis projects.Now I hope to become a front-end engineer as soon as possible and make up for my shortcomings in mathematics.&lt;/p&gt;
 &lt;!-- 引入 Chart.js --&gt;
-&lt;script src=&#34;https://cdn.jsdelivr.net/npm/chart.js&#34;&gt;&lt;/script&gt;
-&lt;!-- 雷达图的 HTML --&gt;
-&lt;p&gt;&lt;canvas id=&#34;myChart&#34; width=&#34;100&#34; height=&#34;100&#34;&gt;&lt;/canvas&gt;&lt;/p&gt;
-&lt;!-- 引入雷达图的 JavaScript --&gt;
+&lt;style&gt;
+    canvas {
+        width: 61.8%; 
+        height: auto;
+    }
+
+&lt;/style&gt;
+&lt;div style=&#34;width:100%; max-width:600px; margin:auto;&#34;&gt;
+    &lt;canvas id=&#34;myChart&#34;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
 &lt;script src=&#34;https://xungirl.github.io/js/radarChart.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://cdn.jsdelivr.net/npm/chart.js&#34;&gt;&lt;/script&gt;
 &lt;h2&gt;Skills&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;Machine Learning &amp; Data analysis&lt;/li&gt;
