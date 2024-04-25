@@ -16,7 +16,6 @@ tags: ["Shell","Terminal"]
   <p>First, you need to download <code>Powershell7</code> to replace Windows PowerShell 5.1, Powershell7 has been designed specially for cloud, local, and mixed environments. For example, it provides based SSH remote processing, Docker containers, cross-platform etc.</p>
   <p>Recommend three main ways to acquire it:</p>
 </div>
-
 - Install Powershell7 by using Winget
 
   running the command to seach available versions
