@@ -11,3 +11,10 @@ tags: ["CS"]
     <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/scanner%20(1).png" alt="VS Code" width="80" height="auto" style="vertical-align: middle;"/>
 </div>
 <!--more-->
+
+reference link:[xungirl/LaTeX-OCR: pix2tex: Using a ViT to convert images of equations into LaTeX code.](https://github.com/xungirl/LaTeX-OCR)
+
+Tech-stack
+
+
+

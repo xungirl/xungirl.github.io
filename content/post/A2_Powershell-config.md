@@ -13,6 +13,7 @@ tags: ["Shell","Terminal"]
   <div style="float: right; margin-left: 20px; max-width: 20%; height: auto;">
     <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/icons8-powershell-250.svg" alt="PowerShell 7 Features" style="width: 100%; height: auto;">
   </div>
+
   <p>First, you need to download <code>Powershell7</code> to replace Windows PowerShell 5.1, Powershell7 has been designed specially for cloud, local, and mixed environments. For example, it provides based SSH remote processing, Docker containers, cross-platform etc.</p>
   <p>Recommend three main ways to acquire it:</p>
 </div>
