@@ -4,9 +4,8 @@ date: 2024-05-08T00:14:15+08:00
 draft: false
 ---
 
+<link rel="stylesheet" href="/css/30railwayfront.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-/* 在 Markdown 中使用内联 CSS 设置字体 */
 .markdown-body {
     font-family: 'Raleway', sans-serif;
     font-size: 61px; /* 设置字体大小 */
@@ -20,7 +19,6 @@ draft: false
 </div>
 
 <!--more-->
-
 
 
 
