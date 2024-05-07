@@ -54,11 +54,14 @@ author = "Hugo Authors"
 <h2>Ongoing</h2>
 
 <ul>
-    <li>Data Science</li>
+    <li>LLM | Transformer Architecture</li>
 </ul>
 <div>
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/site-logo.svg" alt="kaggle logo" height="60" style="margin-right:30px;">
+<a href="https://deeprevision.github.io/posts/001-transformer/#ref-vaswani2017attention">
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/transformer.png" alt="transformer" >
+</a>
 </div>
+
 
 
 
