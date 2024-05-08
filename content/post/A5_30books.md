@@ -5,47 +5,54 @@ draft: false
 ---
 
 <link rel="stylesheet" href="/css/30railwayfront.css">
+
 <style>
-.markdown-body {
-    font-family: 'Raleway', sans-serif;
-    font-size: 61px; /* 设置字体大小 */
-    text-align: center; /* 文本居中 */
-    line-height: 1.5; /* 设置行高，以提高可读性 */
+.progress-bar {
+  width: 300px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #96DB7B;  /* 整体背景为绿色 */
+  overflow: hidden;
+  margin-bottom: 10px;
+  position: relative;
 }
-</style>
 
-<div class="markdown-body">
-30  <i class="bi bi-book-half"></i>
-</div>
+.progress {
+  height: 100%;
+  background-color: #59A4BC; /* 蓝色静态部分 */
+  border-radius: 10px;
+  position: absolute;
+  left: 0;
+  width: 3.33%; /* 初始填充宽度为 1/30 */
+}
 
-<!--more-->
+.progress-dynamic {
+  height: 100%;
+  width: 96.67%; /* 剩余部分用于动态效果 */
+  position: absolute;
+  left: 3.33%; /* 动态部分从3.33%开始 */
+  background: linear-gradient(270deg, rgba(89, 164, 188, 0.7) 25%, transparent 25%, transparent 75%, rgba(89, 164, 188, 0.7) 75%);
+  background-size: 50% 100%;
+  animation: wave 2s linear infinite; /* 连续动画，每次2秒 */
+}
 
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  z-index: 2; /* 确保文本在最前面 */
+}
 
-
-<style>
-  .progress-bar {
-    width: 300px;
-    height: 20px;
-    border-radius: 10px;
-    background-color: #96DB7B;
-    overflow: hidden;
-    margin-bottom: 10px;
-    position: relative;
+@keyframes wave {
+  from {
+    background-position: 0% 0;
   }
-
-  .progress {
-    height: 100%;
-    background-color: #59A4BC;
-    border-radius: 10px;
+  to {
+    background-position: 100% 0;
   }
-
-  .progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #000;
-  }
+}
 
 .markdown-body-in {
     font-family: 'Raleway', sans-serif;
@@ -54,9 +61,11 @@ draft: false
     line-height: 1.5; /* 设置行高，以提高可读性 */
 }
 </style>
+
 <link rel="stylesheet" href="/css/30railwayfront.css">
 <div class="progress-bar">
   <div class="progress" style="width: 3.33%;"></div>
+  <div class="progress-dynamic"></div>
   <div class="progress-text">
     <span class="markdown-body-in">1</span> / <span class="markdown-body-in">30</span>
   </div>
