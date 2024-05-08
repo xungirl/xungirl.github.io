@@ -3,7 +3,21 @@ title: "One language,30 books"
 date: 2024-05-08T00:14:15+08:00
 draft: false
 ---
+<link rel="stylesheet" href="/css/30railwayfront.css">
+<style>
+.markdown-body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 61px; /* 设置字体大小 */
+    text-align: center; /* 文本居中 */
+    line-height: 1.5; /* 设置行高，以提高可读性 */
+}
+</style>
 
+<div class="markdown-body">
+30  <i class="bi bi-book-half"></i>
+</div>
+
+<!--more-->
 <link rel="stylesheet" href="/css/30railwayfront.css">
 
 <style>
@@ -147,6 +161,11 @@ draft: false
   <tr>
     <td></td>
     <td>Utopia</td>
+    <td>Thomas More</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><a href="https://drive.google.com/file/d/15NJwVZVP3eWQ7xaoQZ-620wKOESsYl2b/view?usp=drive_link">Red Roulette</a></td>
     <td>Thomas More</td>
   </tr>
 </table>
