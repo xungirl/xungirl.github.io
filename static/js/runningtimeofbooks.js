@@ -1,11 +1,11 @@
 // 设置网站的开始运行日期，确保使用你网站的实际上线日期
-const startDate = new Date('2024-05-08T00:00:00Z'); // 使用ISO格式
+const startDateofbooks = new Date('2024-05-08T00:00:00Z'); // 使用ISO格式
 
 function updateRunningTime() {
     // 获取当前时间
     const now = new Date();
     // 计算当前时间与开始时间的差值，单位为毫秒
-    const duration = now.getTime() - startDate.getTime();
+    const duration = now.getTime() - startDateofbooks.getTime();
 
     // 将毫秒转换为秒
     let seconds = Math.floor(duration / 1000);
@@ -24,7 +24,7 @@ function updateRunningTime() {
     seconds = seconds % 60;
 
     // 更新网页中显示运行时间的元素
-    document.getElementById('time').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    document.getElementById('time1').textContent = `${days} days`;
 }
 
 // 首次调用函数以初始化显示
