@@ -12,7 +12,8 @@ tags: ["CS"]
 </div>
 <!--more-->
 
-reference link:[xungirl/LaTeX-OCR: pix2tex: Using a ViT to convert images of equations into LaTeX code.](https://github.com/xungirl/LaTeX-OCR)
+reference link1:[xungirl/LaTeX-OCR: pix2tex: Using a ViT to convert images of equations into LaTeX code.](https://github.com/xungirl/LaTeX-OCR)
+reference link2:[](https://pix2tex.readthedocs.io/en/latest/installation.html#docker)
 
 Tech-stack
 
