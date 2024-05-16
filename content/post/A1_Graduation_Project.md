@@ -13,7 +13,8 @@ tags: ["CS"]
 <!--more-->
 
 reference link1:[xungirl/LaTeX-OCR: pix2tex: Using a ViT to convert images of equations into LaTeX code.](https://github.com/xungirl/LaTeX-OCR)
-reference link2:[](https://pix2tex.readthedocs.io/en/latest/installation.html#docker)
+
+reference link2:[pix2tex](https://pix2tex.readthedocs.io/en/latest/installation.html#docker)
 
 Tech-stack
 
@@ -21,17 +22,17 @@ Tech-stack
 
 ### 详细步骤总结
 
-1. **开发前端界面**：
-   - 使用熟悉的前端框架（如 React、Vue.js）开发一个用户界面，允许用户上传图片，并通过 API 调用 `pix2tex` 进行图像识别。
+1. 开发前端界面
+   使用熟悉的前端框架（如 React、Vue.js）开发一个用户界面，允许用户上传图片，并通过 API 调用 `pix2tex` 进行图像识别。
 
-2. **配置前端项目**：
-   - 在前端项目中，配置调用 `pix2tex` API 的请求。需要将 API URL 指向你部署的 `pix2tex` 容器地址。
+2. 配置前端项目
+   在前端项目中，配置调用 `pix2tex` API 的请求。需要将 API URL 指向你部署的 `pix2tex` 容器地址。
 
-3. **使用 Docker 镜像**：
-   - 拉取并运行 `pix2tex` Docker 镜像，无需在本地安装相应的包。`pix2tex` Docker 镜像已经包含了运行所需的所有依赖。
+3. 使用 Docker 
+   拉取并运行 `pix2tex` Docker 镜像，无需在本地安装相应的包。`pix2tex` Docker 镜像已经包含了运行所需的所有依赖。
 
-4. **部署到云平台**：
-   - 将前端应用和 `pix2tex` Docker 镜像部署到云平台，如 AWS、Google Cloud 或 Azure，使其可以通过公网访问。
+4. 部署到云平台
+   将前端应用和 `pix2tex` Docker 镜像部署到云平台，如 AWS、Google Cloud 或 Azure，使其可以通过公网访问。
 
 ### 示例详细步骤
 
@@ -39,14 +40,14 @@ Tech-stack
 
 使用 React 开发前端：
 
-1. **创建前端项目**：
+1. 创建前端项目
 
    ```bash
    npx create-react-app pix2tex-frontend
    cd pix2tex-frontend
    ```
 
-2. **配置 API 调用**：
+2. 配置 API 调用
    编辑 `src/App.js`：
 
    ```jsx
@@ -93,7 +94,7 @@ Tech-stack
    export default App;
    ```
 
-3. **创建 Dockerfile**：
+3. 创建 Dockerfile
    在前端项目根目录下创建一个名为 `Dockerfile` 的文件：
 
    ```Dockerfile
@@ -116,7 +117,7 @@ Tech-stack
    CMD ["nginx", "-g", "daemon off;"]
    ```
 
-4. **构建和运行前端 Docker 镜像**：
+4. 构建和运行前端 Docker 镜像
 
    ```bash
    docker build -t pix2tex-frontend .
@@ -125,7 +126,7 @@ Tech-stack
 
 #### 部署 `pix2tex` API
 
-1. **拉取并运行 `pix2tex` Docker 镜像**：
+1. 拉取并运行 `pix2tex` Docker 镜像
 
    ```bash
    docker pull lukasblecher/pix2tex:api
@@ -136,12 +137,12 @@ Tech-stack
 
 以 AWS EC2 为例：
 
-1. **创建并配置 EC2 实例**：
+1. 创建并配置 EC2 实例
 
    - 登录 AWS 管理控制台，创建一个新的 EC2 实例，选择 Ubuntu 操作系统。
    - 使用 SSH 连接到 EC2 实例。
 
-2. **安装 Docker**：
+2. 安装 Docker
 
    ```bash
    sudo apt update
@@ -150,7 +151,7 @@ Tech-stack
    sudo systemctl enable docker
    ```
 
-3. **拉取并运行 Docker 容器**：
+3. 拉取并运行 Docker 容器
 
    - 运行前端应用：
 
