@@ -6,7 +6,7 @@ tags: ["ICPC"]
 ---
 
 <div style="text-align: center;">
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/icpclogo.png" style="width: 40%;" alt="ICPC Logo" />
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/icpclogo.png" style="width: 30%;" alt="ICPC Logo" />
 </div>
 <!--more-->
 
