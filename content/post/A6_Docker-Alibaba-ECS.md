@@ -6,8 +6,9 @@ tags: ["Service"]
 ---
 
 <div class="image-container" style="text-align: center;line-height: 0;">	
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/docker-logo-blue.svg" alt="docker" width="250" height="auto" style="vertical-align: middle;"/>
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/docker-mark-blue.svg" alt="docker" width="130" height="auto" style="vertical-align: middle;"/>
 </div>
+
 
 
 <!--more-->
