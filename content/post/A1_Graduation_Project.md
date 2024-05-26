@@ -8,7 +8,7 @@ tags: ["CS"]
 <div class="image-container" style="text-align: center;line-height: 0;">
     <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/LaTeX_logo.svg" alt="VS Code" width="100" height="auto" style="vertical-align: middle;"/>
     <scan> <i class="bi bi-plus-lg"></i> </scan>
-    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/scanner%20(1).png" alt="VS Code" width="80" height="auto" style="vertical-align: middle;"/>
+    <img src="https://tuchuang-1312256370.cos.ap-shanghai.myqcloud.com/Icon_%E5%85%AC%E5%BC%8F%E5%AE%9A%E4%B9%89.svg" alt="VS Code" width="80" height="auto" style="vertical-align: middle;"/>
 </div>
 <!--more-->
 
@@ -126,14 +126,29 @@ Tech-stack
 
 #### 部署 `pix2tex` API
 
-1. 拉取并运行 `pix2tex` Docker 镜像
+1. 将 Docker 镜像从 DockerHub 拉取到你的服务器上：
 
-   ```bash
+   ```
    docker pull lukasblecher/pix2tex:api
+   ```
+
+2. 运行 API 容器，将容器内的端口映射到服务器的端口：
+
+   ```
    docker run -d -p 8502:8502 lukasblecher/pix2tex:api
    ```
 
-#### 部署到云平台
+   这将在后台运行容器，并将容器的 8502 端口映射到服务器的 8502 端口。
+
+3. 如果你想运行 Streamlit demo，执行以下命令：
+
+   ```
+   docker run -d -p 8501:8501 --entrypoint python lukasblecher/pix2tex:api pix2tex/api/run.py
+   ```
+
+   这将在后台运行容器，并将容器的 8501 端口映射到服务器的 8501 端口。
+
+现在，你的 Docker 项目已经在服务器上部署成功了。你可以通过浏览器访问相应的端口来使用 API 或者 Streamlit demo。例如，对于 API，访问 `http://服务器IP:8502`，对于 Streamlit demo，访问 `http://服务器IP:8501`。
 
 以 AWS EC2 为例：
 
@@ -173,6 +188,5 @@ Tech-stack
    - 添加 A 记录，将你的域名指向 EC2 实例的 IP 地址。
    - 为前端应用添加 CNAME 记录，指向 Vercel 或 Netlify 提供的域名。
 
-### 总结
+### 
 
-通过上述步骤，开发一个前端界面，利用现成的 Docker 镜像作为后端，并将其部署到云平台上，使其可以通过互联网访问。
