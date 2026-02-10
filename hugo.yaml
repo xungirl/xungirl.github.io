@@ -1,0 +1,91 @@
+baseURL: "https://xungirl.github.io/"
+title: "Xungirl's Blog"
+pagination:
+  pagerSize: 10
+theme: PaperMod
+languageCode: en-us
+defaultContentLanguage: en
+
+# Enable useful features
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+# Mermaid + Math support
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNos: false
+    style: monokai
+
+# Math (KaTeX) support
+params:
+  math: true
+
+  env: production
+  title: "Xungirl's Blog"
+  description: "A personal tech blog"
+  author: "Jiaju"
+
+  defaultTheme: auto # auto / dark / light
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowToc: true
+  TocOpen: false
+
+  homeInfoParams:
+    Title: "Hi there 👋"
+    Content: "Welcome to my blog. I write about programming, algorithms, and software engineering."
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/xungirl"
+    - name: linkedin
+      url: "https://linkedin.com/in/YOUR_USERNAME"
+    - name: email
+      url: "mailto:your@email.com"
+
+  # Search
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+menu:
+  main:
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 1
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 2
+    - identifier: archives
+      name: Archives
+      url: /archives/
+      weight: 3
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 4
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # required for search

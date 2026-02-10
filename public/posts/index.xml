@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Xungirl&#39;s Blog</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Xungirl&#39;s Blog</description>
+    <generator>Hugo -- 0.155.3</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://localhost:1313/posts/my-first-post/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/my-first-post/</guid>
+      <description>&lt;!--
+ * @Author: Maggie xungirl1024@gmail.com
+ * @Date: 2026-02-10 01:57:02
+ * @LastEditors: Maggie xungirl1024@gmail.com
+ * @LastEditTime: 2026-02-10 01:59:14
+ * @FilePath: /undefined/Users/xunxun/myblog/content/posts/my-first-post.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+--&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;showtoc-true&#34;&gt;title: &amp;ldquo;My First Post&amp;rdquo;
+date: 2026-02-10
+draft: false
+tags: [&amp;ldquo;intro&amp;rdquo;, &amp;ldquo;blog&amp;rdquo;]
+math: true
+mermaid: true
+ShowToc: true&lt;/h2&gt;
+&lt;h2 id=&#34;welcome&#34;&gt;Welcome&lt;/h2&gt;
+&lt;p&gt;Hi, I&amp;rsquo;m Jiaju — a CS student at Northeastern University. This blog is where I share what I learn about programming, algorithms, and software engineering.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
