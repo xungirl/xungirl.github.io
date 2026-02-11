@@ -11,6 +11,9 @@
     <loc>http://localhost:1313/posts/my-first-post/</loc>
     <lastmod>2026-02-10T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/zh/posts/my-first-post/</loc>
+    <lastmod>2026-02-10T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/</loc>
     <lastmod>2026-02-10T00:00:00+00:00</lastmod>
   </url><url>
@@ -39,6 +42,9 @@
                 hreflang="en"
                 href="http://localhost:1313/"
                 />
+  </url><url>
+    <loc>http://localhost:1313/zh/</loc>
+    <lastmod>2026-02-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/archives/</loc>
   </url><url>
