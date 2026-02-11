@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>xun&#39;s Blog</title>
+    <link>https://xungirl.github.io/</link>
+    <description>Recent content on xun&#39;s Blog</description>
+    <generator>Hugo -- 0.155.3</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 10 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://xungirl.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>https://xungirl.github.io/posts/my-first-post/</link>
+      <pubDate>Tue, 10 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://xungirl.github.io/posts/my-first-post/</guid>
+      <description>&lt;h2 id=&#34;welcome&#34;&gt;Welcome&lt;/h2&gt;
+&lt;p&gt;Hi, I&amp;rsquo;m Jiaju — a CS student at Northeastern University. This blog is where I share what I learn about programming, algorithms, and software engineering.&lt;/p&gt;
+&lt;h2 id=&#34;why-i-started-this-blog&#34;&gt;Why I Started This Blog&lt;/h2&gt;
+&lt;p&gt;Writing helps me think more clearly. By explaining concepts in my own words, I understand them better. Plus, it&amp;rsquo;s a great way to track my learning journey.&lt;/p&gt;
+&lt;h2 id=&#34;a-quick-math-demo&#34;&gt;A Quick Math Demo&lt;/h2&gt;
+&lt;p&gt;The time complexity of merge sort can be expressed as:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

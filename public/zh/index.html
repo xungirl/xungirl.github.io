@@ -86,7 +86,12 @@
     });">
 </script>
 
-<meta property="og:url" content="http://localhost:1313/zh/">
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+    .footer > span { display: none; }
+    .custom-footer { font-family: 'Pacifico', cursive; }
+</style><meta property="og:url" content="http://localhost:1313/zh/">
   <meta property="og:site_name" content="xun&#39;s Blog">
   <meta property="og:title" content="xun&#39;s Blog">
   <meta property="og:description" content="一个个人技术博客">
@@ -209,10 +214,9 @@
 </a>
 
 <div style="text-align:center;padding:10px 0;">
-    <span style="display:block">Built with ❤️ by Jiaju</span>
-    <span style="display:block" id="site-timer"></span>
+    <span class="custom-footer" style="display:block" id="site-timer"></span>
     <div style="display:flex;justify-content:center;margin:10px auto;width:70px;height:70px;overflow:hidden;">
-        <script type="text/javascript" id="mmvst_globe" src="//mapmyvisitors.com/globe.js?d=ZPgmAws0I02c0geawELAypuQOdLAUA2hFuBKkoZKPMA"></script>
+        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=6Q2_aLfI7DSLKwWEsKB6ymrM8PJQnAH3l9SE3VCgado"></script>
     </div>
 </div>
 <script>
@@ -225,7 +229,7 @@
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         document.getElementById("site-timer").innerHTML = 
-            "🕐 Blog has been running for " + days + " days " + hours + "h " + minutes + "m " + seconds + "s";
+            "Blog has been running for " + days + " days " + hours + "h " + minutes + "m " + seconds + "s";
     }
     updateTimer();
     setInterval(updateTimer, 1000);
