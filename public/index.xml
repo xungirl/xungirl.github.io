@@ -32,5 +32,12 @@
 &lt;h2 id=&#34;a-quick-math-demo&#34;&gt;A Quick Math Demo&lt;/h2&gt;
 &lt;p&gt;The time complexity of merge sort can be expressed as:&lt;/p&gt;</description>
     </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/about/</guid>
+      <description>About me</description>
+    </item>
   </channel>
 </rss>
