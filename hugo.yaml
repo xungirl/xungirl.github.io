@@ -3,8 +3,6 @@ title: "xun's Blog"
 pagination:
   pagerSize: 10
 theme: PaperMod
-defaultContentLanguage: en
-defaultContentLanguageInSubdir: false
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -22,112 +20,57 @@ markup:
     lineNos: false
     style: monokai
 
-languages:
-  en:
-    languageName: "English"
-    weight: 1
-    params:
-      math: true
-      env: production
-      title: "xun's Blog"
-      description: "A personal tech blog"
-      author: "Jiaju"
-      defaultTheme: auto
-      ShowReadingTime: true
-      ShowShareButtons: true
-      ShowPostNavLinks: true
-      ShowBreadCrumbs: true
-      ShowCodeCopyButtons: true
-      ShowWordCount: true
-      ShowToc: true
-      TocOpen: false
-      homeInfoParams:
-        Title: "Hi there 👋"
-        Content: "Welcome to my blog. I write about programming, algorithms, and software engineering."
-      socialIcons:
-        - name: github
-          url: "https://github.com/xungirl"
-        - name: email
-          url: "mailto:xungirl1024@gmail.com"
-        - name: instagram
-          url: "https://www.instagram.com/xunxun1314521/"
-      fuseOpts:
-        isCaseSensitive: false
-        shouldSort: true
-        location: 0
-        distance: 1000
-        threshold: 0.4
-        minMatchCharLength: 0
-        keys: ["title", "permalink", "summary", "content"]
-    menu:
-      main:
-        - identifier: search
-          name: Search
-          url: /search/
-          weight: 1
-        - identifier: tags
-          name: Tags
-          url: /tags/
-          weight: 2
-        - identifier: archives
-          name: Archives
-          url: /archives/
-          weight: 3
-        - identifier: about
-          name: About
-          url: /about/
-          weight: 4
+params:
+  math: true
+  env: production
+  description: "Xun's notes on CS, algorithms, and software engineering"
+  author: "Jiaju"
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowToc: true
+  TocOpen: false
+  homeInfoParams:
+    Title: "Hi there 👋"
+    Content: "Welcome to my blog. I write about programming, algorithms, and software engineering."
+  socialIcons:
+    - name: github
+      url: "https://github.com/xungirl"
+    - name: email
+      url: "mailto:xungirl1024@gmail.com"
+    - name: instagram
+      url: "https://www.instagram.com/xunxun1314521/"
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
 
-  zh:
-    languageName: "中文"
-    weight: 2
-    params:
-      math: true
-      env: production
-      title: "xun 的博客"
-      description: "一个个人技术博客"
-      author: "Jiaju"
-      defaultTheme: auto
-      ShowReadingTime: true
-      ShowShareButtons: true
-      ShowPostNavLinks: true
-      ShowBreadCrumbs: true
-      ShowCodeCopyButtons: true
-      ShowWordCount: true
-      ShowToc: true
-      TocOpen: false
-      homeInfoParams:
-        Title: "你好 👋"
-        Content: "欢迎来到我的博客，我在这里分享编程、算法和软件工程的学习心得。"
-      socialIcons:
-        - name: github
-          url: "https://github.com/xungirl"
-      fuseOpts:
-        isCaseSensitive: false
-        shouldSort: true
-        location: 0
-        distance: 1000
-        threshold: 0.4
-        minMatchCharLength: 0
-        keys: ["title", "permalink", "summary", "content"]
-    menu:
-      main:
-        - identifier: search
-          name: 搜索
-          url: /zh/search/
-          weight: 1
-        - identifier: tags
-          name: 标签
-          url: /zh/tags/
-          weight: 2
-        - identifier: archives
-          name: 归档
-          url: /zh/archives/
-          weight: 3
-        - identifier: about
-          name: 关于
-          url: /zh/about/
-          weight: 4
+menu:
+  main:
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 1
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 2
+    - identifier: archives
+      name: Archives
+      url: /archives/
+      weight: 3
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 4
 
 outputs:
   home:
