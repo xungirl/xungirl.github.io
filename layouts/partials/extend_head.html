@@ -67,7 +67,27 @@
         return true;
     }
 
-    // Mark every KaTeX-rendered node so Google Translate skips them
+    // Protect UI chrome (nav, footer, meta, tags…) — only article body gets translated
+    function protectUI() {
+        [
+            'header.header',
+            'footer.footer',
+            '.breadcrumbs',
+            '.post-meta',
+            '.post-tags',
+            '#TableOfContents',
+            '.paginav',
+            '.share-buttons',
+            '.social-icons',
+        ].forEach(function (sel) {
+            document.querySelectorAll(sel).forEach(function (el) {
+                el.setAttribute('translate', 'no');
+                el.classList.add('notranslate');
+            });
+        });
+    }
+
+    // Protect KaTeX-rendered math nodes
     function protectMath() {
         document.querySelectorAll('.katex').forEach(function (el) {
             el.setAttribute('translate', 'no');
@@ -77,13 +97,13 @@
 
     function toggle() {
         translated = !translated;
-        document.getElementById('translate-btn').textContent = translated ? 'EN' : '中文';
-        if (translated) protectMath();
+        document.getElementById('translate-btn').textContent = translated ? 'EN' : 'Zh';
+        if (translated) { protectUI(); protectMath(); }
         if (applyLang(translated ? 'zh-CN' : '')) return;
         // Widget not ready yet — retry until it appears
         var attempts = 0;
         var t = setInterval(function () {
-            if (translated) protectMath();
+            if (translated) { protectUI(); protectMath(); }
             if (applyLang(translated ? 'zh-CN' : '') || ++attempts > 30) clearInterval(t);
         }, 200);
     }
@@ -98,7 +118,7 @@
 
         var btn = document.createElement('button');
         btn.id = 'translate-btn';
-        btn.textContent = '中文';
+        btn.textContent = 'Zh';
         btn.title = 'Translate to Chinese / 翻译成中文';
         btn.addEventListener('click', toggle);
 
