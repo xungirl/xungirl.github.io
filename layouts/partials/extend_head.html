@@ -67,13 +67,23 @@
         return true;
     }
 
+    // Mark every KaTeX-rendered node so Google Translate skips them
+    function protectMath() {
+        document.querySelectorAll('.katex').forEach(function (el) {
+            el.setAttribute('translate', 'no');
+            el.classList.add('notranslate');
+        });
+    }
+
     function toggle() {
         translated = !translated;
         document.getElementById('translate-btn').textContent = translated ? 'EN' : '中文';
+        if (translated) protectMath();
         if (applyLang(translated ? 'zh-CN' : '')) return;
         // Widget not ready yet — retry until it appears
         var attempts = 0;
         var t = setInterval(function () {
+            if (translated) protectMath();
             if (applyLang(translated ? 'zh-CN' : '') || ++attempts > 30) clearInterval(t);
         }, 200);
     }
