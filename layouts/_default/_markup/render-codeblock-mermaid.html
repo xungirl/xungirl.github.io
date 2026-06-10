@@ -1,4 +1,13 @@
 <div class="mermaid">
   {{- .Inner | safeHTML }}
 </div>
+{{- /* PaperMod renders footer.html via partialCached, so a per-page flag checked
+   there only works for whichever page happens to fill the cache. Load the script
+   alongside the first diagram on the page instead. */ -}}
+{{ if not (.Page.Store.Get "hasMermaid") }}
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: "default" });
+</script>
+{{ end }}
 {{ .Page.Store.Set "hasMermaid" true }}
