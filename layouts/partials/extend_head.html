@@ -46,10 +46,22 @@
     }
 </style>
 <script>
+    // Detect THIS article's own language by counting Chinese vs Latin characters
+    // in the post body. Returns 'zh-CN' for a Chinese post, otherwise 'en'.
+    function detectPageLang() {
+        var body = document.querySelector('.post-content')
+                || document.querySelector('article')
+                || document.body;
+        var text = (body && body.innerText || '').slice(0, 3000);
+        var cjk = (text.match(/[一-鿿]/g) || []).length;
+        var latin = (text.match(/[A-Za-z]/g) || []).length;
+        return cjk > latin ? 'zh-CN' : 'en';
+    }
+
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'zh-CN',
+            pageLanguage: detectPageLang(),   // the article's real language
+            includedLanguages: 'en,zh-CN',    // allow translating to EITHER direction
             autoDisplay: false
         }, 'google_translate_element');
     }
@@ -58,6 +70,15 @@
 <script>
 (function () {
     var translated = false;
+    // Translation direction, decided per page (set in injectButton, once body exists)
+    var target = 'zh-CN', toLabel = 'Zh', backLabel = 'EN';
+
+    function setupDirection() {
+        var pageLang = (typeof detectPageLang === 'function') ? detectPageLang() : 'en';
+        target    = pageLang === 'en' ? 'zh-CN' : 'en';   // translate to the OTHER language
+        toLabel   = target === 'zh-CN' ? 'Zh' : 'EN';     // label shown before translating
+        backLabel = pageLang === 'en' ? 'EN' : 'Zh';      // label shown to restore original
+    }
 
     function applyLang(lang) {
         var combo = document.querySelector('.goog-te-combo');
@@ -106,14 +127,14 @@
 
     function toggle() {
         translated = !translated;
-        document.getElementById('translate-btn').textContent = translated ? 'EN' : 'Zh';
+        document.getElementById('translate-btn').textContent = translated ? backLabel : toLabel;
         if (translated) { protectUI(); protectMath(); protectCode(); }
-        if (applyLang(translated ? 'zh-CN' : '')) return;
+        if (applyLang(translated ? target : '')) return;
         // Widget not ready yet — retry until it appears
         var attempts = 0;
         var t = setInterval(function () {
             if (translated) { protectUI(); protectMath(); protectCode(); }
-            if (applyLang(translated ? 'zh-CN' : '') || ++attempts > 30) clearInterval(t);
+            if (applyLang(translated ? target : '') || ++attempts > 30) clearInterval(t);
         }, 200);
     }
 
@@ -121,14 +142,18 @@
         var themeToggle = document.getElementById('theme-toggle');
         if (!themeToggle) return;
 
+        setupDirection();   // body is ready now — decide direction for this page
+
         var sep = document.createElement('span');
         sep.id = 'translate-sep';
         sep.textContent = ' | ';
 
         var btn = document.createElement('button');
         btn.id = 'translate-btn';
-        btn.textContent = 'Zh';
-        btn.title = 'Translate to Chinese / 翻译成中文';
+        btn.textContent = toLabel;
+        btn.title = target === 'zh-CN'
+            ? 'Translate to Chinese / 翻译成中文'
+            : 'Translate to English / 翻译成英文';
         btn.addEventListener('click', toggle);
 
         themeToggle.parentNode.insertBefore(sep, themeToggle);
