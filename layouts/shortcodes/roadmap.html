@@ -1,0 +1,116 @@
+{{- /*
+  Reusable project-roadmap timeline (bright = done, gray = todo).
+  Usage in a post — wrap pipe-separated lines in the paired shortcode:
+
+    status | date | title | description
+
+  status: done / current (newest done, pulsing dot) / todo (gray dashed).
+  Bright line grows on scroll and stops at the last done/current dot.
+*/ -}}
+<div class="roadmap">
+  <div class="rm-line"></div>
+  <div class="rm-fill"></div>
+  {{- range split (trim .Inner "\n") "\n" }}
+  {{- $parts := split . "|" }}
+  {{- if eq (len $parts) 4 }}
+  {{- $status := trim (index $parts 0) " " }}
+  <div class="rm-item {{ if eq $status "current" }}done current{{ else }}{{ $status }}{{ end }}">
+    <div class="rm-dot"></div>
+    <div class="rm-card">
+      <div class="rm-date">{{ trim (index $parts 1) " " }}{{ if eq $status "current" }}<span class="rm-tag">latest</span>{{ end }}</div>
+      <h3>{{ trim (index $parts 2) " " }}</h3>
+      <p>{{ trim (index $parts 3) " " }}</p>
+    </div>
+  </div>
+  {{- end }}
+  {{- end }}
+</div>
+
+<style>
+.roadmap { position: relative; margin: 2rem 0; padding: 0.3rem 0; }
+.roadmap .rm-line, .roadmap .rm-fill {
+  position: absolute; left: 11px; top: 0; width: 3px; border-radius: 2px;
+}
+.roadmap .rm-line { bottom: 0; background: var(--border, rgba(148,163,184,0.35)); }
+.roadmap .rm-fill {
+  height: 0; background: linear-gradient(180deg, #6366f1, #8b5cf6, #d946ef);
+  box-shadow: 0 0 12px rgba(139,92,246,0.55);
+  transition: height 0.25s ease-out;
+}
+.roadmap .rm-item { position: relative; padding: 0 0 1.6rem 2.7rem; }
+.roadmap .rm-item:last-child { padding-bottom: 0.3rem; }
+.roadmap .rm-dot {
+  position: absolute; left: 0; top: 0.15rem; width: 25px; height: 25px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 800; color: #fff;
+  background: var(--theme, #fff); border: 2px solid var(--border, rgba(148,163,184,0.5));
+}
+.roadmap .rm-item.done .rm-dot {
+  background: linear-gradient(120deg, #6366f1, #8b5cf6, #d946ef); border: none;
+  box-shadow: 0 0 14px rgba(139,92,246,0.6);
+}
+.roadmap .rm-item.done .rm-dot::after { content: "✓"; }
+.roadmap .rm-item.current .rm-dot { animation: rm-pulse 2.2s infinite; }
+@keyframes rm-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(217,70,239,0.55); }
+  70% { box-shadow: 0 0 0 13px rgba(217,70,239,0); }
+  100% { box-shadow: 0 0 0 0 rgba(217,70,239,0); }
+}
+.roadmap .rm-card {
+  background: var(--entry, rgba(148,163,184,0.08));
+  border: 1px solid var(--border, rgba(148,163,184,0.3));
+  border-radius: 12px; padding: 0.85rem 1.1rem;
+  transition: transform .2s, border-color .2s;
+}
+.roadmap .rm-card:hover { transform: translateX(4px); border-color: #8b5cf6; }
+.roadmap .rm-date {
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.5px;
+  color: #8b5cf6; margin-bottom: 0.25rem;
+}
+.roadmap .rm-card h3 {
+  margin: 0 0 0.25rem !important; font-size: 1rem; color: var(--primary, inherit);
+}
+.roadmap .rm-card p {
+  margin: 0; font-size: 0.86rem; line-height: 1.6; color: var(--secondary, inherit);
+}
+.roadmap .rm-item.todo .rm-card { opacity: 0.6; border-style: dashed; }
+.roadmap .rm-item.todo .rm-date { color: var(--secondary, #64748b); }
+.roadmap .rm-tag {
+  display: inline-block; font-size: 0.66rem; font-weight: 700; color: #d946ef;
+  background: rgba(217,70,239,0.12); border: 1px solid rgba(217,70,239,0.45);
+  border-radius: 999px; padding: 0.05rem 0.5rem; margin-left: 0.45rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .roadmap .rm-item.current .rm-dot { animation: none; }
+  .roadmap .rm-fill { transition: none; }
+}
+</style>
+
+<script>
+(function () {
+  // Bright line grows with scroll, capped at the last completed dot.
+  var rm = document.currentScript.previousElementSibling.previousElementSibling;
+  if (!rm || !rm.classList.contains("roadmap")) {
+    var all = document.querySelectorAll(".roadmap"); rm = all[all.length - 1];
+  }
+  var fill = rm.querySelector(".rm-fill");
+  function target() {
+    var dots = rm.querySelectorAll(".rm-item.done .rm-dot");
+    if (!dots.length) return 0;
+    var d = dots[dots.length - 1];
+    return d.closest(".rm-item").offsetTop + d.offsetTop + d.offsetHeight / 2;
+  }
+  function update() {
+    var rect = rm.getBoundingClientRect();
+    var viewH = window.innerHeight || document.documentElement.clientHeight;
+    // 0 → 1 as the timeline scrolls through the viewport.
+    var progress = (viewH * 0.8 - rect.top) / (rect.height * 0.9);
+    progress = Math.max(0, Math.min(1, progress));
+    fill.style.height = (target() * progress) + "px";
+  }
+  ["scroll", "resize", "load"].forEach(function (ev) {
+    window.addEventListener(ev, update, { passive: true });
+  });
+  update();
+})();
+</script>
