@@ -87,9 +87,18 @@
         });
     }
 
-    // Protect KaTeX-rendered math nodes
+    // Protect KaTeX-rendered math nodes (inline + display)
     function protectMath() {
-        document.querySelectorAll('.katex').forEach(function (el) {
+        document.querySelectorAll('.katex, .katex-display').forEach(function (el) {
+            el.setAttribute('translate', 'no');
+            el.classList.add('notranslate');
+        });
+    }
+
+    // Protect code from being translated — fenced blocks AND inline `code`
+    // (inline code is where most technical terms live)
+    function protectCode() {
+        document.querySelectorAll('pre, code, .highlight, .chroma').forEach(function (el) {
             el.setAttribute('translate', 'no');
             el.classList.add('notranslate');
         });
@@ -98,12 +107,12 @@
     function toggle() {
         translated = !translated;
         document.getElementById('translate-btn').textContent = translated ? 'EN' : 'Zh';
-        if (translated) { protectUI(); protectMath(); }
+        if (translated) { protectUI(); protectMath(); protectCode(); }
         if (applyLang(translated ? 'zh-CN' : '')) return;
         // Widget not ready yet — retry until it appears
         var attempts = 0;
         var t = setInterval(function () {
-            if (translated) { protectUI(); protectMath(); }
+            if (translated) { protectUI(); protectMath(); protectCode(); }
             if (applyLang(translated ? 'zh-CN' : '') || ++attempts > 30) clearInterval(t);
         }, 200);
     }
