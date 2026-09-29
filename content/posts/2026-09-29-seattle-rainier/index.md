@@ -74,7 +74,7 @@ cover:
 <section class="trip-day">
   <div class="trip-day-head"><span class="num">02</span><span class="date">Oct 1 · Thu</span><span class="sub">上山看雪，下山看日落</span></div>
   <div class="trip-tl">
-    <div class="trip-stop"><div class="time">7:00 AM</div><div class="what">👭 出发去接 Miss. Huang</div></div>
+    <div class="trip-stop"><div class="time">7:00 AM</div><div class="what">👭 出发去接 Yolo</div></div>
     <div class="trip-stop"><div class="time">8:00 AM</div><div class="what">☕️ Post &amp; Pour 网红打卡 <a class="map" href="https://www.google.com/maps/search/Post+%26+Pour" target="_blank" rel="noopener">地图 ↗</a></div><div class="note">打卡完继续往雪山开</div></div>
     <div class="trip-stop"><div class="time">Then</div><div class="what">🏔 Mt. Rainier 雷尼尔雪山 <a class="map" href="https://www.google.com/maps/search/Mount+Rainier+National+Park" target="_blank" rel="noopener">地图 ↗</a></div><div class="note">记得带国家公园门票 / 年卡，出发前看一眼路况和天气</div></div>
     <div class="trip-stop sunset"><div class="time">Sunset</div><div class="what">🌇 下山 → 看晚霞夕阳</div><div class="note">二选一：Medina Park <a class="map" href="https://www.google.com/maps/search/Medina+Park+Medina+WA" target="_blank" rel="noopener">地图 ↗</a> ｜ Kerry Park <a class="map" href="https://www.google.com/maps/search/Kerry+Park+Seattle" target="_blank" rel="noopener">地图 ↗</a>（封面这张就是 Kerry Park 的经典机位）</div></div>
