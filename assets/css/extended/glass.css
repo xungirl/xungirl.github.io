@@ -48,11 +48,44 @@ body.list .post-entry {
   transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
 }
 body.list .post-entry:hover {
-  transform: translateY(-3px);
   background: var(--glass-bg-hover);
   box-shadow: 0 14px 40px rgba(31, 38, 70, 0.18);
 }
 body.list .post-entry:active { transform: none; }
+
+/* ---- collapsible cards: title-only by default, expand on hover ----
+   Each .fold (see layouts/_default/list.html) is a one-row grid animating 0fr → 1fr,
+   so height eases smoothly to its real content size. The open card is chosen by the
+   script in extend_footer.html (.open); without JS, plain :hover is the fallback.
+   Touch screens keep cards fully expanded. */
+@media (hover: hover) {
+  body.list .post-entry {
+    --ease: cubic-bezier(.22, .8, .24, 1);
+    padding: 14px 22px;
+    transition: padding .5s var(--ease), background .3s ease, box-shadow .3s ease;
+  }
+  body.list .post-entry .fold {
+    display: grid; grid-template-rows: 0fr; opacity: 0;
+    transition: grid-template-rows .5s var(--ease), opacity .25s ease;
+  }
+  body.list .post-entry .fold-in { min-height: 0; overflow: hidden; }
+  body.list .post-entry .fold-cover .entry-cover { margin-bottom: var(--gap); }
+  body.list .post-entry .fold-body .entry-content { margin: 8px 0; }
+  body.list .post-entry .entry-header h2 { font-size: 19px; transition: font-size .5s var(--ease); }
+
+  body.list .post-entry.open,
+  body.list:not(.fold-js) .post-entry:hover,
+  body.list .post-entry:focus-within { padding: var(--gap); background: var(--glass-bg-hover); }
+  body.list .post-entry.open .fold,
+  body.list:not(.fold-js) .post-entry:hover .fold,
+  body.list .post-entry:focus-within .fold {
+    grid-template-rows: 1fr; opacity: 1;
+    transition-delay: 0s, .12s;   /* fade content in once the box has started growing */
+  }
+  body.list .post-entry.open .entry-header h2,
+  body.list:not(.fold-js) .post-entry:hover .entry-header h2,
+  body.list .post-entry:focus-within .entry-header h2 { font-size: 24px; }
+}
 body.list .entry-cover { border-radius: 10px; overflow: hidden; }
 body.list .page-header { padding: 14px 20px; border-radius: 14px; }
 body.list .archive-year { padding: 14px 20px; border-radius: 14px; margin-bottom: var(--gap); }
@@ -67,6 +100,5 @@ body.list .footer { width: fit-content; max-width: calc(100% - 32px); margin: va
   [data-theme="dark"] body.list { --glass-bg: rgba(29, 30, 32, 0.9); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.list .post-entry { transition: none; }
-  body.list .post-entry:hover { transform: none; }
+  body.list .post-entry, body.list .post-entry .fold, body.list .post-entry h2 { transition: none !important; }
 }

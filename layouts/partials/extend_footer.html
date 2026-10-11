@@ -19,3 +19,50 @@
     updateTimer();
     setInterval(updateTimer, 1000);
 </script>
+<script>
+/* Collapsible post cards (glass.css). Opening a card changes the layout under the cursor:
+   when the card above collapses, everything below slides up. So:
+   - only real pointer movement opens a card (the browser's synthetic mousemove after a
+     layout shift has unchanged coordinates and is ignored), so shifts can't cascade;
+   - while a card animates, new hovers wait until it finishes;
+   - the newly opened card is held in place by scrolling, when there is room to scroll. */
+(function () {
+  if (!document.body.classList.contains("list") || !matchMedia("(hover: hover)").matches) return;
+  if (!document.querySelector(".post-entry")) return;
+  document.body.classList.add("fold-js");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var ANIM = reduce ? 0 : 560, open = null, lockUntil = 0, lx = -1, ly = -1, timer = 0, raf = 0;
+
+  function setOpen(card) {
+    if (card === open) return;
+    var top = card ? card.getBoundingClientRect().top : 0;
+    if (open) open.classList.remove("open");
+    if (card) card.classList.add("open");
+    open = card;
+    lockUntil = performance.now() + ANIM;
+    cancelAnimationFrame(raf);
+    if (!card || reduce) return;
+    (function pin() {
+      var d = card.getBoundingClientRect().top - top;
+      if (Math.abs(d) > 0.5) window.scrollBy(0, d);
+      if (performance.now() < lockUntil) raf = requestAnimationFrame(pin);
+    })();
+  }
+  function evaluate() {
+    var wait = lockUntil - performance.now();
+    if (wait > 0) { timer = setTimeout(evaluate, wait); return; }
+    var el = lx < 0 ? null : document.elementFromPoint(lx, ly);
+    setOpen(el && el.closest(".post-entry"));
+  }
+  document.addEventListener("mousemove", function (e) {
+    if (e.clientX === lx && e.clientY === ly) return;
+    lx = e.clientX; ly = e.clientY;
+    clearTimeout(timer);
+    // short hover-intent delay on a card; longer grace period in the gaps between cards
+    timer = setTimeout(evaluate, e.target.closest && e.target.closest(".post-entry") ? 80 : 250);
+  });
+  document.documentElement.addEventListener("mouseleave", function () {
+    lx = ly = -1; clearTimeout(timer); timer = setTimeout(evaluate, 250);
+  });
+})();
+</script>
