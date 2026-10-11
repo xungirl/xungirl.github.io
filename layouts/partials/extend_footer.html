@@ -32,28 +32,33 @@
    - only real pointer movement opens a card (the browser's synthetic mousemove after a
      layout shift has unchanged coordinates and is ignored), so shifts can't cascade;
    - while a card animates, new hovers wait until it finishes;
-   - the newly opened card is held in place by scrolling, when there is room to scroll. */
+   - the newly opened card is held in place by scrolling, when there is room to scroll.
+     The correction runs in a ResizeObserver (after layout, before paint) so it lands in the
+     same frame; doing it in requestAnimationFrame lagged a frame and the card visibly jerked. */
 (function () {
   if (!document.body.classList.contains("list") || !matchMedia("(hover: hover)").matches) return;
   if (!document.querySelector(".post-entry")) return;
   document.body.classList.add("fold-js");
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var ANIM = reduce ? 0 : 560, open = null, lockUntil = 0, lx = -1, ly = -1, timer = 0, raf = 0;
+  var ANIM = reduce ? 0 : 560, open = null, lockUntil = 0, lx = -1, ly = -1, timer = 0;
+  var pinned = null, pinTop = 0;
+
+  function correct() {
+    if (!pinned || performance.now() > lockUntil + 100) { pinned = null; return; }
+    var d = pinned.getBoundingClientRect().top - pinTop;
+    if (Math.abs(d) > 0.5) window.scrollBy(0, d);
+  }
+  var ro = new ResizeObserver(correct);
+  document.querySelectorAll(".post-entry").forEach(function (c) { ro.observe(c); });
 
   function setOpen(card) {
     if (card === open) return;
-    var top = card ? card.getBoundingClientRect().top : 0;
+    pinned = (card && !reduce) ? card : null;
+    if (pinned) pinTop = card.getBoundingClientRect().top;
     if (open) open.classList.remove("open");
     if (card) card.classList.add("open");
     open = card;
     lockUntil = performance.now() + ANIM;
-    cancelAnimationFrame(raf);
-    if (!card || reduce) return;
-    (function pin() {
-      var d = card.getBoundingClientRect().top - top;
-      if (Math.abs(d) > 0.5) window.scrollBy(0, d);
-      if (performance.now() < lockUntil) raf = requestAnimationFrame(pin);
-    })();
   }
   function evaluate() {
     var wait = lockUntil - performance.now();
