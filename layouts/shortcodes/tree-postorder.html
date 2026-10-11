@@ -1,0 +1,328 @@
+{{- /*
+  Step-through visualizer for post-order recursion (left → right → self),
+  using LeetCode 124's gain() as the example.
+  Usage:
+    {{< tree-postorder tree="1,-6,3,2,-4,null,-1" >}}
+  tree: LeetCode level-order array (null = empty).
+*/ -}}
+{{- $id := printf "tpo-%d" .Ordinal -}}
+<div class="tpo" id="{{ $id }}" tabindex="0"
+     data-tree="{{ .Get "tree" | default "1,-6,3,2,-4,null,-1" }}">
+  <div class="tpo-top">
+    <div class="tpo-order"><span class="tpo-lbl">processing order · 处理顺序</span><div class="tpo-seq"></div></div>
+    <div class="tpo-count"></div>
+  </div>
+  <div class="tpo-body">
+    <svg class="tpo-tree" role="img" aria-label="binary tree"></svg>
+    <div class="tpo-side">
+      <div class="tpo-code"></div>
+      <div class="tpo-state">
+        <div><span class="tpo-lbl">left</span><span class="tpo-L"></span></div>
+        <div><span class="tpo-lbl">right</span><span class="tpo-R"></span></div>
+        <div><span class="tpo-lbl">ans</span><span class="tpo-ans"></span></div>
+      </div>
+      <div class="tpo-stackwrap"><span class="tpo-lbl">call stack</span><div class="tpo-stack"></div></div>
+    </div>
+  </div>
+  <div class="tpo-cap">
+    <p class="tpo-zh"></p>
+    <p class="tpo-en"></p>
+  </div>
+  <div class="tpo-ctrl">
+    <button type="button" data-act="reset" title="Reset">⏮</button>
+    <button type="button" data-act="prev" title="Previous (←)">◀ Prev</button>
+    <button type="button" data-act="play" class="tpo-play" title="Auto play">▶ Play</button>
+    <button type="button" data-act="next" title="Next (→)">Next ▶</button>
+  </div>
+  <div class="tpo-legend">
+    <span><i class="lg cur"></i>current frame</span>
+    <span><i class="lg proc"></i>processing self</span>
+    <span><i class="lg stk"></i>on call stack</span>
+    <span><i class="lg done"></i>returned (badge = order, ↑ = return value)</span>
+  </div>
+</div>
+
+<style>
+.tpo {
+  --tp-accent: #8b5cf6; --tp-done: #10b981; --tp-proc: #d946ef;
+  margin: 1.6rem 0; padding: 1rem 1.1rem 0.9rem; border-radius: 14px; outline: none;
+  background: var(--entry, rgba(148,163,184,0.08));
+  border: 1px solid var(--border, rgba(148,163,184,0.3));
+}
+.tpo:focus-visible { border-color: var(--tp-accent); }
+.tpo-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; flex-wrap: wrap; }
+.tpo-seq { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; margin-top: .3rem; min-height: 1.6rem; }
+.tpo-seq span {
+  font-weight: 800; font-size: .85rem; padding: .1rem .5rem; border-radius: 999px;
+  background: var(--tp-done); color: #fff; font-variant-numeric: tabular-nums;
+}
+.tpo-seq i { font-style: normal; color: var(--secondary); font-size: .8rem; }
+.tpo-seq em { font-size: .76rem; color: var(--secondary); }
+.tpo button {
+  font: inherit; font-size: .82rem; cursor: pointer; line-height: 1.2;
+  padding: .38rem .75rem; border-radius: 999px;
+  color: var(--primary); background: var(--theme, transparent);
+  border: 1px solid var(--border, rgba(148,163,184,0.45));
+  transition: border-color .15s, background .15s, color .15s;
+}
+.tpo button:hover:not(:disabled) { border-color: var(--tp-accent); color: var(--tp-accent); }
+.tpo button:disabled { opacity: .4; cursor: default; }
+.tpo button.tpo-play.playing { background: var(--tp-accent); border-color: var(--tp-accent); color: #fff; }
+.tpo-count { font-size: .8rem; font-weight: 700; color: var(--tp-accent); font-variant-numeric: tabular-nums; }
+.tpo-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1rem; margin: .8rem 0 .4rem; align-items: start; }
+@media (max-width: 640px) { .tpo-body { grid-template-columns: minmax(0, 1fr); } }
+.tpo-tree { width: 100%; height: auto; display: block; }
+.tpo-tree line { stroke: var(--border, rgba(148,163,184,0.6)); stroke-width: 2; }
+.tpo-tree .nd circle.c {
+  fill: var(--theme, #fff); stroke: var(--border, rgba(148,163,184,0.7)); stroke-width: 2;
+  transition: fill .25s, stroke .25s, stroke-width .25s;
+}
+.tpo-tree .nd text.v { fill: var(--primary); font-weight: 700; font-size: 14px; text-anchor: middle; dominant-baseline: central; transition: fill .25s; }
+.tpo-tree .nd.stk circle.c { stroke: var(--tp-accent); stroke-width: 3; }
+.tpo-tree .nd.done circle.c { fill: var(--tp-done); stroke: var(--tp-done); }
+.tpo-tree .nd.done text.v { fill: #fff; }
+.tpo-tree .nd.cur circle.c { fill: var(--tp-accent); stroke: var(--tp-accent); filter: drop-shadow(0 0 6px rgba(139,92,246,.7)); }
+.tpo-tree .nd.cur text.v { fill: #fff; }
+.tpo-tree .nd.proc circle.c { fill: var(--tp-proc); stroke: var(--tp-proc); filter: drop-shadow(0 0 8px rgba(217,70,239,.8)); }
+.tpo-tree .nd.proc text.v { fill: #fff; }
+.tpo-tree .badge, .tpo-tree .ret { opacity: 0; transition: opacity .25s; }
+.tpo-tree .nd.done .badge, .tpo-tree .nd.done .ret { opacity: 1; }
+.tpo-tree .badge circle { fill: var(--theme, #fff); stroke: var(--tp-done); stroke-width: 1.5; }
+.tpo-tree .badge text { fill: var(--tp-done); font-size: 10px; font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+.tpo-tree .ret { fill: var(--tp-done); font-size: 11px; font-weight: 800; text-anchor: end; dominant-baseline: central; }
+.tpo-tree .nul { opacity: 0; transition: opacity .2s; }
+.tpo-tree .nul.show { opacity: 1; }
+.tpo-tree .nul line { stroke: var(--tp-accent); stroke-dasharray: 3 3; }
+.tpo-tree .nul text { fill: var(--tp-accent); font-size: 10px; font-weight: 700; text-anchor: middle; }
+.tpo-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .74rem; line-height: 1.55;
+  background: var(--code-bg, rgba(148,163,184,0.12)); border-radius: 8px; padding: .5rem 0; overflow-x: auto;
+}
+.tpo-code .ln { white-space: pre; padding: 0 .7rem; border-left: 3px solid transparent; color: var(--secondary); transition: background .2s; }
+.tpo-code .ln.on { background: rgba(139,92,246,.18); border-left-color: var(--tp-accent); color: var(--primary); font-weight: 600; }
+.tpo-code .ln.on.self { background: rgba(217,70,239,.18); border-left-color: var(--tp-proc); }
+.tpo-state { display: flex; gap: 1.1rem; margin: .6rem 0 .35rem; flex-wrap: wrap; }
+.tpo-state > div { display: flex; align-items: baseline; gap: .4rem; }
+.tpo-lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--secondary); }
+.tpo-L, .tpo-R, .tpo-ans { font-size: 1.25rem; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; transition: color .2s; }
+.tpo-ans.up { color: var(--tp-proc); }
+.tpo-stack { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .3rem; min-height: 1.6rem; }
+.tpo-stack span {
+  font-family: ui-monospace, Menlo, monospace; font-size: .74rem; padding: .12rem .45rem; border-radius: 6px;
+  border: 1px solid var(--tp-accent); color: var(--tp-accent);
+}
+.tpo-stack span:last-child { background: var(--tp-accent); color: #fff; }
+.tpo-stack em { font-size: .76rem; color: var(--secondary); }
+.tpo-cap { min-height: 5.6rem; padding: .55rem .8rem; border-radius: 8px; background: var(--theme, transparent); border: 1px dashed var(--border, rgba(148,163,184,.45)); }
+.tpo-cap p { margin: 0 !important; font-size: .9rem; line-height: 1.6; }
+.tpo-cap .tpo-en { color: var(--secondary); margin-top: .25rem !important; }
+.tpo-cap code { font-size: .82em; }
+.tpo-ctrl { display: flex; justify-content: center; gap: .45rem; margin-top: .75rem; flex-wrap: wrap; }
+.tpo-legend { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: .6rem; font-size: .74rem; color: var(--secondary); }
+.tpo-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.tpo-legend .lg { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 2px solid var(--border); }
+.tpo-legend .lg.cur { background: var(--tp-accent); border-color: var(--tp-accent); }
+.tpo-legend .lg.proc { background: var(--tp-proc); border-color: var(--tp-proc); }
+.tpo-legend .lg.stk { border-color: var(--tp-accent); border-width: 3px; }
+.tpo-legend .lg.done { background: var(--tp-done); border-color: var(--tp-done); }
+@media (prefers-reduced-motion: reduce) { .tpo * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("{{ $id }}");
+  if (!root) return;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var $ = function (s) { return root.querySelector(s); };
+
+  // ---- build tree from LeetCode level-order ----
+  var arr = root.dataset.tree.split(",").map(function (s) {
+    s = s.trim(); return (s === "null" || s === "") ? null : Number(s);
+  });
+  function mk(v) { return { val: v, left: null, right: null }; }
+  var tree = arr.length && arr[0] !== null ? mk(arr[0]) : null;
+  var q = tree ? [tree] : [], i = 1;
+  while (q.length && i < arr.length) {
+    var n = q.shift();
+    if (i < arr.length && arr[i] !== null) { n.left = mk(arr[i]); q.push(n.left); } i++;
+    if (i < arr.length && arr[i] !== null) { n.right = mk(arr[i]); q.push(n.right); } i++;
+  }
+  var nodes = [], maxD = 0;
+  (function lay(n, d) {
+    if (!n) return; lay(n.left, d + 1);
+    n.ix = nodes.length; n.d = d; maxD = Math.max(maxD, d); nodes.push(n);
+    lay(n.right, d + 1);
+  })(tree, 0);
+  var GX = 60, GY = 70, PX = 40, PY = 30;
+  nodes.forEach(function (n) { n.x = PX + n.ix * GX; n.y = PY + n.d * GY; });
+
+  // ---- code panel ----
+  var CODE = [
+    "def gain(node):",
+    "    nonlocal ans",
+    "    if not node: return 0",
+    "    left  = max(gain(node.left), 0)   # 1 left",
+    "    right = max(gain(node.right), 0)  # 2 right",
+    "    ans = max(ans, node.val + left + right) # 3",
+    "    return node.val + max(left, right)"
+  ];
+  $(".tpo-code").innerHTML = CODE.map(function (l) {
+    return '<div class="ln">' + l.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>";
+  }).join("");
+  var lines = root.querySelectorAll(".tpo-code .ln");
+
+  // ---- draw svg ----
+  var svg = $(".tpo-tree");
+  var W = PX * 2 + (nodes.length - 1) * GX, H = PY * 2 + maxD * GY + 24;
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    (parent || svg).appendChild(e); return e;
+  }
+  nodes.forEach(function (n) {
+    [n.left, n.right].forEach(function (c) { if (c) el("line", { x1: n.x, y1: n.y, x2: c.x, y2: c.y }); });
+  });
+  // dashed "None" stubs for empty children, shown when gain(None) is called
+  nodes.forEach(function (n) {
+    ["left", "right"].forEach(function (side) {
+      if (n[side]) return;
+      var dx = side === "left" ? -18 : 18, g = el("g", { "class": "nul" });
+      el("line", { x1: n.x + dx * 0.8, y1: n.y + 16, x2: n.x + dx * 1.3, y2: n.y + 38 }, g);
+      el("text", { x: n.x + dx * 1.45, y: n.y + 49 }, g).textContent = "None→0";
+      n["nul_" + side] = g;
+    });
+  });
+  nodes.forEach(function (n) {
+    var g = el("g", { "class": "nd" });
+    el("circle", { "class": "c", cx: n.x, cy: n.y, r: 19 }, g);
+    el("text", { "class": "v", x: n.x, y: n.y }, g).textContent = n.val;
+    var b = el("g", { "class": "badge" }, g);
+    el("circle", { cx: n.x + 16, cy: n.y - 16, r: 8.5 }, b);
+    n.badge = el("text", { x: n.x + 16, y: n.y - 16 }, b);
+    n.ret = el("text", { "class": "ret", x: n.x - 21, y: n.y - 18 }, g);
+    n.g = g;
+  });
+
+  // ---- simulate gain() and record every step ----
+  function fmt(v) { return v === -Infinity ? "-∞" : String(v); }
+  function c(s) { return "<code>" + s + "</code>"; }
+  function simulate() {
+    var steps = [], stack = [], done = [], rets = new Map(), ans = -Infinity;
+    function snap(o) {
+      steps.push({ cur: o.cur || null, lines: o.lines || [], self: !!o.self, nul: o.nul || null,
+        stack: stack.slice(), done: done.slice(), rets: new Map(rets), ans: ans, up: !!o.up,
+        L: o.L, R: o.R, en: o.en, zh: o.zh });
+    }
+    function gain(n) {
+      stack.push(n);
+      var v = n.val, L, R, g, rEn, rZh;
+      if (n.left) {
+        snap({ cur: n, lines: [3],
+          zh: "进入 " + c("gain(" + v + ")") + "。规则：先左 → 调用 " + c("gain(" + n.left.val + ")") + "，" + v + " 自己先在栈上等着。",
+          en: "Enter " + c("gain(" + v + ")") + ". Rule: left first → call " + c("gain(" + n.left.val + ")") + "; " + v + " waits on the stack." });
+        g = gain(n.left); L = Math.max(g, 0);
+        rZh = "回到 " + c("gain(" + v + ")") + "：左子树返回 " + g + "，left = max(" + g + ", 0) = " + L + "。左边完成，现在 " + v + " 才去右边：";
+        rEn = "Back in " + c("gain(" + v + ")") + ": left returned " + g + ", so left = max(" + g + ", 0) = " + L + ". Left is done, so " + v + " now goes right: ";
+      } else {
+        L = 0;
+        snap({ cur: n, lines: [2, 3], nul: n.nul_left, L: 0,
+          zh: "进入 " + c("gain(" + v + ")") + "。先左，但左是 None → " + c("gain(None)") + " 直接 return 0，left = 0。",
+          en: "Enter " + c("gain(" + v + ")") + ". Left first, but left is None → " + c("gain(None)") + " returns 0, so left = 0." });
+        rZh = "左边完成（是空的）。现在 " + v + " 去右边：";
+        rEn = "Left is done (it was empty). Now " + v + " goes right: ";
+      }
+      if (n.right) {
+        snap({ cur: n, lines: [4], L: L,
+          zh: rZh + "调用 " + c("gain(" + n.right.val + ")") + "。进了右子树，又是重新「先左后右」。",
+          en: rEn + "call " + c("gain(" + n.right.val + ")") + ". Inside the right subtree, \"left first, then right\" starts over." });
+        g = gain(n.right); R = Math.max(g, 0);
+        snap({ cur: n, lines: [4], L: L, R: R,
+          zh: "回到 " + c("gain(" + v + ")") + "：右子树返回 " + g + "，right = max(" + g + ", 0) = " + R + "。两边都完成 → 轮到 " + v + " 处理自己。",
+          en: "Back in " + c("gain(" + v + ")") + ": right returned " + g + ", so right = max(" + g + ", 0) = " + R + ". Both sides done → " + v + " can process itself." });
+      } else {
+        R = 0;
+        snap({ cur: n, lines: [2, 4], nul: n.nul_right, L: L, R: 0,
+          zh: rZh + "右是 None → return 0，right = 0。两边都完成。",
+          en: rEn + "right is None → returns 0, so right = 0. Both sides done." });
+      }
+      var old = ans, path = v + L + R, ret = v + Math.max(L, R);
+      ans = Math.max(ans, path);
+      done.push(n); rets.set(n, ret);
+      snap({ cur: n, lines: [5, 6], self: true, L: L, R: R, up: ans !== old,
+        zh: "处理 " + v + "（自己，最后才轮到）：ans = max(" + fmt(old) + ", " + v + " + " + L + " + " + R + ") = " + fmt(ans) +
+          (ans !== old ? " ⬆" : "（不变）") + "。然后 return " + v + " + max(" + L + ", " + R + ") = <b>" + ret + "</b> 给上一层。",
+        en: "Process " + v + " (self, always last): ans = max(" + fmt(old) + ", " + path + ") = " + fmt(ans) +
+          (ans !== old ? " ⬆" : " (unchanged)") + ". Then return " + v + " + max(" + L + ", " + R + ") = <b>" + ret + "</b> to the caller." });
+      stack.pop();
+      return ret;
+    }
+    if (tree) gain(tree);
+    var order = done.map(function (n) { return n.val; }).join(" → ");
+    snap({ cur: null, lines: [],
+      zh: "全部结束，栈空了。处理顺序：<b>" + order + "</b>（左 → 右 → 自己）。最大路径和 ans = <b>" + fmt(ans) + "</b>。",
+      en: "All done, the stack is empty. Processing order: <b>" + order + "</b> (left → right → self). Max path sum ans = <b>" + fmt(ans) + "</b>." });
+    return steps;
+  }
+
+  // ---- render ----
+  var steps = simulate(), at = 0, timer = null;
+  function show(v) { return v === undefined ? "—" : v; }
+  function render() {
+    var s = steps[at];
+    var onStack = new Set(s.stack), order = new Map();
+    s.done.forEach(function (n, j) { order.set(n, j + 1); });
+    nodes.forEach(function (n) {
+      var cl = "nd";
+      if (onStack.has(n)) cl += " stk";
+      if (order.has(n)) { cl += " done"; n.badge.textContent = order.get(n); n.ret.textContent = "↑" + s.rets.get(n); }
+      if (s.cur === n) cl += s.self ? " proc" : " cur";
+      n.g.setAttribute("class", cl);
+      if (n.nul_left) n.nul_left.classList.toggle("show", s.nul === n.nul_left);
+      if (n.nul_right) n.nul_right.classList.toggle("show", s.nul === n.nul_right);
+    });
+    lines.forEach(function (l, j) {
+      var on = s.lines.indexOf(j) >= 0;
+      l.classList.toggle("on", on); l.classList.toggle("self", on && s.self);
+    });
+    $(".tpo-L").textContent = show(s.L);
+    $(".tpo-R").textContent = show(s.R);
+    var aEl = $(".tpo-ans"); aEl.textContent = fmt(s.ans); aEl.classList.toggle("up", s.up);
+    $(".tpo-stack").innerHTML = s.stack.length
+      ? s.stack.map(function (n) { return "<span>gain(" + n.val + ")</span>"; }).join("")
+      : "<em>(empty)</em>";
+    $(".tpo-seq").innerHTML = s.done.length
+      ? s.done.map(function (n) { return "<span>" + n.val + "</span>"; }).join("<i>→</i>")
+      : "<em>(nothing processed yet)</em>";
+    $(".tpo-zh").innerHTML = s.zh;
+    $(".tpo-en").innerHTML = s.en;
+    $(".tpo-count").textContent = "Step " + (at + 1) + " / " + steps.length;
+    $('[data-act="prev"]').disabled = at === 0;
+    $('[data-act="reset"]').disabled = at === 0;
+    $('[data-act="next"]').disabled = at === steps.length - 1;
+  }
+  function go(d) { at = Math.max(0, Math.min(steps.length - 1, at + d)); render(); }
+  function stop() {
+    clearInterval(timer); timer = null;
+    var p = $(".tpo-play"); p.classList.remove("playing"); p.textContent = "▶ Play";
+  }
+  function play() {
+    if (timer) return stop();
+    if (at === steps.length - 1) { at = 0; render(); }
+    var p = $(".tpo-play"); p.classList.add("playing"); p.textContent = "⏸ Pause";
+    timer = setInterval(function () { if (at >= steps.length - 1) stop(); else go(1); }, 1800);
+  }
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var a = b.dataset.act;
+    if (a === "play") return play();
+    stop();
+    if (a === "next") go(1); else if (a === "prev") go(-1); else if (a === "reset") { at = 0; render(); }
+  });
+  root.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { stop(); go(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { stop(); go(-1); e.preventDefault(); }
+  });
+  render();
+})();
+</script>
