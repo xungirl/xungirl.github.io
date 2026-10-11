@@ -1,33 +1,50 @@
-/* ---- Home / list pages: photo background + frosted-glass cards ----
-   Photo: Unsplash (alpridephoto). Applies only to body.list (home, tags, archives…);
-   article pages keep the plain theme background for readability. */
-body.list {
+/* ---- Site-wide: photo background + frosted glass ----
+   Photo: Unsplash (alpridephoto). List pages (home, tags, archives…) get glass cards;
+   article pages get one glass panel around the article, opaque enough to read on. */
+body {
   --glass-bg: rgba(255, 255, 255, 0.52);
   --glass-bg-hover: rgba(255, 255, 255, 0.68);
+  --glass-bg-read: rgba(255, 255, 255, 0.78);
   --glass-border: rgba(255, 255, 255, 0.7);
   --glass-shadow: 0 8px 32px rgba(31, 38, 70, 0.12);
   background: transparent;
 }
-body.list::before {
+body::before {
   content: ""; position: fixed; inset: 0; z-index: -1;
   background: url("/images/home-bg.jpg") center / cover no-repeat;
 }
-[data-theme="dark"] body.list {
+[data-theme="dark"] body {
   --glass-bg: rgba(24, 24, 30, 0.55);
   --glass-bg-hover: rgba(34, 34, 42, 0.7);
+  --glass-bg-read: rgba(24, 24, 30, 0.8);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
 }
 /* dark mode: invert the paper photo into a dark "blueprint" */
-[data-theme="dark"] body.list::before { filter: invert(0.92) hue-rotate(180deg) brightness(0.85) contrast(0.9); }
+[data-theme="dark"] body::before { filter: invert(0.92) hue-rotate(180deg) brightness(0.85) contrast(0.9); }
 
-@media (min-width: 769px) { body.list .header { position: sticky; top: 0; z-index: 10; } }
-body.list .header {
+@media (min-width: 769px) { body .header { position: sticky; top: 0; z-index: 10; } }
+body .header {
   background: var(--glass-bg);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   backdrop-filter: blur(16px) saturate(160%);
   border-bottom: 1px solid var(--glass-border);
 }
+
+/* ---- article pages ---- */
+body:not(.list) .post-single {
+  background: var(--glass-bg-read);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+body:not(.list) .post-single {
+  padding: calc(var(--gap) * 1.4); border-radius: 18px; margin-top: var(--gap);
+}
+@media (max-width: 600px) { body:not(.list) .post-single { padding: 18px 16px; border-radius: 14px; } }
+body:not(.list) .post-single .post-cover img { border-radius: 10px; }
+body:not(.list) .post-single .post-header { margin-top: 0; }
 
 body.list .home-info,
 body.list .post-entry,
@@ -35,7 +52,7 @@ body.list .page-header,
 body.list .archive-year,
 body.list .terms-tags,
 body.list .pagination a,
-body.list .site-extra .custom-footer {
+body .site-extra .custom-footer {
   background: var(--glass-bg);
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   backdrop-filter: blur(14px) saturate(150%);
@@ -103,15 +120,15 @@ body.list .terms-tags { padding: 16px; border-radius: 14px; }
 body.list .terms-tags a { background: var(--glass-bg-hover); }
 body.list .pagination a { border-radius: 999px; color: var(--primary); }
 /* the theme footer's own text is hidden (extend_head), so the timer below gets the glass pill */
-body.list .site-extra .custom-footer {
+body .site-extra .custom-footer {
   display: inline-block !important; max-width: calc(100% - 32px);
   padding: 6px 22px; border-radius: 999px; color: var(--primary);
 }
 
 /* no backdrop-filter support → fall back to more opaque cards */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  body.list { --glass-bg: rgba(255, 255, 255, 0.88); }
-  [data-theme="dark"] body.list { --glass-bg: rgba(29, 30, 32, 0.9); }
+  body { --glass-bg: rgba(255, 255, 255, 0.88); --glass-bg-read: rgba(255, 255, 255, 0.94); }
+  [data-theme="dark"] body { --glass-bg: rgba(29, 30, 32, 0.9); --glass-bg-read: rgba(29, 30, 32, 0.95); }
 }
 @media (prefers-reduced-motion: reduce) {
   body.list .post-entry, body.list .post-entry .fold, body.list .post-entry h2 { transition: none !important; }
