@@ -7,6 +7,8 @@ body {
   --glass-bg-read: rgba(255, 255, 255, 0.78);
   --glass-border: rgba(255, 255, 255, 0.7);
   --glass-shadow: 0 8px 32px rgba(31, 38, 70, 0.12);
+  /* card corners, Apple sizes; see the corner-shape block at the end */
+  --r-xl: 18px; --r-lg: 16px; --r-md: 14px; --r-sm: 10px;
   background: transparent;
 }
 body::before {
@@ -40,10 +42,10 @@ body:not(.list) .post-single {
   box-shadow: var(--glass-shadow);
 }
 body:not(.list) .post-single {
-  padding: calc(var(--gap) * 1.4); border-radius: 18px; margin-top: var(--gap);
+  padding: calc(var(--gap) * 1.4); border-radius: var(--r-xl); margin-top: var(--gap);
 }
-@media (max-width: 600px) { body:not(.list) .post-single { padding: 18px 16px; border-radius: 14px; } }
-body:not(.list) .post-single .post-cover img { border-radius: 10px; }
+@media (max-width: 600px) { body:not(.list) .post-single { padding: 18px 16px; border-radius: var(--r-md); } }
+body:not(.list) .post-single .post-cover img { border-radius: var(--r-sm); }
 body:not(.list) .post-single .post-header { margin-top: 0; }
 
 body.list .home-info,
@@ -59,9 +61,9 @@ body .site-extra .custom-footer {
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
-body.list .home-info { padding: calc(var(--gap) * 1.4); border-radius: 18px; min-height: 0; }
+body.list .home-info { padding: calc(var(--gap) * 1.4); border-radius: var(--r-xl); min-height: 0; }
 body.list .post-entry {
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
 }
 body.list:not(.fold-js) .post-entry:hover,
@@ -113,10 +115,10 @@ body.list .entry-date {
   color: var(--secondary); font-variant-numeric: tabular-nums; letter-spacing: .02em;
 }
 
-body.list .entry-cover { border-radius: 10px; overflow: hidden; }
-body.list .page-header { padding: 14px 20px; border-radius: 14px; }
-body.list .archive-year { padding: 14px 20px; border-radius: 14px; margin-bottom: var(--gap); }
-body.list .terms-tags { padding: 16px; border-radius: 14px; }
+body.list .entry-cover { border-radius: var(--r-sm); overflow: hidden; }
+body.list .page-header { padding: 14px 20px; border-radius: var(--r-md); }
+body.list .archive-year { padding: 14px 20px; border-radius: var(--r-md); margin-bottom: var(--gap); }
+body.list .terms-tags { padding: 16px; border-radius: var(--r-md); }
 body.list .terms-tags a { background: var(--glass-bg-hover); }
 body.list .pagination a { border-radius: 999px; color: var(--primary); }
 /* the theme footer's own text is hidden (extend_head), so the timer below gets the glass pill */
@@ -129,6 +131,21 @@ body .site-extra .custom-footer {
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   body { --glass-bg: rgba(255, 255, 255, 0.88); --glass-bg-read: rgba(255, 255, 255, 0.94); }
   [data-theme="dark"] body { --glass-bg: rgba(29, 30, 32, 0.9); --glass-bg-read: rgba(29, 30, 32, 0.95); }
+}
+/* Apple-style continuous corners: the curve eases into the straight edge instead of
+   meeting it at a hard tangent (iOS / apple.com squircle). A squircle of the same radius
+   looks tighter, so radii scale up ~1.5x to keep the same visual roundness.
+   Browsers without corner-shape keep the plain round corners above. Pills stay capsules. */
+@supports (corner-shape: squircle) {
+  body { --r-xl: 28px; --r-lg: 24px; --r-md: 22px; --r-sm: 16px; }
+  body:not(.list) .post-single,
+  body:not(.list) .post-single .post-cover img,
+  body.list .home-info,
+  body.list .post-entry,
+  body.list .entry-cover,
+  body.list .page-header,
+  body.list .archive-year,
+  body.list .terms-tags { corner-shape: squircle; }
 }
 @media (prefers-reduced-motion: reduce) {
   body.list .post-entry, body.list .post-entry .fold, body.list .post-entry h2 { transition: none !important; }
