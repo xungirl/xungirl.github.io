@@ -6,6 +6,9 @@ tags: ["LeetCode", "递归", "DFS", "后序遍历", "学习笔记"]
 math: true
 ShowToc: true
 TocOpen: true
+cover:
+  image: "cover.png"
+  alt: "二叉树后序递归：左 → 右 → 自己，处理顺序 2 → -4 → -6 → -1 → 3 → 1 / Binary tree post-order recursion: left → right → self"
 description: "用可交互的逐步图解看清二叉树递归到底按什么顺序走：一路先钻到最左，左边返回后才去右边，两边都返回后才处理自己。以 LC 124 的 gain 函数为例。"
 ---
 
