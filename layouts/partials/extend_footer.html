@@ -40,7 +40,7 @@
   if (!document.querySelector(".post-entry")) return;
   document.body.classList.add("fold-js");
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var ANIM = reduce ? 0 : 560, open = null, lockUntil = 0, lx = -1, ly = -1, timer = 0;
+  var ANIM = reduce ? 0 : 600, open = null, lockUntil = 0, lx = -1, ly = -1, timer = 0;
   var pinned = null, pinTop = 0;
 
   function correct() {
