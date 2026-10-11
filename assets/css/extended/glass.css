@@ -86,12 +86,20 @@ body.list .post-entry:active { transform: none; }
   body.list:not(.fold-js) .post-entry:hover .entry-header h2,
   body.list .post-entry:focus-within .entry-header h2 { font-size: 24px; }
 }
+/* title row: title on the left, short date ("Oct 10 '26") pinned to the right */
+body.list .post-entry .entry-header { display: flex; align-items: baseline; gap: 16px; }
+body.list .post-entry .entry-header h2 { flex: 1; min-width: 0; }
+body.list .entry-date {
+  flex: none; white-space: nowrap; font-size: 14px; font-weight: 600;
+  color: var(--secondary); font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+
 body.list .entry-cover { border-radius: 10px; overflow: hidden; }
 body.list .page-header { padding: 14px 20px; border-radius: 14px; }
 body.list .archive-year { padding: 14px 20px; border-radius: 14px; margin-bottom: var(--gap); }
 body.list .terms-tags { padding: 16px; border-radius: 14px; }
 body.list .terms-tags a { background: var(--glass-bg-hover); }
-body.list .pagination a { border-radius: 999px; }
+body.list .pagination a { border-radius: 999px; color: var(--primary); }
 body.list .footer { width: fit-content; max-width: calc(100% - 32px); margin: var(--gap) auto; padding: 4px 22px; border-radius: 16px; }
 
 /* no backdrop-filter support → fall back to more opaque cards */

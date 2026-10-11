@@ -70,9 +70,10 @@
   {{- with trim (partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden)) " \n\t" }}
   <div class="fold fold-cover"><div class="fold-in">{{ . | safeHTML }}</div></div>
   {{- end }}
+  {{- /* override: drop a leading "YYYY-MM-DD " from the title; the date sits at the right instead */}}
   <header class="entry-header">
     <h2 class="entry-hint-parent">
-      {{- .Title }}
+      {{- replaceRE `^\d{4}-\d{2}-\d{2}\s*` "" .Title }}
       {{- if .Draft }}
       <span class="entry-hint" title="Draft">
         <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
@@ -82,6 +83,9 @@
       </span>
       {{- end }}
     </h2>
+    {{- if not .Date.IsZero }}
+    <time class="entry-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2 '06" }}</time>
+    {{- end }}
   </header>
   <div class="fold fold-body"><div class="fold-in">
   {{- if (ne (.Param "hideSummary") true) }}
@@ -90,9 +94,16 @@
   </div>
   {{- end }}
   {{- if not (.Param "hideMeta") }}
+  {{- /* override: post_meta without the date (it's already at the right of the title) */}}
+  {{- $meta := slice }}
+  {{- if .Param "ShowReadingTime" }}{{ $meta = $meta | append (i18n "read_time" .ReadingTime | default (printf "%d min" .ReadingTime)) }}{{ end }}
+  {{- if .Param "ShowWordCount" }}{{ $meta = $meta | append (i18n "words" .WordCount | default (printf "%d words" .WordCount)) }}{{ end }}
+  {{- if not (.Param "hideAuthor") }}{{ with partial "author.html" . }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
+  {{- with $meta }}
   <footer class="entry-footer">
-    {{- partial "post_meta.html" . -}}
+    {{- range $i, $m := . }}{{ if $i }}&nbsp;·&nbsp;{{ end }}<span>{{ $m }}</span>{{ end -}}
   </footer>
+  {{- end }}
   {{- end }}
   </div></div>
   <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
