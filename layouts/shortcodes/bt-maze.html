@@ -1,0 +1,262 @@
+{{- /*
+  Step-through visualizer: walking a maze with backtracking (DFS, try → ↓ ← ↑ in order).
+  Usage:
+    {{< bt-maze >}}
+  maze: rows separated by "/", "S" start, "E" exit, "#" wall, "." open (optional; has a default).
+*/ -}}
+{{- $id := printf "btm-%d" .Ordinal -}}
+<div class="btm" id="{{ $id }}" tabindex="0"
+     data-maze="{{ .Get "maze" | default "S....#/.###.#/...#.#/##.###/.....E" }}">
+  <div class="btm-top">
+    <span class="btm-act"></span>
+    <span class="btm-count"></span>
+  </div>
+  <div class="btm-body">
+    <svg class="btm-grid" role="img" aria-label="maze"></svg>
+    <div class="btm-side">
+      <div class="btm-code"></div>
+      <div class="btm-row"><span class="btm-lbl">path</span><div class="btm-path"></div></div>
+      <div class="btm-row"><span class="btm-lbl">dead ends</span><div class="btm-dead"></div></div>
+    </div>
+  </div>
+  <div class="btm-cap">
+    <p class="btm-zh"></p>
+    <p class="btm-en"></p>
+  </div>
+  <div class="btm-ctrl">
+    <button type="button" data-act="reset" title="Reset">⏮</button>
+    <button type="button" data-act="prev" title="Previous (←)">◀ Prev</button>
+    <button type="button" data-act="play" class="btm-play" title="Auto play">▶ Play</button>
+    <button type="button" data-act="next" title="Next (→)">Next ▶</button>
+  </div>
+  <div class="btm-legend">
+    <span><i class="lg cur"></i>you · 你在这</span>
+    <span><i class="lg on"></i>on path (rope) · 绳子还拉着</span>
+    <span><i class="lg dead"></i>dead end, rope rolled back · 死路，绳子收回</span>
+    <span><i class="lg wall"></i>wall · 墙</span>
+  </div>
+</div>
+
+<style>
+.btm {
+  --bm-accent: #f97316; --bm-dead: #94a3b8; --bm-up: #6366f1; --bm-exit: #10b981; --bm-wall: rgba(71,85,105,.75);
+  margin: 1.6rem 0; padding: 1rem 1.1rem 0.9rem; border-radius: 14px; outline: none;
+  background: var(--entry, rgba(148,163,184,0.08));
+  border: 1px solid var(--border, rgba(148,163,184,0.3));
+}
+.btm:focus-visible { border-color: var(--bm-accent); }
+.btm-top { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+.btm-act { font-size: .78rem; font-weight: 800; padding: .15rem .6rem; border-radius: 999px; color: #fff; background: var(--secondary); }
+.btm-act.down { background: var(--bm-accent); }
+.btm-act.up { background: var(--bm-up); }
+.btm-act.rec { background: var(--bm-exit); }
+.btm-count { font-size: .8rem; font-weight: 700; color: var(--bm-accent); font-variant-numeric: tabular-nums; }
+.btm button {
+  font: inherit; font-size: .82rem; cursor: pointer; line-height: 1.2;
+  padding: .38rem .75rem; border-radius: 999px;
+  color: var(--primary); background: var(--theme, transparent);
+  border: 1px solid var(--border, rgba(148,163,184,0.45));
+  transition: border-color .15s, background .15s, color .15s;
+}
+.btm button:hover:not(:disabled) { border-color: var(--bm-accent); color: var(--bm-accent); }
+.btm button:disabled { opacity: .4; cursor: default; }
+.btm button.btm-play.playing { background: var(--bm-accent); border-color: var(--bm-accent); color: #fff; }
+.btm-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 1rem; margin: .7rem 0 .4rem; align-items: start; }
+@media (max-width: 680px) { .btm-body { grid-template-columns: minmax(0, 1fr); } }
+.btm-grid { width: 100%; height: auto; display: block; max-width: 380px; margin: 0 auto; }
+.btm-grid rect.cell { fill: var(--theme, #fff); stroke: var(--border, rgba(148,163,184,.5)); stroke-width: 1; transition: fill .25s; }
+.btm-grid rect.cell.wall { fill: var(--bm-wall); }
+.btm-grid rect.cell.on { fill: rgba(249,115,22,.2); }
+.btm-grid rect.cell.dead { fill: rgba(148,163,184,.3); }
+.btm-grid rect.cell.exit { fill: rgba(16,185,129,.25); }
+.btm-grid text.mk { font-size: 13px; font-weight: 800; text-anchor: middle; dominant-baseline: central; fill: var(--bm-exit); }
+.btm-grid text.x { font-size: 16px; font-weight: 800; text-anchor: middle; dominant-baseline: central; fill: var(--bm-dead); opacity: 0; transition: opacity .25s; }
+.btm-grid text.x.show { opacity: 1; }
+.btm-grid polyline.rope { fill: none; stroke: var(--bm-accent); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.btm-grid circle.me { fill: var(--bm-accent); stroke: #fff; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(249,115,22,.8)); transition: cx .3s, cy .3s; }
+.btm-grid circle.me.up { fill: var(--bm-up); filter: drop-shadow(0 0 6px rgba(99,102,241,.8)); }
+.btm-grid circle.me.win { fill: var(--bm-exit); filter: drop-shadow(0 0 8px rgba(16,185,129,.9)); }
+.btm-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .7rem; line-height: 1.55;
+  background: var(--code-bg, rgba(148,163,184,0.12)); border-radius: 8px; padding: .5rem 0; overflow-x: auto;
+}
+.btm-code .ln { white-space: pre; padding: 0 .7rem; border-left: 3px solid transparent; color: var(--secondary); transition: background .2s; }
+.btm-code .ln.on { background: rgba(249,115,22,.16); border-left-color: var(--bm-accent); color: var(--primary); font-weight: 600; }
+.btm-code .ln.on.up { background: rgba(99,102,241,.16); border-left-color: var(--bm-up); }
+.btm-code .ln.on.rec { background: rgba(16,185,129,.16); border-left-color: var(--bm-exit); }
+.btm-row { display: flex; align-items: flex-start; gap: .5rem; margin-top: .55rem; }
+.btm-lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--secondary); min-width: 4.4rem; padding-top: .2rem; }
+.btm-path, .btm-dead { display: flex; flex-wrap: wrap; gap: .2rem; min-height: 1.5rem; }
+.btm-path span, .btm-dead span { font-family: ui-monospace, Menlo, monospace; font-size: .7rem; padding: .08rem .3rem; border-radius: 5px; }
+.btm-path span { border: 1px solid var(--bm-accent); color: var(--bm-accent); }
+.btm-path span:last-child { background: var(--bm-accent); color: #fff; }
+.btm-dead span { background: rgba(148,163,184,.25); color: var(--secondary); }
+.btm em { font-style: normal; font-size: .76rem; color: var(--secondary); }
+.btm-cap { min-height: 5.2rem; padding: .55rem .8rem; border-radius: 8px; background: var(--theme, transparent); border: 1px dashed var(--border, rgba(148,163,184,.45)); }
+.btm-cap p { margin: 0 !important; font-size: .9rem; line-height: 1.6; }
+.btm-cap .btm-en { color: var(--secondary); margin-top: .25rem !important; }
+.btm-cap code { font-size: .82em; }
+.btm-ctrl { display: flex; justify-content: center; gap: .45rem; margin-top: .75rem; flex-wrap: wrap; }
+.btm-legend { display: flex; justify-content: center; gap: .9rem; flex-wrap: wrap; margin-top: .6rem; font-size: .72rem; color: var(--secondary); }
+.btm-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.btm-legend .lg { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.btm-legend .lg.cur { background: var(--bm-accent); border-radius: 50%; }
+.btm-legend .lg.on { background: rgba(249,115,22,.35); }
+.btm-legend .lg.dead { background: rgba(148,163,184,.45); }
+.btm-legend .lg.wall { background: var(--bm-wall); }
+@media (prefers-reduced-motion: reduce) { .btm * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("{{ $id }}");
+  if (!root) return;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var $ = function (s) { return root.querySelector(s); };
+  var G = root.dataset.maze.split("/"), R = G.length, C = G[0].length, S, E;
+  G.forEach(function (row, r) {
+    for (var c = 0; c < C; c++) { if (row[c] === "S") S = [r, c]; if (row[c] === "E") E = [r, c]; }
+  });
+
+  var CODE = [
+    "def walk(r, c):",
+    "    if (r, c) == EXIT: return True",
+    "    for dr, dc in DIRS:   # → ↓ ← ↑",
+    "        nr, nc = r + dr, c + dc",
+    "        if ok(nr, nc):    # open & unseen",
+    "            seen.add((nr, nc))",
+    "            path.append((nr, nc))",
+    "            if walk(nr, nc): return True",
+    "            path.pop()    # step back",
+    "    return False"
+  ];
+  $(".btm-code").innerHTML = CODE.map(function (l) {
+    return '<div class="ln">' + l.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>";
+  }).join("");
+  var lines = root.querySelectorAll(".btm-code .ln");
+
+  // ---- simulate ----
+  var DIRS = [[0, 1, "→", "右", "right"], [1, 0, "↓", "下", "down"], [0, -1, "←", "左", "left"], [-1, 0, "↑", "上", "up"]];
+  function key(p) { return p[0] + "," + p[1]; }
+  function P(p) { return "(" + p[0] + "," + p[1] + ")"; }
+  function c(s) { return "<code>" + s + "</code>"; }
+  function open(r, cc) { return r >= 0 && r < R && cc >= 0 && cc < C && G[r][cc] !== "#"; }
+  function simulate() {
+    var steps = [], path = [S], seen = new Set([key(S)]), dead = [];
+    function snap(o) { steps.push({ path: path.slice(), dead: dead.slice(), act: o.act, lines: o.lines, zh: o.zh, en: o.en }); }
+    snap({ act: "rec", lines: [0],
+      zh: "站在起点 S" + P(S) + "，手里拿着一卷绳子（path），绳头拴在起点。规则：每到一格，按 → ↓ ← ↑ 的顺序试。",
+      en: "Stand at the start S" + P(S) + " holding a ball of rope (path) tied to the start. Rule: at each cell, try → ↓ ← ↑ in that order." });
+    function why(r, cc) {
+      if (r < 0 || r >= R || cc < 0 || cc >= C) return ["出界", "off the map"];
+      if (G[r][cc] === "#") return ["是墙", "a wall"];
+      return ["走过了", "already seen"];
+    }
+    function walk(p) {
+      if (p[0] === E[0] && p[1] === E[1]) {
+        snap({ act: "rec", lines: [1],
+          zh: "到出口 E 了！" + c("return True") + " 一路传回去。现在拉着的绳子就是答案：" + path.map(P).join(" → ") + "，共 " + (path.length - 1) + " 步。",
+          en: "Reached the exit E! " + c("return True") + " bubbles all the way up. The rope still in your hand is the answer: " + (path.length - 1) + " moves." });
+        return true;
+      }
+      var blocked = [];
+      for (var d = 0; d < 4; d++) {
+        var n = [p[0] + DIRS[d][0], p[1] + DIRS[d][1]];
+        if (!open(n[0], n[1]) || seen.has(key(n))) { var w = why(n[0], n[1]); blocked.push([DIRS[d][2] + " " + w[0], DIRS[d][2] + " " + w[1]]); continue; }
+        seen.add(key(n)); path.push(n);
+        var bz = blocked.length ? "（" + blocked.map(function (b) { return b[0]; }).join("，") + "）" : "";
+        var be = blocked.length ? " (" + blocked.map(function (b) { return b[1]; }).join(", ") + ")" : "";
+        blocked = [];
+        snap({ act: "down", lines: [4, 5, 6, 7],
+          zh: "在 " + P(p) + bz + "，往" + DIRS[d][3] + DIRS[d][2] + "能走 → 前进到 " + P(n) + "，放出一段绳子：" + c("path.append(" + P(n) + ")") + "。",
+          en: "At " + P(p) + be + ", " + DIRS[d][4] + " " + DIRS[d][2] + " is open → step to " + P(n) + " and let out rope: " + c("path.append(" + P(n) + ")") + "." });
+        if (walk(n)) return true;
+        path.pop(); dead.push(n);
+        snap({ act: "up", lines: [9, 8],
+          zh: P(n) + " 四个方向都走不通 → " + c("return False") + "。退回 " + P(p) + "，把那段绳子收回来：" + c("path.pop()") + "。粉笔叉（seen）留着，以后不再进去。",
+          en: "Every way out of " + P(n) + " is blocked → " + c("return False") + ". Step back to " + P(p) + " and roll the rope back in: " + c("path.pop()") + ". The chalk mark (seen) stays, so we never go in again." });
+      }
+      return false;
+    }
+    walk(S);
+    return steps;
+  }
+  var steps = simulate();
+
+  // ---- draw ----
+  var CS = 44, PAD = 4, svg = $(".btm-grid");
+  svg.setAttribute("viewBox", "0 0 " + (C * CS + PAD * 2) + " " + (R * CS + PAD * 2));
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function cx(p) { return PAD + p[1] * CS + CS / 2; }
+  function cy(p) { return PAD + p[0] * CS + CS / 2; }
+  var cells = {}, xs = {};
+  for (var r = 0; r < R; r++) for (var cc = 0; cc < C; cc++) {
+    var ch = G[r][cc];
+    cells[r + "," + cc] = el("rect", { "class": "cell" + (ch === "#" ? " wall" : "") + (ch === "E" ? " exit" : ""),
+      x: PAD + cc * CS, y: PAD + r * CS, width: CS, height: CS, rx: 4 });
+    if (ch === "S" || ch === "E") el("text", { "class": "mk", x: PAD + cc * CS + CS / 2, y: PAD + r * CS + 11 }).textContent = ch;
+    if (ch !== "#") xs[r + "," + cc] = el("text", { "class": "x", x: PAD + cc * CS + CS / 2, y: PAD + r * CS + CS / 2 + 1 });
+  }
+  Object.keys(xs).forEach(function (k) { xs[k].textContent = "✕"; });
+  var rope = el("polyline", { "class": "rope" });
+  var me = el("circle", { "class": "me", r: 10, cx: cx(S), cy: cy(S) });
+
+  // ---- render ----
+  var at = 0, timer = null;
+  var ACT = { down: "append → 前进", up: "pop ← 后退", rec: "start / exit" };
+  function render() {
+    var s = steps[at], on = new Set(s.path.map(key)), dd = new Set(s.dead.map(key));
+    Object.keys(cells).forEach(function (k) {
+      var rc = cells[k], base = rc.getAttribute("class").replace(/ (on|dead)/g, "");
+      if (!/wall/.test(base)) rc.setAttribute("class", base + (on.has(k) ? " on" : "") + (dd.has(k) ? " dead" : ""));
+      if (xs[k]) xs[k].classList.toggle("show", dd.has(k));
+    });
+    rope.setAttribute("points", s.path.map(function (p) { return cx(p) + "," + cy(p); }).join(" "));
+    var last = s.path[s.path.length - 1];
+    me.setAttribute("cx", cx(last)); me.setAttribute("cy", cy(last));
+    var win = last[0] === E[0] && last[1] === E[1];
+    me.setAttribute("class", "me" + (s.act === "up" ? " up" : "") + (win ? " win" : ""));
+    var lc = s.act === "up" ? "up" : (s.act === "rec" ? "rec" : "");
+    lines.forEach(function (l, j) {
+      var o = s.lines.indexOf(j) >= 0;
+      l.classList.toggle("on", o); l.classList.toggle("up", o && lc === "up"); l.classList.toggle("rec", o && lc === "rec");
+    });
+    $(".btm-path").innerHTML = s.path.map(function (p) { return "<span>" + P(p) + "</span>"; }).join("");
+    $(".btm-dead").innerHTML = s.dead.length ? s.dead.map(function (p) { return "<span>" + P(p) + "</span>"; }).join("") : "<em>(none yet)</em>";
+    var a = $(".btm-act"); a.className = "btm-act " + s.act; a.textContent = ACT[s.act];
+    $(".btm-zh").innerHTML = s.zh;
+    $(".btm-en").innerHTML = s.en;
+    $(".btm-count").textContent = "Step " + (at + 1) + " / " + steps.length;
+    $('[data-act="prev"]').disabled = at === 0;
+    $('[data-act="reset"]').disabled = at === 0;
+    $('[data-act="next"]').disabled = at === steps.length - 1;
+  }
+  function go(d) { at = Math.max(0, Math.min(steps.length - 1, at + d)); render(); }
+  function stop() {
+    clearInterval(timer); timer = null;
+    var p = $(".btm-play"); p.classList.remove("playing"); p.textContent = "▶ Play";
+  }
+  function play() {
+    if (timer) return stop();
+    if (at === steps.length - 1) { at = 0; render(); }
+    var p = $(".btm-play"); p.classList.add("playing"); p.textContent = "⏸ Pause";
+    timer = setInterval(function () { if (at >= steps.length - 1) stop(); else go(1); }, 1400);
+  }
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var act = b.dataset.act;
+    if (act === "play") return play();
+    stop();
+    if (act === "next") go(1); else if (act === "prev") go(-1); else if (act === "reset") { at = 0; render(); }
+  });
+  root.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { stop(); go(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { stop(); go(-1); e.preventDefault(); }
+  });
+  render();
+})();
+</script>
