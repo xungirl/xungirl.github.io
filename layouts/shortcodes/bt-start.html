@@ -1,0 +1,295 @@
+{{- /*
+  Step-through visualizer for LC 78 Subsets: lines up each node's `start`
+  with ITS OWN loop range(start, n), and shows how each i in that loop makes one child.
+  Usage:
+    {{< bt-start nums="1,2,3,4" >}}
+  Click any node in the tree to jump to it.
+*/ -}}
+{{- $id := printf "bts-%d" .Ordinal -}}
+<div class="bts" id="{{ $id }}" tabindex="0" data-nums="{{ .Get "nums" | default "1,2,3,4" }}">
+  <div class="bts-top">
+    <span class="bts-act"></span>
+    <span class="bts-count"></span>
+  </div>
+  <svg class="bts-tree" role="img" aria-label="subsets recursion tree with start and loop range"></svg>
+  <div class="bts-body">
+    <div class="bts-code"></div>
+    <div class="bts-card">
+      <div class="bts-row"><span class="bts-lbl">node · 节点</span><b class="bts-node"></b></div>
+      <div class="bts-row"><span class="bts-lbl">my start</span><b class="bts-start"></b></div>
+      <div class="bts-row"><span class="bts-lbl">own loop · 自己的循环</span><span class="bts-own"></span></div>
+      <div class="bts-row"><span class="bts-lbl">nums[i]</span><div class="bts-idx"></div></div>
+      <div class="bts-row bts-kidrow"><span class="bts-lbl bts-kidlbl">children · 孩子</span><div class="bts-kids"></div></div>
+    </div>
+  </div>
+  <div class="bts-cap">
+    <p class="bts-zh"></p>
+    <p class="bts-en"></p>
+  </div>
+  <div class="bts-ctrl">
+    <button type="button" data-act="reset" title="Reset">⏮</button>
+    <button type="button" data-act="prev" title="Previous (←)">◀ Prev</button>
+    <button type="button" data-act="play" class="bts-play" title="Auto play">▶ Play</button>
+    <button type="button" data-act="next" title="Next (→)">Next ▶</button>
+  </div>
+  <div class="bts-legend">
+    <span><i class="lg me"></i>current node + its own loop · 当前节点和它自己的循环</span>
+    <span><i class="lg kid"></i>its children + their loops · 孩子和孩子的循环</span>
+    <span><i class="lg seen"></i>visited · 看过</span>
+  </div>
+</div>
+
+<style>
+.bts {
+  --bs-me: #f97316; --bs-kid: #6366f1; --bs-ok: #10b981;
+  margin: 1.6rem 0; padding: 1rem 1.1rem 0.9rem; border-radius: 14px; outline: none;
+  background: var(--entry, rgba(148,163,184,0.08));
+  border: 1px solid var(--border, rgba(148,163,184,0.3));
+}
+.bts:focus-visible { border-color: var(--bs-me); }
+.bts-top { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+.bts-act { font-size: .78rem; font-weight: 800; padding: .15rem .6rem; border-radius: 999px; color: #fff; background: var(--secondary); }
+.bts-act.loop { background: var(--bs-me); }
+.bts-act.kids { background: var(--bs-kid); }
+.bts-act.leaf { background: var(--bs-ok); }
+.bts-count { font-size: .8rem; font-weight: 700; color: var(--bs-me); font-variant-numeric: tabular-nums; }
+.bts button {
+  font: inherit; font-size: .82rem; cursor: pointer; line-height: 1.2;
+  padding: .38rem .75rem; border-radius: 999px;
+  color: var(--primary); background: var(--theme, transparent);
+  border: 1px solid var(--border, rgba(148,163,184,0.45));
+  transition: border-color .15s, background .15s, color .15s;
+}
+.bts button:hover:not(:disabled) { border-color: var(--bs-me); color: var(--bs-me); }
+.bts button:disabled { opacity: .4; cursor: default; }
+.bts button.bts-play.playing { background: var(--bs-me); border-color: var(--bs-me); color: #fff; }
+.bts-tree { width: 100%; height: auto; display: block; margin: .6rem 0 .2rem; }
+.bts-tree .ed line { stroke: var(--border, rgba(148,163,184,0.6)); stroke-width: 2; transition: stroke .25s, stroke-width .25s; }
+.bts-tree .ed text { fill: var(--secondary); font-size: 10px; font-weight: 700; text-anchor: middle; dominant-baseline: central; transition: fill .25s; }
+.bts-tree .ed { opacity: .35; transition: opacity .25s; }
+.bts-tree .ed.seen { opacity: .8; }
+.bts-tree .ed.seen line { stroke: var(--secondary); stroke-width: 1.5; }
+.bts-tree .ed.kid { opacity: 1; }
+.bts-tree .ed.kid line { stroke: var(--bs-kid); stroke-width: 3; }
+.bts-tree .ed.kid text { fill: var(--bs-kid); font-size: 11px; }
+.bts-tree .nd { cursor: pointer; opacity: .35; transition: opacity .25s; }
+.bts-tree .nd.seen, .bts-tree .nd.kid, .bts-tree .nd.me { opacity: 1; }
+.bts-tree .nd rect.b {
+  fill: var(--theme, #fff); stroke: var(--border, rgba(148,163,184,0.7)); stroke-width: 2; transition: fill .25s, stroke .25s;
+}
+.bts-tree .nd text.v { fill: var(--primary); font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 12px; text-anchor: middle; dominant-baseline: central; }
+.bts-tree .nd text.t { fill: var(--secondary); font-family: ui-monospace, Menlo, monospace; font-size: 9.5px; text-anchor: middle; dominant-baseline: central; transition: fill .25s; }
+.bts-tree .nd.me rect.b { fill: var(--bs-me); stroke: var(--bs-me); filter: drop-shadow(0 0 6px rgba(249,115,22,.7)); }
+.bts-tree .nd.me text.v { fill: #fff; }
+.bts-tree .nd.me text.t { fill: var(--bs-me); font-weight: 800; font-size: 10.5px; }
+.bts-tree .nd.kid rect.b { stroke: var(--bs-kid); stroke-width: 3; }
+.bts-tree .nd.kid text.t { fill: var(--bs-kid); font-weight: 800; font-size: 10.5px; }
+.bts-tree .nd:hover rect.b { stroke-width: 3; }
+.bts-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1rem; margin: .4rem 0 .5rem; align-items: start; }
+@media (max-width: 680px) { .bts-body { grid-template-columns: minmax(0, 1fr); } }
+.bts-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .72rem; line-height: 1.6;
+  background: var(--code-bg, rgba(148,163,184,0.12)); border-radius: 8px; padding: .5rem 0; overflow-x: auto;
+}
+.bts-code .ln { white-space: pre; padding: 0 .7rem; border-left: 3px solid transparent; color: var(--secondary); transition: background .2s; }
+.bts-code .ln.on { background: rgba(249,115,22,.16); border-left-color: var(--bs-me); color: var(--primary); font-weight: 600; }
+.bts-code .ln.on.kid { background: rgba(99,102,241,.16); border-left-color: var(--bs-kid); }
+.bts-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; flex-wrap: wrap; }
+.bts-lbl { font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--secondary); min-width: 6.4rem; }
+.bts-node, .bts-start { font-family: ui-monospace, Menlo, monospace; font-size: .95rem; color: var(--bs-me); }
+.bts-own { font-family: ui-monospace, Menlo, monospace; font-size: .82rem; font-weight: 700; color: var(--bs-me); }
+.bts-idx { display: flex; gap: .25rem; }
+.bts-idx span {
+  font-family: ui-monospace, Menlo, monospace; font-weight: 800; font-size: .82rem;
+  min-width: 1.9rem; text-align: center; padding: .12rem .3rem; border-radius: 6px;
+  border: 2px solid var(--border, rgba(148,163,184,.5)); color: var(--primary); opacity: .35; transition: all .2s;
+}
+.bts-idx span sub { font-size: .6rem; color: var(--secondary); font-weight: 600; margin-left: 1px; }
+.bts-idx span.in { opacity: 1; border-color: var(--bs-me); color: var(--bs-me); }
+.bts-kids { display: flex; flex-direction: column; gap: .25rem; }
+.bts-kids div {
+  font-family: ui-monospace, Menlo, monospace; font-size: .76rem; padding: .15rem .45rem; border-radius: 6px;
+  border-left: 3px solid var(--bs-kid); background: rgba(99,102,241,.1); color: var(--primary);
+}
+.bts-kids div b { color: var(--bs-kid); }
+.bts-kids div.wait { border-left-color: var(--border); background: transparent; color: var(--secondary); }
+.bts em { font-style: normal; font-size: .76rem; color: var(--secondary); }
+.bts-cap { min-height: 5.2rem; padding: .55rem .8rem; border-radius: 8px; background: var(--theme, transparent); border: 1px dashed var(--border, rgba(148,163,184,.45)); }
+.bts-cap p { margin: 0 !important; font-size: .9rem; line-height: 1.6; }
+.bts-cap .bts-en { color: var(--secondary); margin-top: .25rem !important; }
+.bts-cap code { font-size: .82em; }
+.bts-cap .me { color: var(--bs-me); font-weight: 700; }
+.bts-cap .kid { color: var(--bs-kid); font-weight: 700; }
+.bts-ctrl { display: flex; justify-content: center; gap: .45rem; margin-top: .75rem; flex-wrap: wrap; }
+.bts-legend { display: flex; justify-content: center; gap: .9rem; flex-wrap: wrap; margin-top: .6rem; font-size: .72rem; color: var(--secondary); }
+.bts-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.bts-legend .lg { width: 14px; height: 11px; border-radius: 3px; display: inline-block; border: 2px solid var(--border); }
+.bts-legend .lg.me { background: var(--bs-me); border-color: var(--bs-me); }
+.bts-legend .lg.seen { border-color: var(--secondary); }
+.bts-legend .lg.kid { border-color: var(--bs-kid); border-width: 3px; }
+@media (prefers-reduced-motion: reduce) { .bts * { transition: none !important; } }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("{{ $id }}");
+  if (!root) return;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var $ = function (s) { return root.querySelector(s); };
+  var nums = root.dataset.nums.split(",").map(function (s) { return Number(s.trim()); });
+  var N = nums.length;
+
+  var CODE = [
+    "def backtrack(start):",
+    "    res.append(path[:])",
+    "    for i in range(start, n):  # 我的循环",
+    "        path.append(nums[i])",
+    "        backtrack(i + 1)        # 孩子的 start",
+    "        path.pop()"
+  ];
+  $(".bts-code").innerHTML = CODE.map(function (l) {
+    return '<div class="ln">' + l.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</div>";
+  }).join("");
+  var lines = root.querySelectorAll(".bts-code .ln");
+
+  // ---- build the full tree: each node knows its start and which i made it ----
+  function L(a) { return "[" + a.join(",") + "]"; }
+  function R(s) { return "range(" + s + "," + N + ")"; }
+  function c(s) { return "<code>" + s + "</code>"; }
+  function iset(s) { var a = []; for (var i = s; i < N; i++) a.push(i); return a.length ? "{" + a.join(", ") + "}" : "∅"; }
+  var nodes = [];
+  (function build(parent, path, start, fromI) {
+    var n = { parent: parent, path: path, start: start, fromI: fromI, kids: [] };
+    if (parent) parent.kids.push(n);
+    nodes.push(n);
+    for (var i = start; i < N; i++) build(n, path.concat([nums[i]]), i + 1, i);
+  })(null, [], 0, null);
+
+  // ---- steps: per node, "own loop" then "children"; leaves get one step ----
+  var steps = [];
+  nodes.forEach(function (n) {
+    n.first = steps.length;
+    var who = L(n.path);
+    var origin = n.parent
+      ? who + " 是 " + L(n.parent.path) + " 的循环在 " + c("i=" + n.fromI) + " 时产生的，所以 " + c("start = i + 1 = " + n.start) + "。"
+      : "根 " + c("[]") + " 由 " + c("backtrack(0)") + " 开始，" + c("start = 0") + "。";
+    var originEn = n.parent
+      ? who + " was created by " + L(n.parent.path) + "'s loop at " + c("i=" + n.fromI) + ", so " + c("start = i + 1 = " + n.start) + ". "
+      : "The root " + c("[]") + " starts from " + c("backtrack(0)") + ", so " + c("start = 0") + ". ";
+    if (!n.kids.length) {
+      steps.push({ node: n, phase: "leaf", lines: [0, 2],
+        zh: origin + "它<span class=\"me\">自己的循环</span> " + c(R(n.start)) + " 是空的 → 没有 i 可以选，所以<b>没有孩子，它是叶子</b>。",
+        en: originEn + "Its <span class=\"me\">own loop</span> " + c(R(n.start)) + " is empty → no i to pick, so <b>no children: it's a leaf</b>." });
+      return;
+    }
+    steps.push({ node: n, phase: "loop", lines: [0, 2],
+      zh: origin + "第一件事：<span class=\"me\">我的 start → 我的循环</span>：" + c(R(n.start)) + " → i ∈ " + iset(n.start) + "。",
+      en: originEn + "Fact one: <span class=\"me\">my start → my loop</span>: " + c(R(n.start)) + " → i ∈ " + iset(n.start) + "." });
+    var list = n.kids.map(function (k) { return c("i=" + k.fromI) + " → " + L(k.path); }).join("、");
+    var kl = n.kids.map(function (k) { return c(R(k.start)); }).join("、");
+    steps.push({ node: n, phase: "kids", lines: [2, 3, 4],
+      zh: "第二件事：<span class=\"kid\">循环里每个 i → 一个孩子</span>：" + list + "。孩子个数 = " + N + " − " + n.start + " = <b>" + n.kids.length + "</b>。注意 " + kl + " 是<span class=\"kid\">孩子的</span>循环，不是 " + who + " 的。",
+      en: "Fact two: <span class=\"kid\">each i in my loop → one child</span>. Children = " + N + " − " + n.start + " = <b>" + n.kids.length + "</b>. " + kl + " belong to the <span class=\"kid\">children</span>, not to " + who + "." });
+  });
+  steps.push({ node: null, phase: "end", lines: [],
+    zh: "全部看完：" + nodes.length + " 个节点 = " + nodes.length + " 个子集。每个节点的循环都用<b>它自己的 start</b>；孩子的 start 永远更大，所以树越往右越瘦。",
+    en: "All " + nodes.length + " nodes visited = " + nodes.length + " subsets. Every node's loop uses <b>its own start</b>; a child's start is always larger, so the tree thins out to the right." });
+
+  // ---- layout ----
+  var GX = 86, GY = 74, PX = 46, PY = 22, leaf = 0, maxD = 0;
+  (function lay(n, d) {
+    n.d = d; maxD = Math.max(maxD, d);
+    if (!n.kids.length) n.x = PX + leaf++ * GX;
+    else { n.kids.forEach(function (k) { lay(k, d + 1); }); n.x = (n.kids[0].x + n.kids[n.kids.length - 1].x) / 2; }
+    n.y = PY + d * GY;
+  })(nodes[0], 0);
+  var svg = $(".bts-tree");
+  svg.setAttribute("viewBox", "0 0 " + (PX * 2 + (leaf - 1) * GX) + " " + (PY * 2 + maxD * GY + 14));
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    (parent || svg).appendChild(e); return e;
+  }
+  nodes.forEach(function (n) {
+    if (!n.parent) return;
+    var p = n.parent, g = el("g", { "class": "ed" });
+    el("line", { x1: p.x, y1: p.y + 26, x2: n.x, y2: n.y - 12 }, g);
+    var t = 0.42, mx = p.x + (n.x - p.x) * t, my = p.y + 26 + (n.y - 12 - p.y - 26) * t;
+    el("text", { x: mx + (n.x > p.x ? 13 : (n.x < p.x ? -13 : 15)), y: my }, g).textContent = "i=" + n.fromI;
+    n.eg = g;
+  });
+  nodes.forEach(function (n, k) {
+    var g = el("g", { "class": "nd" }), label = L(n.path), w = 16 + label.length * 7.4;
+    el("rect", { "class": "b", x: n.x - w / 2, y: n.y - 12, width: w, height: 24, rx: 8 }, g);
+    el("text", { "class": "v", x: n.x, y: n.y + 1 }, g).textContent = label;
+    el("text", { "class": "t", x: n.x, y: n.y + 21 }, g).textContent = R(n.start);
+    g.addEventListener("click", function () { stop(); at = n.first; render(); });
+    n.g = g;
+  });
+
+  // ---- render ----
+  var at = 0, timer = null;
+  var ACT = { loop: "① my start → my loop", kids: "② each i → one child", leaf: "leaf · 叶子", end: "done" };
+  function render() {
+    var s = steps[at], me = s.node, showKids = s.phase === "kids";
+    nodes.forEach(function (n, k) {
+      var seen = s.phase === "end" || k <= nodes.indexOf(me);
+      var isKid = showKids && n.parent === me;
+      n.g.setAttribute("class", "nd" + (seen ? " seen" : "") + (n === me ? " me" : "") + (isKid ? " kid" : ""));
+      if (n.eg) n.eg.setAttribute("class", "ed" + (seen ? " seen" : "") + (isKid ? " kid" : ""));
+    });
+    lines.forEach(function (l, j) {
+      var on = s.lines.indexOf(j) >= 0;
+      l.classList.toggle("on", on); l.classList.toggle("kid", on && showKids && j !== 2);
+    });
+    if (me) {
+      $(".bts-node").textContent = L(me.path);
+      $(".bts-start").textContent = me.start;
+      $(".bts-own").innerHTML = R(me.start) + " → i ∈ " + iset(me.start);
+      $(".bts-idx").innerHTML = nums.map(function (v, i) {
+        return '<span class="' + (i >= me.start ? "in" : "") + '">' + v + "<sub>" + i + "</sub></span>";
+      }).join("");
+      $(".bts-kidlbl").textContent = "children = " + N + " − " + me.start + " = " + me.kids.length;
+      $(".bts-kids").innerHTML = !me.kids.length ? "<em>none · 无（叶子）</em>" : me.kids.map(function (k) {
+        return showKids
+          ? "<div>i=" + k.fromI + " → <b>" + L(k.path) + "</b> start=" + k.start + " · " + R(k.start) + "</div>"
+          : '<div class="wait">i=' + k.fromI + " → ?</div>";
+      }).join("");
+    } else {
+      $(".bts-node").textContent = "—"; $(".bts-start").textContent = "—"; $(".bts-own").textContent = "—";
+      $(".bts-idx").innerHTML = ""; $(".bts-kidlbl").textContent = "children · 孩子";
+      $(".bts-kids").innerHTML = "<em>click any node to revisit · 点任意节点回看</em>";
+    }
+    var a = $(".bts-act"); a.className = "bts-act " + s.phase; a.textContent = ACT[s.phase];
+    $(".bts-zh").innerHTML = s.zh;
+    $(".bts-en").innerHTML = s.en;
+    $(".bts-count").textContent = "Step " + (at + 1) + " / " + steps.length;
+    $('[data-act="prev"]').disabled = at === 0;
+    $('[data-act="reset"]').disabled = at === 0;
+    $('[data-act="next"]').disabled = at === steps.length - 1;
+  }
+  function go(d) { at = Math.max(0, Math.min(steps.length - 1, at + d)); render(); }
+  function stop() {
+    clearInterval(timer); timer = null;
+    var p = $(".bts-play"); p.classList.remove("playing"); p.textContent = "▶ Play";
+  }
+  function play() {
+    if (timer) return stop();
+    if (at === steps.length - 1) { at = 0; render(); }
+    var p = $(".bts-play"); p.classList.add("playing"); p.textContent = "⏸ Pause";
+    timer = setInterval(function () { if (at >= steps.length - 1) stop(); else go(1); }, 2200);
+  }
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var act = b.dataset.act;
+    if (act === "play") return play();
+    stop();
+    if (act === "next") go(1); else if (act === "prev") go(-1); else if (act === "reset") { at = 0; render(); }
+  });
+  root.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { stop(); go(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { stop(); go(-1); e.preventDefault(); }
+  });
+  render();
+})();
+</script>
