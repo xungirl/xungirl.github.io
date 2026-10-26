@@ -1,0 +1,296 @@
+{{- /*
+  Step-through visualizer for LeetCode 206 (reverse a linked list, iterative).
+  Usage:
+    {{< ll-reverse list="1,2,3" >}}
+  list: node values, comma separated (keep it short, 2-5 nodes fits best).
+  Every step is tagged as "arrow" (rewrites a .next pointer) or "label"
+  (only moves prev / curr / nxt), so readers can see which lines really change the list.
+  The two None boxes on the left and right are the same None, drawn twice so arrows never cross.
+*/ -}}
+{{- $id := printf "llr-%d" .Ordinal -}}
+<div class="llr" id="{{ $id }}" tabindex="0" data-list="{{ .Get "list" | default "1,2,3" }}">
+  <div class="llr-top">
+    <span class="llr-kind"></span>
+    <span class="llr-count"></span>
+  </div>
+  <svg class="llr-svg" role="img" aria-label="linked list being reversed"></svg>
+  <div class="llr-read">
+    <div><span class="llr-lbl p">from prev</span><code class="llr-rp"></code></div>
+    <div><span class="llr-lbl c">from curr</span><code class="llr-rc"></code></div>
+  </div>
+  <div class="llr-code"></div>
+  <div class="llr-cap">
+    <p class="llr-zh"></p>
+    <p class="llr-en"></p>
+  </div>
+  <div class="llr-ctrl">
+    <button type="button" data-act="reset" title="Reset">⏮</button>
+    <button type="button" data-act="prev" title="Previous (←)">◀ Prev</button>
+    <button type="button" data-act="play" class="llr-play" title="Auto play">▶ Play</button>
+    <button type="button" data-act="next" title="Next (→)">Next ▶</button>
+  </div>
+  <div class="llr-legend">
+    <span><i class="lg arrow"></i>改箭头 changes an arrow</span>
+    <span><i class="lg label"></i>只挪标签 only moves a label</span>
+    <span><i class="lg check"></i>判断 / 返回 check or return</span>
+  </div>
+</div>
+
+<style>
+.llr {
+  --lr-accent: #8b5cf6; --lr-arrow: #ef4444; --lr-label: #0ea5e9; --lr-check: #64748b;
+  --lr-prev: #10b981; --lr-curr: #8b5cf6; --lr-nxt: #f59e0b;
+  margin: 1.6rem 0; padding: 1rem 1.1rem .9rem; border-radius: 14px; outline: none;
+  background: var(--entry, rgba(148,163,184,0.08));
+  border: 1px solid var(--border, rgba(148,163,184,0.3));
+}
+.llr:focus-visible { border-color: var(--lr-accent); }
+.llr-top { display: flex; justify-content: space-between; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.llr-kind { font-size: .8rem; font-weight: 700; padding: .22rem .65rem; border-radius: 999px; color: #fff; background: var(--lr-check); transition: background .2s; }
+.llr-kind.arrow { background: var(--lr-arrow); }
+.llr-kind.label { background: var(--lr-label); }
+.llr-count { font-size: .8rem; font-weight: 700; color: var(--lr-accent); font-variant-numeric: tabular-nums; }
+.llr-svg { width: 100%; height: auto; display: block; margin: .7rem 0 .3rem; }
+.llr-svg .box { fill: var(--theme, #fff); stroke: var(--border, rgba(148,163,184,.7)); stroke-width: 2; }
+.llr-svg .box.nil { stroke-dasharray: 4 3; }
+.llr-svg .val { fill: var(--primary); font-weight: 800; font-size: 17px; text-anchor: middle; dominant-baseline: central; }
+.llr-svg .val.nil { fill: var(--secondary); font-weight: 600; font-size: 13px; }
+.llr-svg .ar { stroke: var(--primary); stroke-width: 2.2; fill: none; }
+.llr-svg .ar.new { stroke: var(--lr-arrow); stroke-width: 3; animation: llr-pulse .9s ease-out; }
+.llr-svg .ar.ghost { stroke: var(--lr-arrow); stroke-dasharray: 5 4; opacity: .45; }
+.llr-svg .cut { fill: var(--lr-arrow); font-size: 15px; font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+.llr-svg .tag { transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .3s; }
+.llr-svg .tag rect { stroke: none; }
+.llr-svg .tag text { fill: #fff; font-size: 12px; font-weight: 700; text-anchor: middle; dominant-baseline: central; font-family: ui-monospace, Menlo, monospace; }
+.llr-svg .tag.moved rect { animation: llr-glow .9s ease-out; }
+.llr-svg .tag.hide { opacity: 0; }
+@keyframes llr-pulse { 0% { stroke-width: 6; } 100% { stroke-width: 3; } }
+@keyframes llr-glow { 0% { filter: drop-shadow(0 0 6px currentColor); } 100% { filter: none; } }
+.llr-read { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: .82rem; margin-bottom: .5rem; }
+.llr-read > div { display: flex; align-items: center; gap: .45rem; }
+.llr-lbl { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+.llr-lbl.p { color: var(--lr-prev); }
+.llr-lbl.c { color: var(--lr-curr); }
+.llr-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .78rem; line-height: 1.55;
+  background: var(--code-bg, rgba(148,163,184,0.12)); border-radius: 8px; padding: .5rem 0; overflow-x: auto;
+}
+.llr-code .ln { white-space: pre; padding: 0 .7rem; border-left: 3px solid transparent; color: var(--secondary); transition: background .2s; }
+.llr-code .ln.on { background: rgba(139,92,246,.18); border-left-color: var(--lr-accent); color: var(--primary); font-weight: 600; }
+.llr-code .ln.on.arrow { background: rgba(239,68,68,.16); border-left-color: var(--lr-arrow); }
+.llr-code .ln.on.label { background: rgba(14,165,233,.16); border-left-color: var(--lr-label); }
+.llr-code .ln .tip { float: right; margin-left: 1rem; font-weight: 400; opacity: .7; }
+.llr-cap { min-height: 5.4rem; margin-top: .6rem; padding: .55rem .8rem; border-radius: 8px; background: var(--theme, transparent); border: 1px dashed var(--border, rgba(148,163,184,.45)); }
+.llr-cap p { margin: 0 !important; font-size: .9rem; line-height: 1.6; }
+.llr-cap .llr-en { color: var(--secondary); margin-top: .25rem !important; }
+.llr-cap code { font-size: .82em; }
+.llr button {
+  font: inherit; font-size: .82rem; cursor: pointer; line-height: 1.2;
+  padding: .38rem .75rem; border-radius: 999px;
+  color: var(--primary); background: var(--theme, transparent);
+  border: 1px solid var(--border, rgba(148,163,184,0.45));
+  transition: border-color .15s, background .15s, color .15s;
+}
+.llr button:hover:not(:disabled) { border-color: var(--lr-accent); color: var(--lr-accent); }
+.llr button:disabled { opacity: .4; cursor: default; }
+.llr button.llr-play.playing { background: var(--lr-accent); border-color: var(--lr-accent); color: #fff; }
+.llr-ctrl { display: flex; justify-content: center; gap: .45rem; margin-top: .75rem; flex-wrap: wrap; }
+.llr-legend { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: .6rem; font-size: .74rem; color: var(--secondary); }
+.llr-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+.llr-legend .lg { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.llr-legend .lg.arrow { background: var(--lr-arrow); }
+.llr-legend .lg.label { background: var(--lr-label); }
+.llr-legend .lg.check { background: var(--lr-check); }
+@media (prefers-reduced-motion: reduce) { .llr *, .llr-svg .tag { transition: none !important; animation: none !important; } }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("{{ $id }}");
+  if (!root) return;
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var $ = function (s) { return root.querySelector(s); };
+  var vals = root.dataset.list.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+  var n = vals.length, NL = 0, NR = n + 1;   // slot 0 = None (left), slots 1..n = nodes, n+1 = None (right)
+  function name(slot) { return slot === NL || slot === NR ? "None" : vals[slot - 1]; }
+
+  // ---- code panel ----
+  var CODE = [
+    ["prev = None", ""],
+    ["curr = head", ""],
+    ["while curr:", ""],
+    ["    nxt = curr.next", "# save"],
+    ["    curr.next = prev", "# flip"],
+    ["    prev = curr", "# move"],
+    ["    curr = nxt", "# move"],
+    ["return prev", ""]
+  ];
+  $(".llr-code").innerHTML = CODE.map(function (l) {
+    return '<div class="ln">' + l[0] + (l[1] ? '<span class="tip">' + l[1] + "</span>" : "") + "</div>";
+  }).join("");
+  var lines = root.querySelectorAll(".llr-code .ln");
+
+  // ---- geometry ----
+  var GX = 108, PX = 44, BW = 52, BH = 40, MY = 34, ROW0 = MY + BH / 2 + 22, RH = 27;
+  var ROWS = { curr: 0, nxt: 1, prev: 2 };
+  var COLORS = { prev: "var(--lr-prev)", curr: "var(--lr-curr)", nxt: "var(--lr-nxt)" };
+  function cx(slot) { return PX + slot * GX; }
+  var W = PX * 2 + (n + 1) * GX, H = ROW0 + 3 * RH + 4;
+  var svg = $(".llr-svg");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    (parent || svg).appendChild(e); return e;
+  }
+  var defs = el("defs", {});
+  [["llr-h-" + root.id, "var(--primary)"], ["llr-hr-" + root.id, "var(--lr-arrow)"]].forEach(function (m) {
+    var mk = el("marker", { id: m[0], viewBox: "0 0 10 10", refX: 9, refY: 5, markerUnits: "userSpaceOnUse", markerWidth: 11, markerHeight: 11, orient: "auto-start-reverse" }, defs);
+    el("path", { d: "M0,0 L10,5 L0,10 z", style: "fill:" + m[1] }, mk);
+  });
+  var arrowLayer = el("g", {});
+  for (var s = 0; s <= n + 1; s++) {
+    var nil = s === NL || s === NR, w = nil ? 46 : BW;
+    el("rect", { "class": "box" + (nil ? " nil" : ""), x: cx(s) - w / 2, y: MY - BH / 2, width: w, height: BH, rx: 9 });
+    el("text", { "class": "val" + (nil ? " nil" : ""), x: cx(s), y: MY }).textContent = name(s);
+  }
+  var tags = {};
+  ["curr", "nxt", "prev"].forEach(function (k) {
+    var g = el("g", { "class": "tag hide", style: "color:" + COLORS[k] });
+    var y = ROW0 + ROWS[k] * RH;
+    el("path", { d: "M-5," + (y - 9) + " L0," + (y - 15) + " L5," + (y - 9) + " z", style: "fill:" + COLORS[k] }, g);
+    el("rect", { x: -26, y: y - 10, width: 52, height: 20, rx: 10, style: "fill:" + COLORS[k] }, g);
+    el("text", { x: 0, y: y }, g).textContent = k;
+    tags[k] = g;
+  });
+
+  // ---- simulate, one snapshot per executed line ----
+  function simulate() {
+    var next = [], st = { prev: null, curr: null, nxt: null }, steps = [];
+    for (var i = 1; i <= n; i++) next[i] = i + 1;   // node i -> node i+1, last -> None
+    function snap(o) {
+      o.next = next.slice(); o.st = { prev: st.prev, curr: st.curr, nxt: st.nxt };
+      steps.push(o);
+    }
+    function v(slot) { return name(slot); }
+    snap({ line: -1, kind: "check", moved: [],
+      zh: "原始链表 " + vals.join(" → ") + " → None。三个变量都还没赋值。下面每一步执行一行，留意顶上的标签：<b>红色 = 改箭头</b>，<b>蓝色 = 只挪标签</b>。",
+      en: "The original list " + vals.join(" → ") + " → None. No variables yet. Each step runs one line; watch the badge on top: <b>red = changes an arrow</b>, <b>blue = only moves a label</b>." });
+    st.prev = NL;
+    snap({ line: 0, kind: "label", moved: ["prev"],
+      zh: "<code>prev = None</code>：prev 指向 None。它是「已经反转好的部分」的头，一开始是空的。",
+      en: "<code>prev = None</code>: prev points at None. It is the head of the already-reversed part, which starts empty." });
+    st.curr = 1;
+    snap({ line: 1, kind: "label", moved: ["curr"],
+      zh: "<code>curr = head</code>：curr 指向 " + v(1) + "，它是「还没处理的部分」的头。",
+      en: "<code>curr = head</code>: curr points at " + v(1) + ", the head of the part we have not handled yet." });
+    var round = 0;
+    while (st.curr !== NR) {
+      round++;
+      var c = st.curr;
+      snap({ line: 2, kind: "check", moved: [],
+        zh: "第 " + round + " 轮：curr 是 " + v(c) + "，不是 None，进入循环。",
+        en: "Round " + round + ": curr is " + v(c) + ", not None, so we enter the loop." });
+      st.nxt = next[c];
+      snap({ line: 3, kind: "label", moved: ["nxt"],
+        zh: "<code>nxt = curr.next</code>：先把 " + v(c) + " 后面的 " + v(next[c]) + " 记下来。下一行就要剪断这根箭头了，不记的话后半截链表就找不回来了。",
+        en: "<code>nxt = curr.next</code>: save " + v(next[c]) + ", the node after " + v(c) + ". The next line cuts this arrow, and without nxt we would lose the rest of the list." });
+      var old = next[c];
+      next[c] = c - 1 === 0 ? NL : c - 1;
+      snap({ line: 4, kind: "arrow", moved: [], changed: c, old: old,
+        zh: "<code>curr.next = prev</code>：<b>整段代码里只有这一行会改箭头。</b>" + v(c) + " 原来指向 " + v(old) + "，现在掉头指向 prev（" + v(next[c]) + "）。",
+        en: "<code>curr.next = prev</code>: <b>this is the only line that changes an arrow.</b> " + v(c) + " used to point at " + v(old) + "; now it turns around and points at prev (" + v(next[c]) + ")." });
+      st.prev = c;
+      snap({ line: 5, kind: "label", moved: ["prev"],
+        zh: "<code>prev = curr</code>：prev 往右挪到 " + v(c) + "。箭头一根没动，只是「已反转部分」的头变成了 " + v(c) + "。",
+        en: "<code>prev = curr</code>: prev moves right to " + v(c) + ". No arrow changes; the reversed part now just starts at " + v(c) + "." });
+      st.curr = st.nxt;
+      snap({ line: 6, kind: "label", moved: ["curr"],
+        zh: "<code>curr = nxt</code>：curr 挪到刚才存下的 " + v(st.curr) + "。" + (st.curr === NR ? "已经走到 None 了。" : "这就是 nxt 的用处：没有它，curr 现在走不过去。"),
+        en: "<code>curr = nxt</code>: curr moves to " + v(st.curr) + ", the node we saved. " + (st.curr === NR ? "We have reached None." : "That is why we needed nxt: without it, curr could not get here.") });
+    }
+    snap({ line: 2, kind: "check", moved: [],
+      zh: "curr 是 None，循环结束。一共 " + n + " 轮，每轮只改了 1 根箭头。",
+      en: "curr is None, so the loop ends. " + n + " rounds, and each round changed exactly one arrow." });
+    snap({ line: 7, kind: "check", moved: [], ret: true,
+      zh: "<code>return prev</code>：prev 指向 " + v(st.prev) + "，从它读下去就是 " + vals.slice().reverse().join(" → ") + " → None。注意不是返回 curr，curr 已经是 None 了。",
+      en: "<code>return prev</code>: prev points at " + v(st.prev) + ", and reading from it gives " + vals.slice().reverse().join(" → ") + " → None. Not curr: curr is already None." });
+    return steps;
+  }
+  var steps = simulate(), at = 0, timer = null;
+
+  function readFrom(slot, next) {
+    if (slot === null) return "—";
+    var out = [], guard = 0;
+    while (slot !== NL && slot !== NR && guard++ < 10) { out.push(vals[slot - 1]); slot = next[slot]; }
+    out.push("None"); return out.join(" → ");
+  }
+  function arrow(from, to, cls) {
+    var dir = to > from ? 1 : -1;
+    var x1 = cx(from) + dir * BW / 2, x2 = cx(to) - dir * ((to === NL || to === NR) ? 23 : BW / 2);
+    return el("line", { "class": "ar " + (cls || ""), x1: x1, y1: MY, x2: x2 - dir * 1, y2: MY,
+      "marker-end": "url(#" + (cls ? "llr-hr-" : "llr-h-") + root.id + ")" }, arrowLayer);
+  }
+
+  // ---- render ----
+  function render() {
+    var s = steps[at];
+    while (arrowLayer.firstChild) arrowLayer.removeChild(arrowLayer.firstChild);
+    if (s.changed) {
+      arrow(s.changed, s.old, "ghost");
+      var mid = (cx(s.changed) + cx(s.old)) / 2;
+      el("text", { "class": "cut", x: mid, y: MY - 14 }, arrowLayer).textContent = "✂";
+    }
+    for (var i = 1; i <= n; i++) arrow(i, s.next[i], s.changed === i ? "new" : "");
+    ["prev", "curr", "nxt"].forEach(function (k) {
+      var slot = s.st[k], g = tags[k];
+      var wasHidden = g.classList.contains("hide");
+      g.classList.toggle("hide", slot === null);
+      if (slot !== null) {
+        if (wasHidden) g.style.transition = "none";   // appear in place, don't slide in from x = 0
+        g.style.transform = "translate(" + cx(slot) + "px, 0)";
+        if (wasHidden) { void g.getBoundingClientRect(); g.style.transition = ""; }
+      }
+      g.classList.remove("moved");
+      if (s.moved.indexOf(k) >= 0) { void g.getBoundingClientRect(); g.classList.add("moved"); }
+    });
+    lines.forEach(function (l, j) {
+      l.className = "ln" + (j === s.line ? " on " + s.kind : "");
+    });
+    var kind = $(".llr-kind");
+    kind.className = "llr-kind " + s.kind;
+    kind.textContent = s.line < 0 ? "开始 start" : s.kind === "arrow" ? "改箭头 changes an arrow" : s.kind === "label" ? "只挪标签 only moves a label" : (s.ret ? "返回 return" : "判断 check");
+    $(".llr-rp").textContent = readFrom(s.st.prev, s.next);
+    $(".llr-rc").textContent = readFrom(s.st.curr, s.next);
+    $(".llr-zh").innerHTML = s.zh;
+    $(".llr-en").innerHTML = s.en;
+    $(".llr-count").textContent = "Step " + (at + 1) + " / " + steps.length;
+    $('[data-act="prev"]').disabled = at === 0;
+    $('[data-act="reset"]').disabled = at === 0;
+    $('[data-act="next"]').disabled = at === steps.length - 1;
+  }
+  function go(d) { at = Math.max(0, Math.min(steps.length - 1, at + d)); render(); }
+  function stop() {
+    clearInterval(timer); timer = null;
+    var p = $(".llr-play"); p.classList.remove("playing"); p.textContent = "▶ Play";
+  }
+  function play() {
+    if (timer) return stop();
+    if (at === steps.length - 1) { at = 0; render(); }
+    var p = $(".llr-play"); p.classList.add("playing"); p.textContent = "⏸ Pause";
+    timer = setInterval(function () { if (at >= steps.length - 1) stop(); else go(1); }, 1600);
+  }
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var a = b.dataset.act;
+    if (a === "play") return play();
+    stop();
+    if (a === "next") go(1); else if (a === "prev") go(-1); else if (a === "reset") { at = 0; render(); }
+  });
+  root.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { stop(); go(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft") { stop(); go(-1); e.preventDefault(); }
+  });
+  render();
+})();
+</script>
