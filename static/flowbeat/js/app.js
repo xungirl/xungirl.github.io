@@ -49,7 +49,9 @@
 
   // ------------------------------------------------------------------ the session (port of FocusSession.tick)
   const SIM_CALIBRATION = 10;   // FocusSession.beginSession: simulator build uses FocusEngine(calibrationSeconds: 10)
-  const settings = { source: 'demo', speed: 1, calibration: SIM_CALIBRATION };
+  const settings = { source: 'replay', speed: 1, calibration: SIM_CALIBRATION };
+  // The repo's recorded session (FlowbeatPhone/Resources/sample-session.json, watch simulator, -demo mode).
+  const SAMPLE = window.FLOWBEAT_SAMPLE || null;
   const manual = { hr: 70, motion: 0.01, walking: false };
 
   class WebSession {
@@ -64,6 +66,10 @@
       this.nudgeCount = 0; this.lastNudgeAt = null; this.focusedSeconds = 0;
       this.pendingLabel = null; this.segment = null; this.cycleSecond = 0; this.trace = null;
       this.usedPedometer = false;
+      this.source = settings.source;
+      // replay only: the score the Swift app recorded for this second, and a running comparison
+      this.swiftScore = null; this.replayLength = SAMPLE ? SAMPLE.samples.length : 0;
+      this.compared = 0; this.maxDiff = 0; this.mismatch = 0;
     }
     get calibrationSeconds() { return this.engine.calibrationSeconds; }
     syncAway() {
@@ -73,10 +79,21 @@
     setAway(away) { if (this.engine.setAway(away, this.elapsed)) this.syncAway(); }
     mark(label) { this.pendingLabel = label; }
 
-    /** One second. Same order as FocusSession.tick(). */
+    /** One second. Same order as FocusSession.tick(). Returns false when a replay has run out of samples. */
     tick() {
+      if (this.source === 'replay' && (!SAMPLE || this.elapsed >= this.replayLength)) return false;
       this.elapsed += 1;
-      if (settings.source === 'manual') {
+      if (this.source === 'replay') {
+        // Recorded inputs, fed exactly like test/port.test.js: setAway before engine.tick, motion is the
+        // recorded 10 s mean, heart rate may be null.
+        const smp = SAMPLE.samples[this.elapsed - 1];
+        this.setAway(!!smp.away);
+        this.heartRate = smp.heartRate == null ? null : smp.heartRate;
+        this.motion = smp.motion;
+        this.segment = null;
+        this.swiftScore = smp.score == null ? null : smp.score;
+        if (smp.label && !this.pendingLabel) this.pendingLabel = smp.label;
+      } else if (this.source === 'manual') {
         // Visitor = the sensors. Slider = instantaneous |userAcceleration| at 25 Hz -> RollingMean -> 10 s mean;
         // the "walking" switch stands in for CMMotionActivityManager's walking/stationary events.
         for (let i = 0; i < 25; i++) this.motionWindow.append(manual.motion);
@@ -111,6 +128,10 @@
         this.nudgeCount = this.nudge.nudgeCount; this.lastNudgeAt = this.elapsed; haptic();
       }
       if (sampleScore != null && sampleScore >= SessionStats.focusThreshold) this.focusedSeconds += 1;
+      if (this.source === 'replay') {
+        if ((this.swiftScore == null) !== (sampleScore == null)) this.mismatch += 1;
+        else if (sampleScore != null) { this.compared += 1; this.maxDiff = Math.max(this.maxDiff, Math.abs(this.swiftScore - sampleScore)); }
+      }
 
       this.samples.push({ t: this.elapsed, heartRate: this.heartRate, motion: this.motion, score: sampleScore,
                           label: this.pendingLabel, away: this.isAway, calibrating: this.phase === 'calibrating' });
@@ -123,8 +144,9 @@
         motionPenalty: willScore ? FocusScorer.motionPenalty(this.motion) : null,
         hrPenalty: willScore ? FocusScorer.hrPenalty(hrUsed, e.baselineHR) : null,
         raw: willScore ? FocusScorer.rawScore(hrUsed, this.motion, e.baselineHR) : null,
-        score: this.score, sampleScore,
+        score: this.score, sampleScore, swift: this.source === 'replay' ? this.swiftScore : undefined,
       };
+      return true;
     }
     // FocusSession computed properties used by SummaryView
     get averageScore() { return SessionStats.averageScore(this.samples); }
@@ -289,7 +311,7 @@
 
   function start() {
     stop();
-    session = new WebSession(settings.calibration);
+    session = new WebSession(settings.source === 'replay' ? SIM_CALIBRATION : settings.calibration);
     setView('running');
     ring.set(0.001, [C.white, C.white], false);
     renderRunning();
@@ -300,7 +322,7 @@
     clearInterval(timer);
     timer = setInterval(() => {
       if (!session || view !== 'running') return;
-      session.tick();
+      if (session.tick() === false) { end(); return; }
       renderRunning();
       document.dispatchEvent(new CustomEvent('flowbeat:tick', { detail: session }));
     }, 1000 / settings.speed);
@@ -394,18 +416,25 @@
   $('#doneBtn').addEventListener('click', () => { session = null; setView('start'); document.dispatchEvent(new CustomEvent('flowbeat:reset')); });
 
   // vertical paging: wheel, swipe, arrow keys
+  // Wheel and swipe page the watch only after the visitor has engaged with it (clicked, tapped or focused it),
+  // so scrolling the page past the watch is never hijacked.
+  const engaged = () => watchEl.contains(document.activeElement) || watchEl.classList.contains('engaged');
+  watchEl.addEventListener('pointerdown', () => watchEl.classList.add('engaged'));
+  watchEl.addEventListener('focusin', () => watchEl.classList.add('engaged'));
+  document.addEventListener('pointerdown', (ev) => { if (!watchEl.contains(ev.target)) watchEl.classList.remove('engaged'); });
+  watchEl.addEventListener('focusout', (ev) => { if (!watchEl.contains(ev.relatedTarget)) watchEl.classList.remove('engaged'); });
   let wheelLock = 0;
   screen.addEventListener('wheel', (ev) => {
-    if (view !== 'running') return;
+    if (view !== 'running' || !engaged()) return;
     ev.preventDefault();
     const now = performance.now(); if (now - wheelLock < 450 || Math.abs(ev.deltaY) < 8) return;
     wheelLock = now; setPage(page + (ev.deltaY > 0 ? 1 : -1));
   }, { passive: false });
   let touchY = null;
   screen.addEventListener('touchstart', (ev) => { touchY = ev.touches[0].clientY; }, { passive: true });
-  screen.addEventListener('touchmove', (ev) => { if (view === 'running') ev.preventDefault(); }, { passive: false });
+  screen.addEventListener('touchmove', (ev) => { if (view === 'running' && engaged()) ev.preventDefault(); }, { passive: false });
   screen.addEventListener('touchend', (ev) => {
-    if (touchY == null || view !== 'running') return;
+    if (touchY == null || view !== 'running' || !engaged()) { touchY = null; return; }
     const dy = ev.changedTouches[0].clientY - touchY; touchY = null;
     if (Math.abs(dy) > 24) setPage(page + (dy < 0 ? 1 : -1));
   });
@@ -428,11 +457,14 @@
   tickClock(); setInterval(tickClock, 5000);
 
   // ------------------------------------------------------------------ panel controls (outside the watch)
-  document.querySelectorAll('[data-source]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('button[data-source]').forEach(b => b.addEventListener('click', () => {
+    const prev = settings.source;
     settings.source = b.dataset.source;
-    document.querySelectorAll('[data-source]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('button[data-source]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     document.body.dataset.source = settings.source;
-    if (!session || view !== 'running') start();
+    // A replay is tied to its recording, so entering or leaving it restarts the session.
+    if (!session || view !== 'running' || prev === 'replay' || settings.source === 'replay') start();
+    else session.source = settings.source;
   }));
   document.querySelectorAll('[data-speed]').forEach(b => b.addEventListener('click', () => {
     settings.speed = +b.dataset.speed;
@@ -465,6 +497,12 @@
   setView('start');
   onResize();
   document.body.dataset.source = settings.source;
-  const autostart = setTimeout(() => { if (view === 'start' && !session) start(); }, 1600);
+  // Auto-start shortly after the watch first scrolls into view, so the replay begins where the visitor can see it.
+  let autostart = null;
+  const kick = () => { if (autostart == null) autostart = setTimeout(() => { if (view === 'start' && !session) start(); }, 1200); };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => { if (es.some(e => e.isIntersecting)) { kick(); io.disconnect(); } }, { threshold: 0.35 });
+    io.observe(watchEl);
+  } else kick();
   $('#startBtn').addEventListener('click', () => clearTimeout(autostart));
 })();

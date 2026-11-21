@@ -7,7 +7,6 @@
   'use strict';
   const { FocusEngine } = window.FlowbeatCore;
   const $ = (s) => document.querySelector(s);
-  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const f = (x, d = 1) => (x == null ? '—' : x.toFixed(d));
 
   // ------------------------------------------------------------------ live breakdown
@@ -19,7 +18,9 @@
       ['bdHr', 'bdBase', 'bdMotion', 'bdMp', 'bdHp', 'bdRaw', 'bdScore'].forEach(id => setText(id, '—'));
       setText('bdPhase', s ? 'starting' : 'not running');
       setText('bdNote', 'Waiting for the first one-second tick.');
+      setText('bdSwift', '—');
       if (seg) seg.dataset.seg = '';
+      renderReplayProgress(s);
       return;
     }
     setText('bdPhase', tr.away ? 'away (walking)' : tr.phase === 'calibrating' ? `calibrating ${s.elapsed}/${s.calibrationSeconds} s` : 'running');
@@ -38,6 +39,8 @@
     else if (tr.recovering) note = 'Back from walking: for 60 s the heart-rate penalty is skipped while HR settles.';
     else note = `raw = 100 − ${f(tr.motionPenalty)} − ${f(tr.hrPenalty)} = ${f(tr.raw)};  shown = previous + 0.2 × (raw − previous) = ${f(tr.score)}`;
     setText('bdNote', note);
+    if (tr.swift !== undefined) setText('bdSwift', tr.swift == null ? (tr.score == null ? '— (not scored)' : '— (not scored, ring held)') : f(tr.swift));
+    renderReplayProgress(s);
     if (seg) {
       seg.dataset.seg = s.segment || '';
       const pos = $('#segPos');
@@ -45,8 +48,32 @@
     }
   }
 
+  const mmss = (t) => Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+  function renderReplayProgress(s) {
+    const fill = $('#rpFill'), time = $('#rpTime'), match = $('#rpMatch');
+    if (!fill || !time || !match) return;
+    const S = window.FLOWBEAT_SAMPLE, n = S ? S.samples.length : 0;
+    if (!s || s.source !== 'replay') {
+      fill.style.width = '0%'; time.textContent = '0:00 / ' + mmss(n);
+      match.textContent = 'Starts when the watch is on screen'; match.className = '';
+      if ($('#rpSwift')) { $('#rpSwift').textContent = '—'; $('#rpJs').textContent = '—'; }
+      return;
+    }
+    fill.style.width = (n ? (s.elapsed / n) * 100 : 0) + '%';
+    const tr = s.trace, sw = $('#rpSwift'), js = $('#rpJs');
+    if (sw && js) {
+      if (!tr || tr.phase === 'calibrating') { sw.textContent = '—'; js.textContent = '—'; }
+      else if (tr.sampleScore == null && tr.swift == null) { sw.textContent = 'paused'; js.textContent = 'paused'; }
+      else { sw.textContent = tr.swift == null ? '—' : tr.swift.toFixed(1); js.textContent = tr.sampleScore == null ? '—' : tr.sampleScore.toFixed(1); }
+    }
+    time.textContent = mmss(s.elapsed) + ' / ' + mmss(n);
+    if (!s.compared && !s.mismatch) { match.textContent = s.phase === 'calibrating' ? 'Calibrating, no scores yet' : 'Waiting for the first score'; match.className = ''; }
+    else if (s.mismatch === 0 && s.maxDiff === 0) { match.textContent = `Identical to Swift: ${s.compared} of ${s.compared} seconds`; match.className = 'ok'; }
+    else { match.textContent = `Differs from Swift: max ${s.maxDiff.toExponential(2)}, ${s.mismatch} one-sided`; match.className = 'bad'; }
+  }
+
   // ------------------------------------------------------------------ charts
-  function bandColor(v) { return v >= 70 ? css('--c-flow') : v >= 40 ? css('--c-mid') : css('--c-low'); }
+  function bandColor(v, css) { return v >= 70 ? css('--c-flow') : v >= 40 ? css('--c-mid') : css('--c-low'); }
   function setupCanvas(cv) {
     const dpr = window.devicePixelRatio || 1;
     const w = cv.clientWidth, h = cv.clientHeight;
@@ -61,6 +88,7 @@
   function drawChart(cv, opts) {
     if (!cv || !cv.clientWidth) return;
     const { ctx, w, h } = setupCanvas(cv);
+    const cs = getComputedStyle(cv), css = (name) => cs.getPropertyValue(name).trim();   // tokens of the canvas's section
     const L = 6, R = 30, T = 10, B = 20;
     const pw = w - L - R, ph = h - T - B;
     const n = Math.max(2, opts.n);
@@ -105,7 +133,7 @@
         ctx.lineWidth = sr.width || 2.5;
         for (let i = 1; i < v.length; i++) {
           if (v[i] == null || v[i - 1] == null) continue;
-          ctx.strokeStyle = bandColor((v[i] + v[i - 1]) / 2);
+          ctx.strokeStyle = bandColor((v[i] + v[i - 1]) / 2, css);
           ctx.beginPath(); ctx.moveTo(X(i - 1), Y(v[i - 1])); ctx.lineTo(X(i), Y(v[i])); ctx.stroke();
         }
       } else {
@@ -184,12 +212,15 @@
       else if (sw != null) { compared++; maxDiff = Math.max(maxDiff, Math.abs(sw - r.sampleScore)); }
     });
     replay = { js, swift, compared, maxDiff, mismatch, baseline: e.baselineHR };
+    // Numbers on the page are computed here, in the visitor's browser, not typed in.
+    setText('maxDiff', maxDiff === 0 ? '0' : maxDiff.toExponential(2));
+    setText('compared', String(compared));
     const el = $('#replayStats');
-    if (el) el.innerHTML =
-      `<div><b>${compared}</b><span>scored seconds compared</span></div>` +
-      `<div><b>${maxDiff === 0 ? '0' : maxDiff.toExponential(2)}</b><span>largest difference, Swift vs JS</span></div>` +
-      `<div><b>${mismatch}</b><span>seconds scored by one side only</span></div>` +
-      `<div><b>${replay.baseline.toFixed(1)}</b><span>baseline bpm (both)</span></div>`;
+    if (el) {
+      const b = el.querySelectorAll('b');
+      if (b[0]) b[0].textContent = String(S.samples.length);
+      if (b[1]) b[1].textContent = String(mismatch);
+    }
     renderJudgments();
   }
   function drawReplay() {
@@ -200,7 +231,7 @@
       n,
       series: [
         { values: replay.swift, style: 'band', width: 5 },
-        { values: replay.js, style: 'thin', color: css('--ink'), width: 1.25, dash: [3, 3] },
+        { values: replay.js, style: 'thin', color: getComputedStyle($('#replay')).getPropertyValue('--ink').trim(), width: 1.25, dash: [3, 3] },
       ],
       away: S.samples.map(x => !!x.away), calib: S.samples.map((x, i) => i < replay.swift.findIndex(v => v != null)),
       labels: S.samples.map(x => x.label || null), xlabels: xl,

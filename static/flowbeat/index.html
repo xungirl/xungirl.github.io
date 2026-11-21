@@ -3,288 +3,477 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Flowbeat · live demo</title>
-<meta name="description" content="Flowbeat is an Apple Watch app that estimates focus from heart rate and wrist motion. This page runs its real scoring code, ported from Swift to JavaScript, on simulated sensors.">
-<meta name="color-scheme" content="light dark">
+<title>Flowbeat for Apple Watch</title>
+<meta name="description" content="Flowbeat is an Apple Watch app that turns heart rate and wrist motion into a live 0–100 focus score. This page runs its real scoring code, ported line by line from Swift, on recorded and simulated sensor data.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#000000">
 <link rel="icon" type="image/png" href="img/icon-64.png">
 <link rel="apple-touch-icon" href="img/icon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
-<body>
+<body data-source="replay">
 <a class="skip" href="#main">Skip to content</a>
-<header class="top">
-  <a class="logo" href="#top"><img src="img/icon-64.png" alt="" width="28" height="28"><span>Flowbeat</span></a>
-  <nav>
-    <a href="#how">How it works</a>
-    <a href="#verify">Verification</a>
-    <a href="#judge">LLM judge</a>
-    <a href="#status">Status</a>
-    <a class="gh" href="https://github.com/xungirl/Flowbeat">GitHub</a>
-  </nav>
-</header>
+
+<nav class="localnav" id="localnav" aria-label="Flowbeat">
+  <div class="localnav-inner">
+    <a class="ln-title" href="#overview"><img src="img/icon-64.png" alt="" width="22" height="22">Flowbeat</a>
+    <div class="ln-menu" id="lnMenu">
+      <a href="#how">How it works</a>
+      <a href="#try">Try it</a>
+      <a href="#features">Features</a>
+      <a href="#specs">Tech Specs</a>
+    </div>
+    <button class="ln-toggle" id="lnToggle" aria-expanded="false" aria-controls="lnMenu" aria-label="Show sections">
+      <svg viewBox="0 0 12 8" width="12" height="8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <a class="ln-cta" href="https://github.com/xungirl/Flowbeat">View on GitHub</a>
+  </div>
+</nav>
 
 <main id="main">
-<section class="hero" id="top">
-  <div class="intro">
-    <p class="eyebrow">Apple Watch app · interactive web demo</p>
-    <h1>Your focus, read from your <span class="grad">wrist</span>.</h1>
-    <p class="lede">Flowbeat turns heart rate and wrist motion into a live 0–100 focus score on Apple Watch. The watch on this page runs Flowbeat’s actual scoring code, ported line by line from Swift to JavaScript. The sensor data is simulated.</p>
-  </div>
-  <div class="status-wrap">
-    <div class="status-card" role="note">
-      <div class="status-head"><span class="pill warn">Not validated</span><span>From the project README, 2026-11-14</span></div>
-      <p>Everything has run only in the <b>watchOS simulator</b> (demo mode with simulated sensors), in local tests, and in GitHub Actions. It has <b>never run on a real Apple Watch</b>, and the focus score has not been validated against real labeled data.</p>
-      <p class="small">This page reads no sensors. The heart rate and motion come from the app’s own simulator demo cycle or from the sliders. Flowbeat is not a medical device, and it is not on the App Store yet.</p>
-    </div>
-    <div class="cta">
-      <a class="btn primary" href="https://github.com/xungirl/Flowbeat">View source on GitHub</a>
-      <a class="btn" href="#how">How the score works</a>
-    </div>
-  </div>
 
-  <div class="watch-col">
-      <div class="watch" id="watch" tabindex="0" aria-label="Flowbeat watch demo. Arrow keys switch pages.">
-        <div class="band top"></div><div class="band bottom"></div>
-        <div class="case">
-          <button class="crown" id="crown" aria-label="Digital Crown: switch page" title="Switch page"></button>
-          <span class="side-btn" aria-hidden="true"></span>
-          <div class="glass"><div class="screen" id="screen" aria-live="off"></div></div>
-        </div>
+<!-- ============================================================ hero -->
+<section class="hero dark" id="overview">
+  <div class="hero-copy">
+    <p class="hero-eyebrow a-in" style="--d:0ms">Flowbeat for Apple Watch</p>
+    <h1 class="a-in" style="--d:80ms">Your focus,<br>on your wrist.</h1>
+    <p class="hero-sub a-in" style="--d:180ms">A live 0–100 focus score from your heart rate and wrist motion. Computed every second, entirely on the watch.</p>
+    <div class="hero-cta a-in" style="--d:260ms">
+      <a class="btn-pill" href="#try">Try it live</a>
+      <a class="link-more" href="https://github.com/xungirl/Flowbeat">View the source</a>
+    </div>
+    <p class="hero-note a-in" style="--d:320ms">Preparing for App Store release.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+  </div>
+  <div class="hero-device a-rise">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="device xl">
+      <span class="dev-band top" aria-hidden="true"></span><span class="dev-band bottom" aria-hidden="true"></span>
+      <div class="dev-case">
+        <span class="dev-crown" aria-hidden="true"></span><span class="dev-btn" aria-hidden="true"></span>
+        <div class="dev-glass"><img src="img/en-1-focus.png" alt="Flowbeat on Apple Watch: focus ring at 100, In flow, heart rate 71 BPM, motion Still" width="416" height="496"></div>
       </div>
-      <p class="watch-hint">Swipe or scroll on the screen (or press the crown) for the second page: labels and <b>End</b>.</p>
+    </div>
+    <p class="dev-caption">Watch simulator screenshot.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
   </div>
 </section>
 
-<section class="lab" aria-label="Demo controls and live breakdown">
-    <div class="panel">
-      <div class="controls-col">
-      <h2 class="h-sm">Sensor input</h2>
-      <div class="seg" role="group" aria-label="Sensor source">
-        <button data-source="demo" aria-pressed="true">Simulator cycle</button>
-        <button data-source="manual" aria-pressed="false">Your inputs</button>
-      </div>
+<!-- ============================================================ highlights -->
+<section class="highlights dark">
+  <div class="wrap">
+    <p class="statement reveal">Heart rate from HealthKit. Wrist motion from CoreMotion. <span class="grad-text">One transparent score</span>, updated every second, with no network required.</p>
+    <ul class="stat-row">
+      <li class="reveal"><b>1<small>s</small></b><span>between score updates</span></li>
+      <li class="reveal" style="--rd:80ms"><b>25<small>Hz</small></b><span>wrist motion sampling</span></li>
+      <li class="reveal" style="--rd:160ms"><b>60<small>s</small></b><span>to learn your resting heart rate</span></li>
+      <li class="reveal" style="--rd:240ms"><b>0</b><span>network requests in the App Store build</span></li>
+    </ul>
+  </div>
+</section>
 
-      <div class="src src-demo">
-        <p class="hint">The repo’s simulator mode, ported from <code>FocusSession.simulateSensors()</code>: after calibration a 60 s loop of fake data.</p>
-        <div class="segbar" id="segment" data-seg="">
-          <div class="track" aria-hidden="true"><span class="focused" style="flex:35"></span><span class="distracted" style="flex:10"></span><span class="walking" style="flex:15"></span><i id="segPos"></i></div>
-          <div class="seglabels">
-            <span class="s focused"><b>Focused</b> 35 s<small>HR 70 ± 2 · 0–0.02 g</small></span>
-            <span class="s distracted"><b>Distracted</b> 10 s<small>HR 86 ± 2 · 0.08–0.18 g</small></span>
-            <span class="s walking"><b>Walking</b> 15 s<small>HR 95 ± 3 · away</small></span>
+<!-- ============================================================ how (sticky sequence) -->
+<section class="how light" id="how">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2>How the score<br>is built.</h2>
+      <p class="intro">No black box. One baseline, two penalties and a little smoothing. Every constant lives in <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/FocusScorer.swift"><code>FocusScorer.swift</code></a>.</p>
+    </header>
+
+    <div class="seq" id="seq">
+      <div class="seq-viz" aria-hidden="true">
+        <div class="viz" id="viz" data-step="0">
+          <svg class="viz-ring" viewBox="0 0 200 200">
+            <defs><linearGradient id="vizGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="s1"/><stop offset="1" class="s2"/></linearGradient></defs>
+            <circle class="trk" cx="100" cy="100" r="84"/>
+            <circle class="arc" cx="100" cy="100" r="84" pathLength="100" transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="viz-center"><b id="vizBig">71</b><span id="vizSmall">BPM</span></div>
+          <p class="viz-formula" id="vizFormula">heart rate + wrist motion, every second</p>
+        </div>
+      </div>
+      <ol class="seq-steps">
+        <li class="step" data-step="0">
+          <span class="step-n">01</span>
+          <h3>Sense.</h3>
+          <p>A Mind &amp; Body workout session keeps heart rate arriving every few seconds, then is discarded so nothing lands in Health. Wrist motion is CoreMotion’s user acceleration at 25 Hz, averaged over the last 10 seconds.</p>
+        </li>
+        <li class="step" data-step="1">
+          <span class="step-n">02</span>
+          <h3>Calibrate.</h3>
+          <p>The first 60 seconds learn your resting baseline. It is the <em>median</em> heart rate, so one spike from shifting in your chair doesn’t move it. Seconds spent walking are left out.</p>
+        </li>
+        <li class="step" data-step="2">
+          <span class="step-n">03</span>
+          <h3>Subtract two penalties.</h3>
+          <p>Wrist motion above 0.02 g costs up to 60 points, in full at 0.15 g. Heart rate more than 5 bpm over baseline costs up to 40, in full at 20 bpm. Below both, you keep all 100.</p>
+        </li>
+        <li class="step" data-step="3">
+          <span class="step-n">04</span>
+          <h3>Smooth it.</h3>
+          <p>The ring moves a fifth of the way toward each new reading (α&nbsp;=&nbsp;0.2). One shake of the hand nudges it. It doesn’t knock you out of flow.</p>
+        </li>
+        <li class="step" data-step="4">
+          <span class="step-n">05</span>
+          <h3>Walking isn’t distraction.</h3>
+          <p>When activity recognition reports walking, scoring pauses and the time counts as away. Once you sit back down, the heart-rate penalty waits 60 seconds while your pulse settles.</p>
+        </li>
+        <li class="step" data-step="5">
+          <span class="step-n">06</span>
+          <h3>A gentle tap.</h3>
+          <p><span class="band-flow">70 and up</span> is flow. <span class="band-mid">40 to 70</span>, a bit distracted. <span class="band-low">Under 40</span>, off track. After 3 minutes off track the watch taps once, at most every 10 minutes, and never while you walk.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ try it -->
+<section class="try gray" id="try">
+  <div class="wrap">
+    <header class="sec-head center reveal">
+      <p class="eyebrow">Try it</p>
+      <h2>Right here.<br>Right now.</h2>
+      <p class="intro">This watch runs Flowbeat’s scoring code, ported line by line from Swift.<sup><a href="#fn2" aria-label="Footnote 2">2</a></sup> Replay a session the watch simulator recorded, or be the sensors yourself.</p>
+    </header>
+
+    <div class="lab reveal">
+      <div class="stage">
+        <div class="watch" id="watch" tabindex="0" aria-label="Flowbeat watch demo. Arrow keys switch pages.">
+          <div class="band top"></div><div class="band bottom"></div>
+          <div class="case">
+            <button class="crown" id="crown" aria-label="Digital Crown: switch page" title="Switch page"></button>
+            <span class="side-btn" aria-hidden="true"></span>
+            <div class="glass"><div class="screen" id="screen" aria-live="off"></div></div>
           </div>
         </div>
+        <p class="stage-hint">Tap the dots, press the crown or swipe on the screen for labels and <b>End</b>.</p>
       </div>
 
-      <div class="src src-manual">
-        <p class="hint">You are the sensors. The motion slider is the instantaneous wrist acceleration; the app averages it over the last 10 s, so the score responds with a lag.</p>
-        <label class="field"><span>Heart rate <output id="inHrVal">70 bpm</output></span>
-          <input id="inHr" type="range" min="45" max="160" step="1" value="70"></label>
-        <label class="field"><span>Wrist motion <output id="inMotionVal">0.010 g</output></span>
-          <input id="inMotion" type="range" min="0" max="0.4" step="0.005" value="0.01"></label>
-        <label class="switch"><input id="inWalk" type="checkbox"><span>Walking (away from desk)</span></label>
-        <div class="presets" role="group" aria-label="Presets">
-          <button data-preset="calm">Calm</button><button data-preset="typing">Typing</button>
-          <button data-preset="fidget">Fidgeting</button><button data-preset="walk">Walking</button>
+      <div class="console">
+        <div class="seg" role="group" aria-label="Sensor source">
+          <button data-source="replay" aria-pressed="true">Recorded</button>
+          <button data-source="demo" aria-pressed="false">Demo cycle</button>
+          <button data-source="manual" aria-pressed="false">Your inputs</button>
         </div>
-      </div>
 
-      <div class="row2">
-        <div class="seg small" role="group" aria-label="Speed">
-          <span class="lbl">Speed</span>
-          <button data-speed="1" aria-pressed="true">1×</button><button data-speed="5" aria-pressed="false">5×</button><button data-speed="20" aria-pressed="false">20×</button>
+        <div class="src src-replay">
+          <h3>A real session, replayed.</h3>
+          <p>245 seconds the watch simulator recorded in demo mode.<sup><a href="#fn4" aria-label="Footnote 4">4</a></sup> Each second, the ring here should equal the score the Swift app computed.</p>
+          <div class="replay-bar" aria-hidden="true"><i id="rpFill"></i></div>
+          <div class="replay-meta num"><span id="rpTime">0:00 / 4:05</span><span id="rpMatch">Waiting for the first score</span></div>
+          <div class="dual" aria-live="off">
+            <div><span>Swift app recorded</span><b class="num" id="rpSwift">—</b></div>
+            <div><span>This page computed</span><b class="num" id="rpJs">—</b></div>
+          </div>
         </div>
-        <div class="seg small" role="group" aria-label="Calibration length">
-          <span class="lbl">Calibration</span>
-          <button data-cal="10" aria-pressed="true" title="Simulator build">10 s</button><button data-cal="60" aria-pressed="false" title="Watch build">60 s</button>
+
+        <div class="src src-demo">
+          <h3>The app’s own demo loop.</h3>
+          <p>Ported from <code>simulateSensors()</code>: after calibration, a 60-second cycle of randomized sensor data.</p>
+          <div class="segbar" id="segment" data-seg="">
+            <div class="track" aria-hidden="true"><span class="focused" style="flex:35"></span><span class="distracted" style="flex:10"></span><span class="walking" style="flex:15"></span><i id="segPos"></i></div>
+            <div class="seglabels">
+              <span class="s focused"><b>Focused</b> 35 s<small>HR 70 ± 2 · 0–0.02 g</small></span>
+              <span class="s distracted"><b>Distracted</b> 10 s<small>HR 86 ± 2 · 0.08–0.18 g</small></span>
+              <span class="s walking"><b>Walking</b> 15 s<small>HR 95 ± 3 · away</small></span>
+            </div>
+          </div>
         </div>
-        <button class="btn ghost" id="restart">Restart</button>
-      </div>
-      </div>
 
-      <div class="breakdown" aria-live="off">
-        <h2 class="h-sm">What the algorithm sees this second</h2>
-        <dl>
-          <div><dt>Phase</dt><dd id="bdPhase">—</dd></div>
-          <div><dt>Heart rate</dt><dd id="bdHr" class="num">—</dd></div>
-          <div><dt>Baseline</dt><dd id="bdBase" class="num">—</dd></div>
-          <div><dt>Motion, 10 s mean</dt><dd id="bdMotion" class="num">—</dd></div>
-          <div><dt>Motion penalty</dt><dd id="bdMp" class="num">—</dd></div>
-          <div><dt>HR penalty</dt><dd id="bdHp" class="num">—</dd></div>
-          <div><dt>Raw score</dt><dd id="bdRaw" class="num">—</dd></div>
-          <div class="hl"><dt>Ring (smoothed)</dt><dd id="bdScore" class="num">—</dd></div>
-        </dl>
-        <p class="note num" id="bdNote"></p>
-        <div class="chart-head"><span>Last 3 minutes</span><span class="legend"><i class="lg calib"></i>calibrating <i class="lg away"></i>away <i class="lg line"></i>score</span></div>
-        <canvas id="live" class="chart live" aria-label="Focus score over the last three minutes"></canvas>
+        <div class="src src-manual">
+          <h3>You are the sensors.</h3>
+          <p>Motion is instantaneous wrist acceleration. The app averages it over 10 seconds, so the ring follows with a lag.</p>
+          <label class="field"><span>Heart rate <output id="inHrVal">70 bpm</output></span>
+            <input id="inHr" type="range" min="45" max="160" step="1" value="70"></label>
+          <label class="field"><span>Wrist motion <output id="inMotionVal">0.010 g</output></span>
+            <input id="inMotion" type="range" min="0" max="0.4" step="0.005" value="0.01"></label>
+          <label class="switch"><input id="inWalk" type="checkbox"><span class="sw" aria-hidden="true"></span><span>Walking (away from desk)</span></label>
+          <div class="presets" role="group" aria-label="Presets">
+            <button data-preset="calm">Calm</button><button data-preset="typing">Typing</button>
+            <button data-preset="fidget">Fidgeting</button><button data-preset="walk">Walking</button>
+          </div>
+        </div>
+
+        <div class="opts">
+          <div class="seg small" role="group" aria-label="Speed">
+            <span class="lbl">Speed</span>
+            <button data-speed="1" aria-pressed="true">1×</button><button data-speed="5" aria-pressed="false">5×</button><button data-speed="20" aria-pressed="false">20×</button>
+          </div>
+          <div class="seg small cal-group" role="group" aria-label="Calibration length">
+            <span class="lbl">Calibration</span>
+            <button data-cal="10" aria-pressed="true" title="Simulator build">10 s</button><button data-cal="60" aria-pressed="false" title="Watch build">60 s</button>
+          </div>
+          <button class="btn-ghost" id="restart">Restart</button>
+        </div>
+        <p class="opts-note src-replay">The recording used the simulator’s 10-second calibration, so replay always does too.</p>
       </div>
     </div>
-</section>
 
-<section class="sec" id="how">
-  <div class="sec-head">
-    <p class="eyebrow">How the score works</p>
-    <h2>Two penalties, one baseline, and smoothing.</h2>
-    <p class="lede-sm">The score is a transparent rule, not a trained model: there was no labeled data to train one. Every number below is a constant in <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/FocusScorer.swift"><code>FocusScorer.swift</code></a>, and the same constants are in the JavaScript port.</p>
-  </div>
-
-  <ol class="steps">
-    <li>
-      <span class="n">1</span>
-      <h3>Sense, once a second</h3>
-      <p>During a session the watch runs a Mind &amp; Body workout so heart rate keeps arriving (it is discarded at the end, not saved to Health). Wrist motion is the magnitude of CoreMotion’s user acceleration at 25 Hz, averaged over the last 10 s.</p>
-    </li>
-    <li>
-      <span class="n">2</span>
-      <h3>Calibrate a resting baseline</h3>
-      <p>The first 60 s (10 s in the simulator build) collect heart rate. The baseline is the <b>median</b>, so one spike from standing up doesn’t move it. Seconds spent walking are left out.</p>
-    </li>
-    <li>
-      <span class="n">3</span>
-      <h3>Subtract two penalties</h3>
-      <div class="formula num">
-        <div><span class="k">motion</span> = clamp((m − 0.02) / 0.13) × 60</div>
-        <div><span class="k">heart</span> = clamp((hr − baseline − 5) / 15) × 40</div>
-        <div><span class="k">raw</span> = 100 − motion − heart</div>
+    <div class="breakdown reveal" aria-live="off">
+      <div class="bd-head">
+        <h3>What the algorithm sees, this second.</h3>
       </div>
-      <p>Below 0.02 g of motion and within 5 bpm of baseline there is no penalty. At 0.15 g or 20 bpm above baseline each penalty is at its maximum. <code>clamp</code> keeps values in 0…1.</p>
-    </li>
-    <li>
-      <span class="n">4</span>
-      <h3>Smooth it</h3>
-      <div class="formula num"><div><span class="k">shown</span> = previous + 0.2 × (raw − previous)</div></div>
-      <p>Exponential smoothing with α = 0.2, so one shake of the hand doesn’t drop the ring out of the focus band.</p>
-    </li>
-    <li>
-      <span class="n">5</span>
-      <h3>Walking isn’t distraction</h3>
-      <p>When the system’s activity recognition reports walking or running, scoring pauses and the time counts as away. After you sit back down, the heart-rate penalty is skipped for 60 s while your pulse settles.</p>
-    </li>
-    <li>
-      <span class="n">6</span>
-      <h3>Bands and a gentle nudge</h3>
-      <p><b class="t-flow">≥ 70</b> in flow · <b class="t-mid">40–70</b> a bit distracted · <b class="t-low">&lt; 40</b> off track. After 3 minutes below 40, the watch taps once, at most every 10 minutes. A recovery has to last 15 s before the count resets.</p>
-    </li>
-  </ol>
-
-  <div class="ported">
-    <h3 class="h-sm">What is ported, and from where</h3>
-    <table>
-      <thead><tr><th>JavaScript (<a href="js/flowbeat-core.js">js/flowbeat-core.js</a>)</th><th>Swift source</th></tr></thead>
-      <tbody>
-        <tr><td><code>FocusScorer</code>, <code>RollingMean</code></td><td><a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/FocusScorer.swift">FlowbeatCore/…/FocusScorer.swift</a></td></tr>
-        <tr><td><code>AwayTracker</code>, <code>FocusEngine.tick</code>, <code>SessionStats</code></td><td><a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/FocusEngine.swift">FlowbeatCore/…/FocusEngine.swift</a>, <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/SessionPlan.swift">SessionPlan.swift</a></td></tr>
-        <tr><td><code>DistractionNudge</code></td><td><a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatCore/Sources/FlowbeatCore/DistractionNudge.swift">FlowbeatCore/…/DistractionNudge.swift</a></td></tr>
-        <tr><td><code>simulateSensors</code>, per-second session loop</td><td><a href="https://github.com/xungirl/Flowbeat/blob/main/Flowbeat/FocusSession.swift">Flowbeat/FocusSession.swift</a> (<code>tick()</code>, <code>simulateSensors()</code>)</td></tr>
-        <tr><td>Watch screens (start, ring, controls, summary)</td><td><a href="https://github.com/xungirl/Flowbeat/blob/main/Flowbeat/ContentView.swift">Flowbeat/ContentView.swift</a></td></tr>
-      </tbody>
-    </table>
-    <p class="small muted">Not on this page: Pomodoro mode, history and complications, the on-device personal model (a logistic regression that needs at least 8 labels of each kind), HRV, and the LLM judge. Screenshots of those are below.</p>
+      <dl>
+        <div><dt>Phase</dt><dd id="bdPhase">—</dd></div>
+        <div><dt>Heart rate</dt><dd id="bdHr" class="num">—</dd></div>
+        <div><dt>Baseline</dt><dd id="bdBase" class="num">—</dd></div>
+        <div><dt>Motion, 10 s mean</dt><dd id="bdMotion" class="num">—</dd></div>
+        <div><dt>Motion penalty</dt><dd id="bdMp" class="num">—</dd></div>
+        <div><dt>Heart-rate penalty</dt><dd id="bdHp" class="num">—</dd></div>
+        <div><dt>Raw score</dt><dd id="bdRaw" class="num">—</dd></div>
+        <div class="hl"><dt>Ring, smoothed</dt><dd id="bdScore" class="num">—</dd></div>
+        <div class="src-replay hl2"><dt>Swift app recorded</dt><dd id="bdSwift" class="num">—</dd></div>
+      </dl>
+      <p class="note num" id="bdNote"></p>
+      <div class="chart-head"><span>Last 3 minutes</span><span class="legend"><i class="lg calib"></i>calibrating <i class="lg away"></i>away <i class="lg line"></i>score</span></div>
+      <canvas id="live" class="chart live" aria-label="Focus score over the last three minutes"></canvas>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="verify">
-  <div class="sec-head">
-    <p class="eyebrow">Checked against the Swift app</p>
-    <h2>The port gives the same numbers as the app.</h2>
-    <p class="lede-sm">The repo includes a session that the watch simulator recorded in demo mode: 245 seconds of heart rate, motion and away flags, plus the score the Swift code computed each second. Your browser just fed those inputs through the JavaScript port:</p>
-  </div>
-  <div class="replay card-box">
-    <div class="stats4" id="replayStats"><div><b>…</b><span>loading</span></div></div>
-    <div class="chart-head"><span>Sample session, re-scored in your browser</span>
-      <span class="legend"><i class="lg swift"></i>Swift (recorded) <i class="lg dash"></i>JS port <i class="lg dia"></i>LLM judgment <i class="lg away"></i>away</span></div>
-    <canvas id="replay" class="chart tall" aria-label="Swift and JavaScript focus scores for the sample session, overlapping exactly"></canvas>
-    <p class="small muted">Inputs come from <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatPhone/Resources/sample-session.json"><code>FlowbeatPhone/Resources/sample-session.json</code></a>. The source data is simulated, so this shows the port matches the Swift code, not that the score measures focus. The vertical lines are the demo’s automatic focused/distracted labels. Why the later dips are shallower: each walk starts a 60 s heart-rate grace period and the demo walks every 60 s, so after the first walk only the motion penalty applies.</p>
-  </div>
-  <div class="tests">
-    <p><b>Unit tests.</b> <a href="test/port.test.js"><code>test/port.test.js</code></a> (Node, no dependencies) re-runs, case by case, the Swift tests for the ported code: <code>FocusScorerTests</code>, <code>AwayTrackerTests</code>, <code>FocusEngineTests</code>, <code>DistractionNudgeTests</code> and the streak cases from <code>SessionPlanTests</code>. It also replays the sample session above and checks the constants against the Swift source. 50 of 50 pass.</p>
-  </div>
-</section>
-
-<section class="sec" id="judge">
-  <div class="sec-head">
-    <p class="eyebrow">Developer builds only</p>
-    <h2>An LLM as a second opinion.</h2>
-    <p class="lede-sm">In Debug builds, every 2 minutes (every 30 s in the simulator) the watch sends a statistics-only summary of the window to a small FastAPI backend: heart rate mean, min, max and trend against the baseline, wrist stillness and time away. Your own focused/distracted labels go along as few-shot examples. The model (Qwen <code>qwen3.8-flash</code> by default) returns <code>{state, score, reason}</code>. If it is down, the watch queues the windows and keeps scoring locally. The App Store build compiles all of this out and makes no network requests.</p>
-  </div>
-  <div class="judge-grid">
-    <figure class="shot watch-shot">
-      <img src="img/watch-offline-queued.png" alt="Watch screen showing a score of 99 and the line: AI offline, 2 queued" width="416" height="496" loading="lazy">
-      <figcaption>Backend down: “AI offline · 2 queued” (UI in Chinese). Scoring continues on the watch.</figcaption>
+<!-- ============================================================ verify -->
+<section class="verify dark" id="verify">
+  <div class="wrap">
+    <header class="sec-head center reveal">
+      <p class="eyebrow">Verified against Swift</p>
+      <h2>Same math.<br>Same answer.</h2>
+      <p class="intro">The repo ships a session the watch simulator recorded: every input, and the score the Swift code computed each second.<sup><a href="#fn4" aria-label="Footnote 4">4</a></sup> Your browser just re-scored all of it.</p>
+    </header>
+    <div class="big-stat reveal">
+      <b class="grad-text num" id="maxDiff">0</b>
+      <p>largest difference between the Swift app and this page, across <span class="num" id="compared">179</span> scored seconds.</p>
+    </div>
+    <ul class="stat-row three" id="replayStats">
+      <li class="reveal"><b class="num">245</b><span>seconds replayed</span></li>
+      <li class="reveal" style="--rd:80ms"><b class="num">0</b><span>seconds scored by only one side</span></li>
+      <li class="reveal" style="--rd:160ms"><b class="num">50</b><span>unit tests run against the port, mirroring the Swift suites</span></li>
+    </ul>
+    <figure class="chart-fig reveal">
+      <div class="chart-head"><span>The recorded session, re-scored in your browser</span>
+        <span class="legend"><i class="lg swift"></i>Swift (recorded) <i class="lg dash"></i>Web port <i class="lg dia"></i>LLM judgment <i class="lg away"></i>away</span></div>
+      <canvas id="replay" class="chart tall" aria-label="Swift and JavaScript focus scores for the sample session, overlapping exactly"></canvas>
+      <figcaption>The two lines overlap exactly. The input data is simulated, so this proves the port matches the app, not that the score measures focus.<sup><a href="#fn5" aria-label="Footnote 5">5</a></sup> Vertical lines are the demo’s automatic focused and distracted labels.</figcaption>
     </figure>
-    <figure class="shot watch-shot">
-      <img src="img/watch-back-online.png" alt="Watch screen after reconnecting, showing a judgment line" width="416" height="496" loading="lazy">
-      <figcaption>Back online: queued windows delivered in order. The line here is the backend’s fake provider (“[simulated] signal unclear”).</figcaption>
-    </figure>
-    <figure class="shot phone-shot">
-      <img src="img/ci-phone-detail.png" alt="iPhone session detail: average focus 88, focus curve with AI judgment diamonds, list of judgments" width="603" height="1311" loading="lazy">
-      <figcaption>iPhone companion timeline, screenshot from the CI iOS simulator, using the same sample session as the chart above.</figcaption>
-    </figure>
-    <div class="judgments card-box">
-      <h3 class="h-sm">The judgments in that session</h3>
-      <p class="small muted">Real <code>qwen3.8-flash</code> responses to simulated-sensor windows. The model answered in Chinese; the English is translated for this page.</p>
-      <ul id="judgments"></ul>
-      <p class="small muted">Measured in the repo: once the on-device score was removed from the prompt, the share of LLM scores that just copied it fell from 10/30 to 0/30. On ambiguous windows the models then disagreed, so the judge became independent but not provably more accurate.</p>
+  </div>
+</section>
+
+<!-- ============================================================ features -->
+<section class="features light" id="features">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <p class="eyebrow">Features</p>
+      <h2>Small screen.<br>Serious engineering.</h2>
+    </header>
+    <div class="tiles">
+      <article class="tile wide dark-tile reveal">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">On-device machine learning</p>
+          <h3>Learns what focus looks like for you.</h3>
+          <p>Tap Focused or Distracted during a session. Once you have 8 labels of each, a logistic regression trains on the watch itself and is blended 50/50 with the rule score.<sup><a href="#fn7" aria-label="Footnote 7">7</a></sup></p>
+        </div>
+        <div class="tile-art ml-art" aria-hidden="true">
+          <div class="ml-chips"><span class="chip-f">Focused</span><span class="chip-d">Distracted</span></div>
+          <div class="ml-eq"><div><b>50</b><span>rule score</span></div><i>/</i><div><b>50</b><span>your model</span></div></div>
+        </div>
+      </article>
+
+      <article class="tile reveal" style="--rd:80ms">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">Siri and Shortcuts</p>
+          <h3>Just say the word.</h3>
+          <p>App Intents for Siri, Shortcuts and the Action button, with phrases in English and Chinese.</p>
+        </div>
+        <div class="siri" aria-hidden="true">
+          <span>“Start focus”</span><span>“Start a Pomodoro”</span><span>“Stop focus”</span>
+        </div>
+      </article>
+
+      <article class="tile shot-tile dark-tile reveal">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">Offline queue</p>
+          <h3>Keeps scoring when the network doesn’t.</h3>
+          <p>In developer builds, if the judge backend is down, windows wait on the watch (up to 30, backing off from 15 s to 5 min) and arrive in order once it’s back.</p>
+        </div>
+        <div class="device sm"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/watch-offline-queued.png" alt="Watch showing a score of 99 with a pill reading AI offline, 2 queued, in Chinese" width="416" height="496" loading="lazy"></div></div></div>
+        <p class="tile-fine">UI shown in Simplified Chinese.</p>
+      </article>
+
+      <article class="tile shot-tile reveal" style="--rd:80ms">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">WidgetKit complications</p>
+          <h3>Your day, at a glance.</h3>
+          <p>Today’s focused minutes and goal progress, in circular, rectangular, inline and corner styles.</p>
+        </div>
+        <div class="device sm"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-10-widgets.png" alt="Widget previews: a ring at 41 and a card reading Focus today, 41 of 60 min, 2-day streak" width="416" height="496" loading="lazy"></div></div></div>
+        <p class="tile-fine">Widget views previewed inside the app.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
+      </article>
+
+      <article class="tile shot-tile reveal" style="--rd:160ms">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">Pomodoro and goals</p>
+          <h3>Work in rounds.</h3>
+          <p>25 minutes on, 5 off by default, with a haptic at each switch. Scoring pauses on breaks.</p>
+        </div>
+        <div class="device sm"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-6-pomodoro.png" alt="Pomodoro break screen: Break, scoring paused" width="416" height="496" loading="lazy"></div></div></div>
+        <p class="tile-fine">Simulator screenshot.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
+      </article>
+
+      <article class="tile shot-tile reveal">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">History</p>
+          <h3>See your week.</h3>
+          <p>Today against a daily goal, the last 7 days in Swift Charts, your streak and your best time of day.</p>
+        </div>
+        <div class="device sm"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-8-history.png" alt="History screen: 41 minutes today, goal 60 minutes, 2-day streak, last 7 days chart" width="416" height="496" loading="lazy"></div></div></div>
+        <p class="tile-fine">Sample week in demo mode.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
+      </article>
+
+      <article class="tile reveal" style="--rd:80ms">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">Away detection</p>
+          <h3>Walking isn’t a lapse.</h3>
+          <p>Getting up pauses the score instead of counting against you. Steps and time away show up on the summary.</p>
+        </div>
+        <div class="big-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg></div>
+      </article>
+
+      <article class="tile reveal" style="--rd:160ms">
+        <div class="tile-copy">
+          <p class="tile-eyebrow">Privacy</p>
+          <h3>Stays on your watch.</h3>
+          <p>The App Store build has no backend, no account and no tracking. A script scans the Release binary to prove the network code is gone.</p>
+        </div>
+        <div class="tile-stat"><b>0<span>/6</span></b><small>network markers in the Release binary</small></div>
+      </article>
     </div>
   </div>
 </section>
 
-<section class="sec" id="screens">
-  <div class="sec-head">
-    <p class="eyebrow">More of the app</p>
-    <h2>Other watch screens, from the simulator.</h2>
-    <p class="lede-sm">App Store screenshots from the Release build in the watchOS simulator, demo mode, with a fixed sample week. The numbers are not measurements.</p>
-  </div>
-  <div class="gallery">
-    <figure><img src="img/en-2-summary.png" alt="Summary screen: average focus 86, duration, time in flow" width="416" height="496" loading="lazy"><figcaption>Summary</figcaption></figure>
-    <figure><img src="img/en-6-pomodoro.png" alt="Pomodoro break: scoring paused" width="416" height="496" loading="lazy"><figcaption>Pomodoro break</figcaption></figure>
-    <figure><img src="img/en-7-goal.png" alt="Summary with goal reached" width="416" height="496" loading="lazy"><figcaption>Session goal</figcaption></figure>
-    <figure><img src="img/en-8-history.png" alt="History: today's focused minutes and streak" width="416" height="496" loading="lazy"><figcaption>History</figcaption></figure>
-    <figure><img src="img/en-9-history-best.png" alt="Last 7 days chart and best time of day" width="416" height="496" loading="lazy"><figcaption>7-day chart</figcaption></figure>
-    <figure><img src="img/en-10-widgets.png" alt="Widget views previewed inside the app" width="416" height="496" loading="lazy"><figcaption>Complications (in-app preview)</figcaption></figure>
-    <figure><img src="img/en-4-disclaimer.png" alt="Not a medical device disclaimer" width="416" height="496" loading="lazy"><figcaption>First-launch disclaimer</figcaption></figure>
+<!-- ============================================================ LLM judge -->
+<section class="judge dark" id="judge">
+  <div class="wrap">
+    <header class="sec-head center reveal">
+      <p class="eyebrow">LLM judge · developer builds</p>
+      <h2>A second opinion<br>that thinks for itself.</h2>
+      <p class="intro">Every 2 minutes, developer builds send a statistics-only summary of the window to a small FastAPI backend, and an LLM answers with a state, a score and a reason. Early runs just copied the watch’s own score. So the score came out of the prompt.</p>
+    </header>
+    <div class="judge-stat reveal">
+      <div><b class="num">10<span>/30</span></b><small>scores copied the on-device score</small></div>
+      <svg class="arrow" viewBox="0 0 48 16" aria-hidden="true"><path d="M2 8h40M36 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b class="num grad-text">0<span>/30</span></b><small>after the fix</small></div>
+    </div>
+    <p class="judge-fine reveal">Measured over 90 real API calls on 6 synthetic windows.<sup><a href="#fn6" aria-label="Footnote 6">6</a></sup> Independent isn’t the same as correct: without the anchor, the models disagreed on ambiguous windows.</p>
+
+    <div class="judge-grid">
+      <div class="judge-card reveal">
+        <h3>Built to fail gracefully.</h3>
+        <ul class="facts">
+          <li><b>8 s</b><span>timeout per LLM call, one retry on timeouts, 429s and 5xx</span></li>
+          <li><b>200</b><span>with the rule score as a fallback when the model fails, never a dead end</span></li>
+          <li><b>422</b><span>for any field outside its physical range</span></li>
+          <li><b>1.10 s</b><span>median latency for <code>qwen3.8-flash</code>, the default model</span></li>
+        </ul>
+      </div>
+      <div class="judge-card reveal" style="--rd:80ms">
+        <h3>What it said about the recorded session.</h3>
+        <ul class="judgments" id="judgments"></ul>
+        <p class="fine">Real <code>qwen3.8-flash</code> responses to the recorded windows, translated from Chinese.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="sec" id="status">
-  <div class="sec-head">
-    <p class="eyebrow">Status</p>
-    <h2>What is real here, and what isn’t.</h2>
+<!-- ============================================================ gallery -->
+<section class="gallery-sec light" id="screens">
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <p class="eyebrow">Screens</p>
+      <h2>Every screen,<br>made for a glance.</h2>
+    </header>
   </div>
-  <div class="two-col">
-    <div class="card-box">
-      <h3 class="h-sm">Real</h3>
-      <ul class="ticks">
-        <li>The scoring code: a line-by-line port of the Swift logic, checked number for number against a session the Swift app recorded.</li>
-        <li>The watch layout and states, re-created from the SwiftUI views.</li>
-        <li>The LLM judgments shown above: real model outputs (on simulated windows).</li>
-        <li>The app itself: 157 Swift tests and 48 backend tests passing in CI, and a Release build with no network code.</li>
-      </ul>
+  <div class="gallery" tabindex="0" aria-label="Watch screenshots, scroll sideways">
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-2-summary.png" alt="Summary: average focus 86, duration, time in flow" width="416" height="496" loading="lazy"></div></div></div><figcaption>Summary</figcaption></figure>
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-7-goal.png" alt="Summary with the session goal reached" width="416" height="496" loading="lazy"></div></div></div><figcaption>Session goal</figcaption></figure>
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-9-history-best.png" alt="Last 7 days chart and best time of day" width="416" height="496" loading="lazy"></div></div></div><figcaption>Last 7 days</figcaption></figure>
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-6-pomodoro.png" alt="Pomodoro break: scoring paused" width="416" height="496" loading="lazy"></div></div></div><figcaption>Pomodoro break</figcaption></figure>
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-8-history.png" alt="History: today's focused minutes and streak" width="416" height="496" loading="lazy"></div></div></div><figcaption>History</figcaption></figure>
+    <figure><div class="device md"><div class="dev-case"><span class="dev-crown"></span><div class="dev-glass"><img src="img/en-4-disclaimer.png" alt="First-launch disclaimer: not a medical device" width="416" height="496" loading="lazy"></div></div></div><figcaption>First launch</figcaption></figure>
+  </div>
+  <div class="wrap gallery-foot">
+    <div class="gallery-nav"><button type="button" class="gnav" data-dir="-1" aria-label="Previous screens"><svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true"><path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" class="gnav" data-dir="1" aria-label="Next screens"><svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true"><path d="M2 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <p class="fine center">Screenshots from the watchOS simulator with simulated sensors and a fixed sample week.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p></div>
+</section>
+
+<!-- ============================================================ status -->
+<section class="status gray" id="status">
+  <div class="wrap">
+    <header class="sec-head center reveal">
+      <p class="eyebrow">Status</p>
+      <h2>Where it stands.</h2>
+      <p class="intro">Built in the open, and honest about what hasn’t been proven yet.</p>
+    </header>
+    <div class="status-grid">
+      <div class="status-card reveal">
+        <span class="dot ok" aria-hidden="true"></span>
+        <h3>Tested in the simulator.</h3>
+        <p>157 Swift tests on macOS and the watchOS simulator, 48 backend tests, all green in CI on every push.</p>
+      </div>
+      <div class="status-card reveal" style="--rd:80ms">
+        <span class="dot wait" aria-hidden="true"></span>
+        <h3>Preparing for the App Store.</h3>
+        <p>Listing, privacy policy, review notes and screenshots are ready. Signing and submission wait on the Apple Developer account.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+      </div>
+      <div class="status-card reveal" style="--rd:160ms">
+        <span class="dot todo" aria-hidden="true"></span>
+        <h3>Not yet on a real watch.</h3>
+        <p>It has never run on Apple Watch hardware, and the score hasn’t been validated against real labeled data.<sup><a href="#fn5" aria-label="Footnote 5">5</a></sup></p>
+      </div>
     </div>
-    <div class="card-box">
-      <h3 class="h-sm">Simulated or unproven</h3>
-      <ul class="crosses">
-        <li>All sensor data on this page: either the simulator’s random demo cycle or your sliders.</li>
-        <li>Whether the score tracks focus at all. It has never been validated against real labeled data.</li>
-        <li>Real hardware. The app has never run on an Apple Watch; heart-rate sample rate, battery and background behavior are unmeasured.</li>
-        <li>Release. v1 is prepared for the App Store but not signed or submitted.</li>
-      </ul>
+    <blockquote class="quote reveal">“The simulator has no real sensors, so scores there are meaningless. Only a real watch can show whether the score means anything.”<cite>From the Flowbeat README</cite></blockquote>
+  </div>
+</section>
+
+<!-- ============================================================ tech specs -->
+<section class="specs light" id="specs">
+  <div class="wrap">
+    <h2 class="specs-title reveal">Tech Specs</h2>
+    <dl class="spec-list">
+      <div class="spec reveal"><dt>Platform</dt><dd><p>Apple Watch, watchOS 10 or later. Watch-only app in v1.</p><p class="sub">iPhone companion (iOS 17 or later) with a Swift Charts session timeline, planned for a later release.</p></dd></div>
+      <div class="spec reveal"><dt>Built with</dt><dd><p>Swift and SwiftUI. Pure logic in a local Swift package, <code>FlowbeatCore</code>, tested on macOS and the watchOS simulator.</p><p class="sub">Swift Charts · XcodeGen · GitHub Actions CI</p></dd></div>
+      <div class="spec reveal"><dt>Sensors</dt><dd><ul><li><b>HealthKit</b> heart rate through an <code>HKWorkoutSession</code>, discarded at the end</li><li><b>CoreMotion</b> wrist user acceleration at <b>25 Hz</b>, 10-second rolling mean</li><li><b>Activity recognition</b> for walking and running, <b>pedometer</b> for steps</li></ul></dd></div>
+      <div class="spec reveal"><dt>Scoring</dt><dd><ul><li>Updates every second, on device</li><li>60-second calibration, median resting heart rate</li><li>Motion penalty up to 60, heart-rate penalty up to 40</li><li>Exponential smoothing, α = 0.2</li></ul></dd></div>
+      <div class="spec reveal"><dt>On-device ML</dt><dd><p>Logistic regression trained by gradient descent on your own labels, at least 8 per class, blended 50/50 with the rule score.</p></dd></div>
+      <div class="spec reveal"><dt>System integration</dt><dd><ul><li><b>WidgetKit</b> complications: circular, rectangular, inline, corner</li><li><b>App Intents</b>: Start focus, Start a Pomodoro, Stop focus</li><li>Haptic nudges · Pomodoro timer · session goals</li></ul></dd></div>
+      <div class="spec reveal"><dt>LLM judge</dt><dd><p>Developer builds only. FastAPI backend with Pydantic validation, token auth, an 8-second timeout, one retry and a rule-score fallback. Qwen <code>qwen3.8-flash</code> by default.</p><p class="sub">Offline queue on the watch: FIFO, capacity 30, 1-hour max age, backoff from 15 s to 5 min.</p></dd></div>
+      <div class="spec reveal"><dt>Privacy</dt><dd><p>App Store build: no network code, no account, no tracking. App Privacy: Data Not Collected.</p><p class="sub">Checked by <code>scripts/verify_release_offline.sh</code>: Debug 6/6 network markers, Release 0/6.</p></dd></div>
+      <div class="spec reveal"><dt>Tests</dt><dd><div class="spec-nums"><div><b>157</b><span>Swift tests</span></div><div><b>48</b><span>backend pytest</span></div><div><b>50</b><span>web-port tests</span></div></div></dd></div>
+      <div class="spec reveal"><dt>Languages</dt><dd><p>English and Simplified Chinese.</p><p class="sub">Every watch UI string translated: 122 in the app, 7 in the widget, 0 missing.</p></dd></div>
+    </dl>
+    <div class="specs-cta reveal">
+      <a class="btn-pill" href="https://github.com/xungirl/Flowbeat">View on GitHub</a>
+      <a class="link-more" href="#try">Try the live demo</a>
     </div>
   </div>
-  <blockquote class="quote">
-    “The simulator has no real sensors, so scores there are meaningless. Only a real watch can show whether the score means anything.”
-    <cite>Flowbeat README</cite>
-  </blockquote>
 </section>
 </main>
 
-<footer class="foot">
-  <div>
-    <a class="logo" href="https://github.com/xungirl/Flowbeat"><img src="img/icon-64.png" alt="" width="22" height="22"><span>github.com/xungirl/Flowbeat</span></a>
-    <p class="small muted">Port based on commit <code>0ea8963</code> (2026-11-19). Not a medical device. Apple Watch is a trademark of Apple Inc.; this project is not affiliated with Apple.</p>
+<!-- ============================================================ footnotes -->
+<footer class="foot" id="footnotes">
+  <div class="wrap">
+    <ol class="footnotes">
+      <li id="fn1">Flowbeat is not on the App Store. Version 1 is prepared for release (listing, privacy policy, review notes and screenshots are in the repository) but has not been signed or submitted; that waits on the Apple Developer account.</li>
+      <li id="fn2">The scoring on this page is a line-by-line JavaScript port of Flowbeat’s Swift code (<code>FocusScorer</code>, <code>FocusEngine</code>, <code>DistractionNudge</code>, <code>simulateSensors</code>), based on commit <code>0ea8963</code>. The watch screens are re-created from the SwiftUI views. This page reads no sensors: input comes from a recording, the app’s demo loop or your sliders.</li>
+      <li id="fn3">Watch screenshots come from the watchOS simulator, Release build, in demo mode with simulated sensors and a fixed sample week. The numbers are not measurements. Widget views are rendered inside the app, not on a real watch face.</li>
+      <li id="fn4">The recorded session is <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatPhone/Resources/sample-session.json"><code>FlowbeatPhone/Resources/sample-session.json</code></a>: 245 seconds generated by the watch simulator in demo mode, with simulated sensors, automatic labels and real <code>qwen3.8-flash</code> judgments.</li>
+      <li id="fn5">Flowbeat has only run in the watchOS simulator, in local tests and in CI. It has never run on a real Apple Watch, and the focus score has not been validated against real labeled data. Flowbeat is not a medical device.</li>
+      <li id="fn6">From the repository’s model comparison (Run 3): 6 synthetic windows × 3 prompt conditions, <code>qwen3.8-flash</code> × 3 runs and <code>qwen3.8-max</code> × 2 runs, 90 calls, 0 errors. A smoke test, not a statistical evaluation. The LLM judge is compiled into developer builds only.</li>
+      <li id="fn7">Personalized scoring has been unit-tested on synthetic data and not validated on real users.</li>
+    </ol>
+    <div class="legal">
+      <p>Flowbeat is an independent open-source project. It is not affiliated with, sponsored by or endorsed by Apple Inc. Apple Watch, HealthKit, SwiftUI and Siri are trademarks of Apple Inc., registered in the U.S. and other countries.</p>
+      <p class="legal-row"><a class="legal-brand" href="https://github.com/xungirl/Flowbeat"><img src="img/icon-64.png" alt="" width="16" height="16">github.com/xungirl/Flowbeat</a><span>Not a medical device.</span></p>
+    </div>
   </div>
 </footer>
 
@@ -292,5 +481,6 @@
 <script src="js/sample-session.js"></script>
 <script src="js/app.js"></script>
 <script src="js/explain.js"></script>
+<script src="js/page.js"></script>
 </body>
 </html>
