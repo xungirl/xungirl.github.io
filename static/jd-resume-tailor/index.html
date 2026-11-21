@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JD Resume Tailor: live demo</title>
+<meta name="description" content="Open-source AI resume tailoring that never invents a fact, checked by blind hiring-manager and ATS reviewers before you see it. Replays of real runs.">
+<meta property="og:title" content="JD Resume Tailor">
+<meta property="og:description" content="AI resume tailoring that never invents a fact, checked by blind reviewers. Watch real runs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#top"><img src="wordmark.svg" alt="JD Resume Tailor" height="18"></a>
+  <nav>
+    <a href="#demo">Demo</a>
+    <a href="#results">Results</a>
+    <a href="#how">How it works</a>
+    <a class="gh" href="https://github.com/xungirl/jd-resume-tailor">GitHub</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">Open source · runs on your own computer</p>
+    <h1>Tailor your resume to any job.<br><span class="grad">Without inventing a word.</span></h1>
+    <p class="lede">An agent rewrites your resume for one job description, using only your real experience. Then two reviewers who never saw your source material read only the page, a hiring manager and an ATS parser, and it fixes what they find before you see it.</p>
+    <div class="cta">
+      <a class="btn primary" href="#demo">Watch a real run</a>
+      <a class="btn" href="https://github.com/xungirl/jd-resume-tailor">Get it on GitHub</a>
+    </div>
+    <ul class="pills">
+      <li>Claude Code · Codex · Grok · DeepSeek</li>
+      <li>No account, no server</li>
+      <li>Blind HM + ATS review</li>
+      <li><a href="https://claudemarketplaces.com/skills/xungirl/jd-resume-tailor/jd-resume-tailor">Listed on claudemarketplaces.com ↗</a></li>
+    </ul>
+  </section>
+
+  <section id="demo" class="demo">
+    <div class="sec-head">
+      <h2>Real runs, replayed</h2>
+      <p>Five real Summer 2027 internship postings and one made-up candidate, <b>Alex Rivera</b>. Nothing below was staged: these are the recorded files from each run.</p>
+    </div>
+    <div id="picker" class="picker" role="tablist"></div>
+
+    <div id="player" class="player">
+      <div class="col left">
+        <div class="card">
+          <div class="row between">
+            <div>
+              <div class="eyebrow">Posting</div>
+              <div id="pTitle" class="ttl"></div>
+              <a id="pLink" class="small muted" target="_blank" rel="noopener">original posting ↗</a>
+            </div>
+            <span id="pBadge" class="badge"></span>
+          </div>
+          <p id="pWhy" class="why"></p>
+          <div class="row">
+            <button id="play" class="btn primary small">▶ Replay</button>
+            <button id="skip" class="btn small">Show all</button>
+            <span id="clock" class="muted small"></span>
+          </div>
+          <ol id="timeline" class="timeline"></ol>
+          <div id="pMeta" class="muted small"></div>
+        </div>
+      </div>
+      <div class="col right">
+        <div class="card">
+          <div class="tabs" role="tablist">
+            <button data-tab="resume" class="on">Resume</button>
+            <button data-tab="reviews">Reviews</button>
+            <button data-tab="analysis">Analysis</button>
+            <button data-tab="bank">Bank changes</button>
+            <button data-tab="jd">Job description</button>
+          </div>
+          <div data-pane="resume">
+            <div id="vers" class="row"></div>
+            <div class="pdfbox"><img id="pdf" alt="The tailored resume, one page"></div>
+            <a id="pdfLink" class="small" target="_blank" rel="noopener">Open the PDF ↗</a>
+          </div>
+          <div data-pane="reviews" hidden><div id="revs"></div></div>
+          <div data-pane="analysis" hidden><pre id="analysis" class="doc"></pre></div>
+          <div data-pane="bank" hidden>
+            <p class="muted small">What the writer changed in the candidate's bullet bank during this run. The app backs the bank up first and can undo this in one click.</p>
+            <pre id="diff" class="doc diff"></pre>
+          </div>
+          <div data-pane="jd" hidden><pre id="jd" class="doc"></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="results">
+    <div class="sec-head">
+      <h2>What happened in each run</h2>
+      <p>Measured by scripts, not by the model.</p>
+      <ul class="small muted defs">
+        <li><b>New numbers</b>: digits on the final page that appear nowhere in the candidate's bank.</li>
+        <li><b>New terms</b>: technical-looking words on the page that the bank never mentions, for a human to check.</li>
+      </ul>
+    </div>
+    <div class="tablewrap"><table id="table"></table></div>
+    <p id="totals" class="totals"></p>
+  </section>
+
+  <section id="how" class="how">
+    <div class="sec-head">
+      <h2>How it works</h2>
+      <p>The rule underneath: whoever writes sees your material; whoever reviews sees only the paper.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span>1</span><h3>Analyze the JD</h3><p>Hard requirements, ATS keywords, the team's real work, eligibility. It stops and asks when a hard condition fails (clearance, citizenship, dates).</p></div>
+      <div class="step"><span>2</span><h3>Write from your bank</h3><p>It picks and rewrites only your real bullets and can mine your project repos. Every new fact must be found in a file. Your bank is backed up first.</p></div>
+      <div class="step"><span>3</span><h3>Measure</h3><p>Scripts check for one page, extractable text, every keyword present, nothing stuffed, and no empty space left at the bottom.</p></div>
+      <div class="step"><span>4</span><h3>Blind review</h3><p>A hiring-manager and an ATS reviewer run as fresh processes in folders that hold only the JD and the PDF. The writer revises, then a gate decides.</p></div>
+    </div>
+    <div class="install card">
+      <div>
+        <h3>Use it</h3>
+        <p class="muted">Runs with the AI agent you already have: Claude Code, Codex, Grok Build, or DeepSeek. Your resume never leaves your computer except to that agent.</p>
+      </div>
+      <pre class="cmd">git clone https://github.com/xungirl/jd-resume-tailor ~/jd-resume-tailor
+~/jd-resume-tailor/app/install.sh</pre>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Made by <a href="https://xungirl.com">xungirl</a> · MIT License · The candidate in this demo is fictional.</span>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
