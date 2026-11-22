@@ -3,11 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Flowbeat for Apple Watch</title>
-<meta name="description" content="Flowbeat is an Apple Watch app that turns heart rate and wrist motion into a live 0–100 focus score. This page runs its real scoring code, ported line by line from Swift, on recorded and simulated sensor data.">
+<title>Flowbeat · 心流 — Focus from heart rate and motion</title>
+<meta name="description" content="Flowbeat is an Apple Watch app with an iPhone companion that turns heart rate and wrist motion into a live 0–100 focus score. This page runs its real scoring code, ported line by line from Swift, on recorded and simulated sensor data.">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#000000">
-<link rel="icon" type="image/png" href="img/icon-64.png">
+<meta name="theme-color" content="#0B1A1F">
+<meta property="og:title" content="Flowbeat · 心流">
+<meta property="og:image" content="https://xungirl.com/flowbeat/img/logo-on-dark.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="img/icon-64.png">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add('js');</script>
@@ -17,10 +20,11 @@
 
 <nav class="localnav" id="localnav" aria-label="Flowbeat">
   <div class="localnav-inner">
-    <a class="ln-title" href="#overview"><img src="img/icon-64.png" alt="" width="22" height="22">Flowbeat</a>
+    <a class="ln-title" href="#overview"><img src="img/mark-128.png" alt="" width="24" height="24">Flowbeat</a>
     <div class="ln-menu" id="lnMenu">
       <a href="#how">How it works</a>
       <a href="#try">Try it</a>
+      <a href="#iphone">iPhone</a>
       <a href="#features">Features</a>
       <a href="#specs">Tech Specs</a>
     </div>
@@ -36,14 +40,18 @@
 <!-- ============================================================ hero -->
 <section class="hero dark" id="overview">
   <div class="hero-copy">
-    <p class="hero-eyebrow a-in" style="--d:0ms">Flowbeat for Apple Watch</p>
-    <h1 class="a-in" style="--d:80ms">Your focus,<br>on your wrist.</h1>
-    <p class="hero-sub a-in" style="--d:180ms">A live 0–100 focus score from your heart rate and wrist motion. Computed every second, entirely on the watch.</p>
+    <h1 class="hero-logo a-in" style="--d:0ms"><img src="img/logo-on-dark.png" alt="Flowbeat 心流" width="700" height="212"></h1>
+    <p class="hero-eyebrow a-in" style="--d:40ms">For Apple Watch and iPhone</p>
+    <p class="hero-title a-in" style="--d:80ms">Your focus,<br>on your wrist.</p>
+    <p class="hero-sub a-in" style="--d:180ms">A live 0–100 focus score from your heart rate and wrist motion, computed every second on the watch. Every session lands on your iPhone.</p>
     <div class="hero-cta a-in" style="--d:260ms">
       <a class="btn-pill" href="#try">Try it live</a>
       <a class="link-more" href="https://github.com/xungirl/Flowbeat">View the source</a>
     </div>
-    <p class="hero-note a-in" style="--d:320ms">Preparing for App Store release.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+    <div class="hero-store a-in" style="--d:320ms">
+      <img src="img/app-store-badge-white.svg" alt="Download on the App Store" width="150" height="50">
+      <span>Coming soon<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></span>
+    </div>
   </div>
   <div class="hero-device a-rise">
     <div class="hero-glow" aria-hidden="true"></div>
@@ -61,12 +69,12 @@
 <!-- ============================================================ highlights -->
 <section class="highlights dark">
   <div class="wrap">
-    <p class="statement reveal">Heart rate from HealthKit. Wrist motion from CoreMotion. <span class="grad-text">One transparent score</span>, updated every second, with no network required.</p>
+    <p class="statement reveal">Heart rate from HealthKit. Wrist motion from CoreMotion. <span class="grad-text">One transparent score</span>, updated every second, with no server of ours in between.</p>
     <ul class="stat-row">
       <li class="reveal"><b>1<small>s</small></b><span>between score updates</span></li>
       <li class="reveal" style="--rd:80ms"><b>25<small>Hz</small></b><span>wrist motion sampling</span></li>
       <li class="reveal" style="--rd:160ms"><b>60<small>s</small></b><span>to learn your resting heart rate</span></li>
-      <li class="reveal" style="--rd:240ms"><b>0</b><span>network requests in the App Store build</span></li>
+      <li class="reveal" style="--rd:240ms"><b>0</b><span>accounts, servers or trackers</span></li>
     </ul>
   </div>
 </section>
@@ -258,6 +266,29 @@
   </div>
 </section>
 
+<!-- ============================================================ iPhone -->
+<section class="iphone gray" id="iphone">
+  <div class="wrap">
+    <header class="sec-head center reveal">
+      <p class="eyebrow">Flowbeat for iPhone</p>
+      <h2>Every session,<br>kept and counted.</h2>
+      <p class="intro">End a session on the watch and it arrives on your iPhone in the background. A real database, your goal and your trends, with heart rate kept off iCloud.</p>
+    </header>
+    <div class="phones reveal">
+      <figure><div class="phone"><img src="img/phone-today.png" alt="iPhone Today screen: focused minutes against a 60-minute goal, last 7 and 30 days, best time of day" width="460" height="1000" loading="lazy"></div><figcaption>Today</figcaption></figure>
+      <figure class="lift"><div class="phone"><img src="img/phone-detail.png" alt="Session detail: a note, average focus 78, and the focus timeline with labels and time away" width="460" height="1000" loading="lazy"></div><figcaption>Session</figcaption></figure>
+      <figure><div class="phone"><img src="img/phone-sessions.png" alt="Sessions grouped by day with focus rings, focused minutes and notes" width="460" height="1000" loading="lazy"></div><figcaption>Sessions</figcaption></figure>
+    </div>
+    <p class="fine center">iOS simulator with a generated sample month; not measurements.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
+    <ul class="phone-points">
+      <li class="reveal"><h3>A real database.</h3><p>SwiftData on the iPhone. Lists and charts read small summary fields and per-minute buckets; the full per-second session is decoded only when you open it.</p></li>
+      <li class="reveal" style="--rd:80ms"><h3>Heart rate stays home.</h3><p>App Review guideline 5.1.3 forbids health data in iCloud. Heart rate is stripped before anything reaches the synced store, and a unit test checks it. The original file stays on the device.</p></li>
+      <li class="reveal" style="--rd:160ms"><h3>Nothing gets lost.</h3><p>The watch keeps a ledger of what the iPhone confirmed and resends the rest, so installing the iPhone app weeks later backfills your history.</p></li>
+      <li class="reveal"><h3>Your data, your way.</h3><p>Notes and search on every session, CSV export of everything, JSON export of one session, and a daily goal that syncs with the watch.</p></li>
+    </ul>
+  </div>
+</section>
+
 <!-- ============================================================ features -->
 <section class="features light" id="features">
   <div class="wrap">
@@ -341,8 +372,8 @@
       <article class="tile reveal" style="--rd:160ms">
         <div class="tile-copy">
           <p class="tile-eyebrow">Privacy</p>
-          <h3>Stays on your watch.</h3>
-          <p>The App Store build has no backend, no account and no tracking. A script scans the Release binary to prove the network code is gone.</p>
+          <h3>Stays on your devices.</h3>
+          <p>No backend, no account, no tracking. Sessions go from the watch to your iPhone and your own iCloud, and heart rate never leaves your devices. A script scans the Release binary to prove the judge’s network code is gone.</p>
         </div>
         <div class="tile-stat"><b>0<span>/6</span></b><small>network markers in the Release binary</small></div>
       </article>
@@ -416,18 +447,18 @@
     <div class="status-grid">
       <div class="status-card reveal">
         <span class="dot ok" aria-hidden="true"></span>
-        <h3>Tested in the simulator.</h3>
-        <p>157 Swift tests on macOS and the watchOS simulator, 48 backend tests, all green in CI on every push.</p>
+        <h3>Tested on every push.</h3>
+        <p>162 Swift logic tests, 11 database tests, 48 backend tests and both apps built in CI, all green.</p>
       </div>
       <div class="status-card reveal" style="--rd:80ms">
         <span class="dot wait" aria-hidden="true"></span>
         <h3>Preparing for the App Store.</h3>
-        <p>Listing, privacy policy, review notes and screenshots are ready. Signing and submission wait on the Apple Developer account.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+        <p>iPhone and watch ship together in v1. Listing, privacy policy and review notes are ready; the developer account is being processed.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
       </div>
       <div class="status-card reveal" style="--rd:160ms">
         <span class="dot todo" aria-hidden="true"></span>
-        <h3>Not yet on a real watch.</h3>
-        <p>It has never run on Apple Watch hardware, and the score hasn’t been validated against real labeled data.<sup><a href="#fn5" aria-label="Footnote 5">5</a></sup></p>
+        <h3>Real-device testing has begun.</h3>
+        <p>The Release build now runs on an Apple Watch Series 9. Results aren’t in yet, and the score hasn’t been validated against real labeled data.<sup><a href="#fn5" aria-label="Footnote 5">5</a></sup></p>
       </div>
     </div>
     <blockquote class="quote reveal">“The simulator has no real sensors, so scores there are meaningless. Only a real watch can show whether the score means anything.”<cite>From the Flowbeat README</cite></blockquote>
@@ -439,16 +470,17 @@
   <div class="wrap">
     <h2 class="specs-title reveal">Tech Specs</h2>
     <dl class="spec-list">
-      <div class="spec reveal"><dt>Platform</dt><dd><p>Apple Watch, watchOS 10 or later. Watch-only app in v1.</p><p class="sub">iPhone companion (iOS 17 or later) with a Swift Charts session timeline, planned for a later release.</p></dd></div>
+      <div class="spec reveal"><dt>Platform</dt><dd><p>Apple Watch, watchOS 10 or later, and iPhone, iOS 17 or later. Both ship in v1.</p><p class="sub">The watch app scores on its own; the iPhone keeps every session.</p></dd></div>
       <div class="spec reveal"><dt>Built with</dt><dd><p>Swift and SwiftUI. Pure logic in a local Swift package, <code>FlowbeatCore</code>, tested on macOS and the watchOS simulator.</p><p class="sub">Swift Charts · XcodeGen · GitHub Actions CI</p></dd></div>
       <div class="spec reveal"><dt>Sensors</dt><dd><ul><li><b>HealthKit</b> heart rate through an <code>HKWorkoutSession</code>, discarded at the end</li><li><b>CoreMotion</b> wrist user acceleration at <b>25 Hz</b>, 10-second rolling mean</li><li><b>Activity recognition</b> for walking and running, <b>pedometer</b> for steps</li></ul></dd></div>
       <div class="spec reveal"><dt>Scoring</dt><dd><ul><li>Updates every second, on device</li><li>60-second calibration, median resting heart rate</li><li>Motion penalty up to 60, heart-rate penalty up to 40</li><li>Exponential smoothing, α = 0.2</li></ul></dd></div>
+      <div class="spec reveal"><dt>Data</dt><dd><ul><li><b>SwiftData</b> on the iPhone, optional <b>CloudKit</b> sync to the user’s private database</li><li>Heart rate and HRV stripped before sync (guideline 5.1.3)</li><li><b>WatchConnectivity</b> file transfer with a resend ledger; daily goal synced both ways</li><li>CSV and JSON export</li></ul></dd></div>
       <div class="spec reveal"><dt>On-device ML</dt><dd><p>Logistic regression trained by gradient descent on your own labels, at least 8 per class, blended 50/50 with the rule score.</p></dd></div>
       <div class="spec reveal"><dt>System integration</dt><dd><ul><li><b>WidgetKit</b> complications: circular, rectangular, inline, corner</li><li><b>App Intents</b>: Start focus, Start a Pomodoro, Stop focus</li><li>Haptic nudges · Pomodoro timer · session goals</li></ul></dd></div>
       <div class="spec reveal"><dt>LLM judge</dt><dd><p>Developer builds only. FastAPI backend with Pydantic validation, token auth, an 8-second timeout, one retry and a rule-score fallback. Qwen <code>qwen3.8-flash</code> by default.</p><p class="sub">Offline queue on the watch: FIFO, capacity 30, 1-hour max age, backoff from 15 s to 5 min.</p></dd></div>
-      <div class="spec reveal"><dt>Privacy</dt><dd><p>App Store build: no network code, no account, no tracking. App Privacy: Data Not Collected.</p><p class="sub">Checked by <code>scripts/verify_release_offline.sh</code>: Debug 6/6 network markers, Release 0/6.</p></dd></div>
-      <div class="spec reveal"><dt>Tests</dt><dd><div class="spec-nums"><div><b>157</b><span>Swift tests</span></div><div><b>48</b><span>backend pytest</span></div><div><b>50</b><span>web-port tests</span></div></div></dd></div>
-      <div class="spec reveal"><dt>Languages</dt><dd><p>English and Simplified Chinese.</p><p class="sub">Every watch UI string translated: 122 in the app, 7 in the widget, 0 missing.</p></dd></div>
+      <div class="spec reveal"><dt>Privacy</dt><dd><p>No account, no tracking, no server of ours. App Privacy: Data Not Collected. iCloud sync goes to the user’s private database and carries no health data.</p><p class="sub">The LLM judge is compiled out of Release, checked by <code>scripts/verify_release_offline.sh</code>: Debug 6/6 network markers, Release 0/6.</p></dd></div>
+      <div class="spec reveal"><dt>Tests</dt><dd><div class="spec-nums"><div><b>173</b><span>Swift tests</span></div><div><b>48</b><span>backend pytest</span></div><div><b>50</b><span>web-port tests</span></div></div></dd></div>
+      <div class="spec reveal"><dt>Languages</dt><dd><p>English and Simplified Chinese.</p><p class="sub">Every UI string translated: 122 on the watch, 7 in the widget, 65 on the iPhone, 0 missing.</p></dd></div>
     </dl>
     <div class="specs-cta reveal">
       <a class="btn-pill" href="https://github.com/xungirl/Flowbeat">View on GitHub</a>
@@ -462,17 +494,17 @@
 <footer class="foot" id="footnotes">
   <div class="wrap">
     <ol class="footnotes">
-      <li id="fn1">Flowbeat is not on the App Store. Version 1 is prepared for release (listing, privacy policy, review notes and screenshots are in the repository) but has not been signed or submitted; that waits on the Apple Developer account.</li>
+      <li id="fn1">Flowbeat is not on the App Store yet. Version 1 (iPhone + Apple Watch) is prepared for release, but it hasn’t been submitted; the Apple Developer account is still being processed. The badge isn’t a link until the app is live.</li>
       <li id="fn2">The scoring on this page is a line-by-line JavaScript port of Flowbeat’s Swift code (<code>FocusScorer</code>, <code>FocusEngine</code>, <code>DistractionNudge</code>, <code>simulateSensors</code>), based on commit <code>0ea8963</code>. The watch screens are re-created from the SwiftUI views. This page reads no sensors: input comes from a recording, the app’s demo loop or your sliders.</li>
-      <li id="fn3">Watch screenshots come from the watchOS simulator, Release build, in demo mode with simulated sensors and a fixed sample week. The numbers are not measurements. Widget views are rendered inside the app, not on a real watch face.</li>
+      <li id="fn3">Watch screenshots come from the watchOS simulator, Release build, in demo mode with simulated sensors and a fixed sample week. iPhone screenshots come from the iOS simulator with a generated sample month. The numbers are not measurements. Widget views are rendered inside the app, not on a real watch face.</li>
       <li id="fn4">The recorded session is <a href="https://github.com/xungirl/Flowbeat/blob/main/FlowbeatPhone/Resources/sample-session.json"><code>FlowbeatPhone/Resources/sample-session.json</code></a>: 245 seconds generated by the watch simulator in demo mode, with simulated sensors, automatic labels and real <code>qwen3.8-flash</code> judgments.</li>
-      <li id="fn5">Flowbeat has only run in the watchOS simulator, in local tests and in CI. It has never run on a real Apple Watch, and the focus score has not been validated against real labeled data. Flowbeat is not a medical device.</li>
+      <li id="fn5">Until November 21, 2026 Flowbeat ran only in simulators, local tests and CI. The Release watch build is now installed on an Apple Watch Series 9 for device testing; no device results are reported here yet. The watch-to-iPhone transfer hasn’t been shown on real hardware. The focus score has not been validated against real labeled data. Flowbeat is not a medical device.</li>
       <li id="fn6">From the repository’s model comparison (Run 3): 6 synthetic windows × 3 prompt conditions, <code>qwen3.8-flash</code> × 3 runs and <code>qwen3.8-max</code> × 2 runs, 90 calls, 0 errors. A smoke test, not a statistical evaluation. The LLM judge is compiled into developer builds only.</li>
       <li id="fn7">Personalized scoring has been unit-tested on synthetic data and not validated on real users.</li>
     </ol>
     <div class="legal">
-      <p>Flowbeat is an independent open-source project. It is not affiliated with, sponsored by or endorsed by Apple Inc. Apple Watch, HealthKit, SwiftUI and Siri are trademarks of Apple Inc., registered in the U.S. and other countries.</p>
-      <p class="legal-row"><a class="legal-brand" href="https://github.com/xungirl/Flowbeat"><img src="img/icon-64.png" alt="" width="16" height="16">github.com/xungirl/Flowbeat</a><span>Not a medical device.</span></p>
+      <p>Flowbeat is an independent open-source project. It is not affiliated with, sponsored by or endorsed by Apple Inc. Apple, the Apple logo, App Store, Apple Watch, iPhone, iCloud, HealthKit, SwiftUI and Siri are trademarks of Apple Inc., registered in the U.S. and other countries.</p>
+      <p class="legal-row"><a class="legal-brand" href="https://github.com/xungirl/Flowbeat"><img src="img/mark-128.png" alt="" width="18" height="18">github.com/xungirl/Flowbeat</a><span>Not a medical device.</span></p>
     </div>
   </div>
 </footer>

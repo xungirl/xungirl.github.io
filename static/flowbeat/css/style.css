@@ -8,10 +8,13 @@
   --gutter: 22px;
   --nav-h: 52px;
   --blue: #0071e3;
-  --mint: #00F5EA;
-  --cyan: #5AC8FA;
-  --grad: linear-gradient(90deg, #00F5EA 0%, #5AC8FA 55%, #7d8bff 100%);
-  --grad-light: linear-gradient(90deg, #00a89f 0%, #0a84ff 70%, #5e5ce6 100%);
+  /* brand (docs/brand): ring #19E6D9 → #38D3F5, accent #FF9A3C, background #0B1A1F */
+  --mint: #19E6D9;
+  --cyan: #38D3F5;
+  --orange: #FF9A3C;
+  --brand-bg: #0B1A1F;
+  --grad: linear-gradient(90deg, #19E6D9 0%, #38D3F5 100%);
+  --grad-light: linear-gradient(90deg, #0FB5AB 0%, #0a9ad0 100%);
   --ease: cubic-bezier(.2, .7, .2, 1);
   --band: #2a2d31; --band-2: #1b1d20;
 
@@ -91,7 +94,7 @@ main > section { background: var(--bg); color: var(--fg); position: relative; }
 .hero { padding: 72px var(--gutter) 40px; text-align: center; overflow: hidden; }
 .hero-eyebrow { margin: 0 0 10px; font-size: clamp(19px, 2vw, 24px); font-weight: 600; letter-spacing: -.01em; }
 .hero-eyebrow { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
-.hero h1 { margin: 0 auto; font-size: clamp(52px, 8.8vw, 112px); line-height: 1.02; font-weight: 700; letter-spacing: -.045em; max-width: 11em; }
+.hero .hero-title { margin: 0 auto; font-size: clamp(52px, 8.8vw, 112px); line-height: 1.02; font-weight: 700; letter-spacing: -.045em; max-width: 11em; }
 .hero-sub { margin: 22px auto 0; max-width: 34em; font-size: clamp(19px, 1.9vw, 24px); line-height: 1.33; font-weight: 500; letter-spacing: -.015em; color: var(--fg-2); }
 .hero-cta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px 30px; justify-content: center; align-items: center; }
 .hero-note { margin: 22px 0 0; font-size: 14px; color: var(--fg-2); letter-spacing: -.01em; }
@@ -593,7 +596,8 @@ body:not([data-source="replay"]) .opts-note { display: none; }
 }
 @media (max-width: 480px) {
   .ln-title { font-size: 19px; }
-  .hero h1 { font-size: 50px; }
+  .hero .hero-title { font-size: 50px; }
+  .hero-logo img { width: 280px; }
   .device.xl { --w: 228px; }
   .watch { --k: 1.22; }
   .stage { padding: 30px 8px 22px; border-radius: 24px; }
@@ -624,3 +628,38 @@ body:not([data-source="replay"]) .opts-note { display: none; }
   .pager { transition: none; }
   .replay-bar i, .track i { transition: none; }
 }
+
+/* ---------- 2026-11-22: brand logo, store badge, iPhone section ---------- */
+.hero.dark { background: radial-gradient(120% 80% at 50% 0%, #10262d 0%, var(--brand-bg) 55%, #000 100%); }
+.hero-logo { margin: 0 0 18px; line-height: 0; }
+.hero-logo img { width: min(420px, 80vw); height: auto; }
+.hero-store { margin: 26px 0 0; display: inline-flex; align-items: center; gap: 12px; font-size: 14px; color: var(--fg-2); }
+.hero-store img { height: 44px; width: auto; opacity: .92; }
+.ln-title img { border-radius: 0; }
+
+.iphone .sec-head { margin-bottom: 48px; }
+.phones { display: flex; justify-content: center; align-items: flex-end; gap: clamp(14px, 3vw, 40px); margin: 0 auto 18px; }
+.phones figure { margin: 0; text-align: center; }
+.phones figcaption { margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--fg-2); }
+.phones .lift { transform: translateY(-28px); }
+.phone { --w: 240px; width: var(--w); padding: calc(var(--w) * .035); border-radius: calc(var(--w) * .17);
+  background: linear-gradient(145deg, #3a3d42, #1a1c1f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 30px 60px rgba(0,0,0,.18); }
+.phone img { display: block; width: 100%; height: auto; border-radius: calc(var(--w) * .135); background: #f2f2f7; }
+.phone-points { list-style: none; padding: 0; margin: 56px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.phone-points li { background: var(--tile); border-radius: 22px; padding: 28px 28px 26px; }
+.phone-points h3 { margin: 0 0 8px; font-size: 22px; letter-spacing: -.02em; }
+.phone-points p { margin: 0; color: var(--fg-2); font-size: 16px; line-height: 1.5; }
+@media (max-width: 833px) {
+  .phone { --w: 180px; }
+  .phones .lift { transform: translateY(-16px); }
+  .phone-points { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .phones { overflow-x: auto; justify-content: flex-start; padding: 30px 16px 0; scroll-snap-type: x mandatory; }
+  .phones figure { scroll-snap-align: center; }
+  .phone { --w: 200px; }
+  .phones .lift { transform: none; }
+}
+
+.iphone { padding-bottom: 120px; }
+@media (max-width: 833px) { .iphone { padding-bottom: 80px; } }
