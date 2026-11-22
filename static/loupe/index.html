@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Loupe: a flight recorder for AI agents. Go ingest with backpressure, animated architecture, and a replay of a 216-run harness experiment.">
+<style>body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Loupe Technical Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: an IEEE-style paper (title block, abstract, two justified columns on desktop) with full-width animated figures. */
+:root {
+  --paper: #fbfcfd; --ink: #17202c; --muted: #5a6575; --rule: #d8dde5; --panel: #f0f3f7; --card: #ffffff; --dot: #d3d9e2;
+  --blue: #2458c4; --teal: #0f8a7a; --amber: #b97e06; --coral: #cf4234; --violet: #6a4ccc; --green: #1b7f49;
+  --blue-soft: #e7eefc; --teal-soft: #e2f4f1; --amber-soft: #fbf1dc; --coral-soft: #fbe7e4; --violet-soft: #eeeafb; --band: #eef2f7;
+  --serif: "Source Serif 4", "Times New Roman", Georgia, serif;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0f141a; --ink: #e5eaf1; --muted: #9aa5b4; --rule: #2a333f; --panel: #17202a; --card: #151c25; --dot: #232c37;
+  --blue: #7aa2ff; --teal: #3fc6b3; --amber: #f0b54a; --coral: #ff7d6e; --violet: #a891ff; --green: #55c98a;
+  --blue-soft: #1a2640; --teal-soft: #102b28; --amber-soft: #2e2512; --coral-soft: #32191a; --violet-soft: #221d3a; --band: #18212c;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #0f141a; --ink: #e5eaf1; --muted: #9aa5b4; --rule: #2a333f; --panel: #17202a; --card: #151c25; --dot: #232c37;
+  --blue: #7aa2ff; --teal: #3fc6b3; --amber: #f0b54a; --coral: #ff7d6e; --violet: #a891ff; --green: #55c98a;
+  --blue-soft: #1a2640; --teal-soft: #102b28; --amber-soft: #2e2512; --coral-soft: #32191a; --violet-soft: #221d3a; --band: #18212c;
+  color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--serif); }
+.page { max-width: 1120px; margin: 0 auto; padding-block: 48px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, .node:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+
+/* title block */
+.masthead { text-align: center; display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--rule); }
+.venue { font: 500 12px/1.4 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { font-weight: 700; font-size: clamp(30px, 4.6vw, 46px); line-height: 1.12; margin: 0; text-wrap: balance; }
+h1 .name { color: var(--blue); }
+.authors { font-size: 17px; }
+.authors small { display: block; color: var(--muted); font: 400 14px/1.5 var(--sans); }
+.links { font: 500 14px/1.5 var(--sans); display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+
+/* abstract + keywords */
+.abstract { max-width: 860px; margin: 26px auto 0; text-align: justify; hyphens: auto; }
+.abstract b:first-child { font-style: italic; }
+.keywords { max-width: 860px; margin: 8px auto 0; font-size: 15px; color: var(--muted); }
+
+/* stat grid (Flowbeat-style label — value rows) */
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; margin: 34px 0 6px; }
+.stat { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--rule);
+  font: 400 15px/1.35 var(--sans); color: var(--muted); }
+.stat b { font: 600 19px/1.2 var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat b.c-blue { color: var(--blue); } .stat b.c-teal { color: var(--teal); } .stat b.c-violet { color: var(--violet); }
+.stat b.c-amber { color: var(--amber); } .stat b.c-coral { color: var(--coral); } .stat b.c-green { color: var(--green); }
+
+/* body columns */
+.cols { columns: 2; column-gap: 44px; text-align: justify; hyphens: auto; margin-top: 30px; }
+.cols p { margin: 0 0 12px; text-indent: 1.2em; }
+.cols h2 + p, .cols h3 + p { text-indent: 0; }
+h2 { font: 600 14px/1.4 var(--sans); letter-spacing: .12em; text-transform: uppercase; text-align: center; margin: 26px 0 10px;
+  break-after: avoid; color: var(--ink); }
+h2 .num { color: var(--blue); margin-right: 6px; }
+h3 { font-style: italic; font-weight: 400; font-size: 17px; margin: 14px 0 6px; break-after: avoid; }
+.cols ul { margin: 0 0 12px; padding-left: 1.2em; text-align: left; }
+.cols li { margin-bottom: 4px; }
+
+/* tables (IEEE three-line) */
+.tbl { break-inside: avoid; margin: 16px 0 18px; overflow-x: auto; }
+.tbl caption, .tcap { font: 500 12px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; text-align: center; color: var(--muted); margin-bottom: 6px; display: block; }
+table { width: 100%; border-collapse: collapse; font: 400 13.5px/1.4 var(--sans); font-variant-numeric: tabular-nums; }
+thead th { border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink); font-weight: 600; padding: 6px 6px; text-align: left; }
+tbody td { padding: 5px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+td.r, th.r { text-align: right; }
+.tag { display: inline-block; font: 600 11px/1.6 var(--sans); padding: 0 7px; border-radius: 999px; letter-spacing: .03em; }
+.tag.inc { background: var(--amber-soft); color: var(--amber); }
+.tag.no { background: var(--coral-soft); color: var(--coral); }
+.tag.part { background: var(--violet-soft); color: var(--violet); }
+.tag.ok { background: var(--teal-soft); color: var(--teal); }
+.armA { color: var(--teal); font-weight: 600; } .armB { color: var(--amber); font-weight: 600; } .armC { color: var(--violet); font-weight: 600; }
+
+/* figures */
+figure { margin: 34px 0; break-inside: avoid; }
+figcaption { font: 400 14px/1.55 var(--sans); color: var(--muted); margin-top: 10px; text-align: justify; }
+figcaption b { color: var(--ink); font-weight: 600; }
+.figbox { position: relative; border: 1px solid var(--rule); border-radius: 14px; background: var(--card); padding: 18px; }
+.flowscroll { overflow-x: auto; border-radius: 10px;
+  background-color: var(--panel); background-image: radial-gradient(var(--dot) 1.1px, transparent 1.2px); background-size: 18px 18px; }
+.flowscroll svg { display: block; min-width: 940px; width: 100%; height: auto; }
+.hint { font: 400 12.5px/1.4 var(--sans); color: var(--muted); margin-top: 8px; }
+
+/* flow diagram pieces (SVG) */
+.zone rect { fill: none; stroke: var(--muted); stroke-opacity: .45; stroke-dasharray: 6 6; }
+.zone-pill rect { fill: var(--card); stroke: var(--rule); }
+.zone-pill text { font: 600 12px var(--mono); fill: var(--muted); }
+.node rect.body { fill: var(--card); stroke: var(--rule); stroke-width: 1.2; }
+.node { cursor: pointer; outline: none; }
+.node .title { font: 600 14.5px var(--sans); fill: var(--ink); }
+.node .code { font: 500 12px var(--mono); }
+.node .desc { font: 400 11.5px var(--sans); fill: var(--muted); }
+.node .halo { fill: none; stroke-width: 6; opacity: 0; transition: opacity .35s; }
+.node.active .halo, .node:hover .halo, .node:focus .halo { opacity: .35; }
+.edge path.line { fill: none; stroke-width: 2; stroke-dasharray: 7 6; }
+.flow-on .edge path.line { animation: march 1.1s linear infinite; }
+@keyframes march { to { stroke-dashoffset: -26; } }
+.edge-pill rect { stroke-width: 1.2; }
+.edge-pill text { font: 600 11.5px var(--mono); }
+.tip { position: absolute; z-index: 5; width: min(320px, calc(100% - 24px)); background: var(--card); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; box-shadow: 0 10px 30px rgba(15, 25, 40, .16); pointer-events: none;
+  font: 400 13.5px/1.5 var(--sans); }
+.tip h4 { margin: 0 0 7px; font: 600 14.5px/1.3 var(--sans); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { font: 500 11.5px/1.5 var(--mono); padding: 1px 8px; border-radius: 6px; background: var(--blue-soft); color: var(--blue); }
+
+/* replay figure */
+.rgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 36px; }
+.rgrid .stat { padding: 10px 0; font-size: 14px; }
+.rgrid .stat b { font-size: 16px; }
+.status { margin: 14px 0 12px; padding: 12px 16px; border-radius: 12px; background: var(--panel);
+  font: 400 13px/1.5 var(--mono); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; min-height: 3.1em; }
+.chartwrap { overflow-x: auto; }
+.chartwrap svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.axis text, .lbl { font: 400 11px var(--mono); fill: var(--muted); }
+.grid line { stroke: var(--rule); }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; justify-content: flex-end; font: 400 13px/1.4 var(--sans); color: var(--muted); margin-bottom: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+.controls { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.controls button { font: 600 13px var(--sans); border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 6px 14px; cursor: pointer; min-width: 78px; }
+.controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--blue); }
+.controls .t { font: 400 12px var(--mono); color: var(--muted); min-width: 66px; text-align: right; }
+
+/* bars (ingest) */
+.bars { display: grid; gap: 10px; }
+.bar { display: grid; grid-template-columns: 112px minmax(0, 1fr) 150px; gap: 12px; align-items: center; font: 400 13.5px/1.3 var(--sans); }
+.bar .track { height: 16px; background: var(--band); border-radius: 4px; position: relative; overflow: hidden; }
+.bar .fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; transition: width 1.2s cubic-bezier(.2,.7,.2,1); }
+.bar .v { font: 600 13.5px var(--sans); font-variant-numeric: tabular-nums; text-align: right; }
+
+.refs { font-size: 14.5px; }
+.refs ol { padding-left: 1.6em; margin: 0; }
+.refs li { margin-bottom: 4px; overflow-wrap: anywhere; }
+.foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--rule); font: 400 13px/1.5 var(--sans); color: var(--muted); }
+
+@media (max-width: 860px) {
+  .cols { columns: 1; }
+  .stats, .rgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .stats, .rgrid { grid-template-columns: minmax(0, 1fr); }
+  .bar { grid-template-columns: 84px minmax(0, 1fr) 104px; font-size: 12.5px; }
+  .figbox { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .flow-on .edge path.line { animation: none; } .bar .fill { transition: none; } }
+</style>
+</head><body>
+
+<div class="page">
+  <header class="masthead">
+    <div class="venue">Technical report · Agent infrastructure · November 2026</div>
+    <h1><span class="name">Loupe</span>: A Flight Recorder for AI Agents</h1>
+    <div class="authors">Jiaju (Jensen) Zhang<small>Khoury College of Computer Sciences, Northeastern University, Seattle</small></div>
+    <div class="links"><a href="https://github.com/xungirl/loupe" target="_blank" rel="noopener">github.com/xungirl/loupe</a><span class="mono">Go · SQLite · React · Python</span></div>
+  </header>
+
+  <p class="abstract"><b>Abstract</b>—Coding agents spend most of their budget in places nobody looks at: retried tool calls, rewrites of the same file, subagents that run long. Loupe records every model call and tool call as a span, rebuilds the multi-agent tree even when spans arrive late or out of order, flags failure patterns, and shows the run as a waterfall, an agent tree and a live tail. The Go ingest path commits <b>137,172 spans/s</b> with batching (<b>2.49×</b> one span per request) and sheds overload with HTTP 429 while writing every accepted span. At 1.02 M stored spans a typical trace opens in <b>0.38 ms</b> (p50). We also ran a preregistered harness experiment on a real model, 216 runs for <b>¥1.42</b>: a restate-first prompt and a planner/coder/reviewer team gave no detectable pass-rate gain at a 98.6 % ceiling, and cost 1.6–1.7× the tokens.</p>
+  <p class="keywords"><i>Index Terms</i>—observability, OpenTelemetry GenAI, backpressure, trace assembly, agent harness, preregistration.</p>
+
+  <section class="stats" aria-label="Headline measurements">
+    <div class="stat">Batched ingest (committed)<b class="c-blue" data-count="137172" data-fmt="int">137,172 /s</b></div>
+    <div class="stat">Speed-up vs one span per request<b class="c-blue" data-count="2.49" data-fmt="x">2.49×</b></div>
+    <div class="stat">Open a trace at 1.02 M spans (p50)<b class="c-teal" data-count="0.38" data-fmt="ms">0.38 ms</b></div>
+    <div class="stat">Overload: accepted = written<b class="c-green">3 / 3 runs</b></div>
+    <div class="stat">Transcript import with writes<b class="c-violet" data-count="48.6" data-fmt="mbs">48.6 MB/s</b></div>
+    <div class="stat">Real-model experiment<b class="c-amber">216 runs · ¥1.42</b></div>
+  </section>
+
+  <figure id="fig1">
+    <div class="figbox">
+      <div class="flowscroll" id="flowscroll"><svg id="flow" viewBox="0 0 1200 700" role="img" aria-labelledby="flowtitle"><title id="flowtitle">Loupe architecture: sources, ingest with backpressure, storage, live tail and read path</title></svg></div>
+      <div class="tip" id="tip" hidden></div>
+      <div class="hint">Hover or tap a box for the code path. Blue = request path, red = rejection, orange = client retry, green = after commit, violet = read path.</div>
+    </div>
+    <figcaption><b>Fig. 1.</b> Span lifecycle. Handlers never block: <code>Pipeline.Submit</code> reserves queue capacity with a compare-and-swap, so concurrent requests cannot overshoot the 50,000-span bound, and a full queue answers <code>429</code> with <code>Retry-After: 1</code>. One writer goroutine flushes at 2,000 spans or 50 ms; <code>INSERT OR IGNORE</code> makes re-sent spans harmless. Names are taken from <code>server/internal/</code>.</figcaption>
+  </figure>
+
+  <div class="cols">
+    <h2><span class="num">I.</span>Introduction</h2>
+    <p>An agent run is a tree: a main agent calls the model, calls tools, and spawns subagents that do the same. When a run is slow or expensive, the transcript alone rarely says why. Distributed-tracing systems answer this question for microservices, and the OpenTelemetry GenAI conventions already name the attributes. Loupe applies that model to agents and adds detectors for the failure shapes agents have and services do not, such as editing the same file in a loop.</p>
+    <p>Loupe accepts spans from four sources: a Claude Code hook adapter, a small Python SDK, any OTLP/HTTP JSON exporter, and an offline importer for Claude Code transcripts that turns sidechains into subagents. All four go through the same ingest path in Fig. 1.</p>
+
+    <h2><span class="num">II.</span>Ingest under pressure</h2>
+    <h3>A. Batching</h3>
+    <p>Each SQLite transaction has a fixed cost, so throughput depends on how many spans share one commit. We measured three request sizes with 8 concurrent clients and a fresh database per run, three runs each (Table I).</p>
+    <div class="tbl">
+      <span class="tcap">Table I · Ingest throughput, 3 runs each (mean ± sd)</span>
+      <table>
+        <thead><tr><th>Spans / request</th><th class="r">Committed spans/s</th><th class="r">Request p99</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="r">55,027 ± 11,585</td><td class="r">0.59 ms</td></tr>
+          <tr><td>50</td><td class="r"><b>137,172 ± 4,166</b></td><td class="r">1.96 ms</td></tr>
+          <tr><td>500</td><td class="r">135,515 ± 3,406</td><td class="r">6.72 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bars" id="bars" aria-hidden="true">
+      <div class="bar"><span>1 / request</span><span class="track"><span class="fill" style="background:var(--coral)" data-w="0.401"></span></span><span class="v">55,027 /s</span></div>
+      <div class="bar"><span>50 / request</span><span class="track"><span class="fill" style="background:var(--blue)" data-w="1"></span></span><span class="v">137,172 /s</span></div>
+      <div class="bar"><span>500 / request</span><span class="track"><span class="fill" style="background:var(--teal)" data-w="0.988"></span></span><span class="v">135,515 /s</span></div>
+    </div>
+    <p style="text-indent:0;margin-top:12px">Gains stop after about 50 spans per request because the writer already fills its 2,000-span batches; larger requests only raise tail latency.</p>
+    <h3>B. Backpressure</h3>
+    <p>To test overload we shrank the queue to 5,000 spans and sent 600 requests of 500 spans from 32 clients with retries disabled. In all three runs the server answered 574–578 requests with 429, the queue never exceeded its bound, peak memory stayed at 58–62 MB, and every accepted span reached the database (Table II).</p>
+    <div class="tbl">
+      <span class="tcap">Table II · Overload, queue = 5,000 spans</span>
+      <table>
+        <thead><tr><th>Run</th><th class="r">429s / 600</th><th class="r">Accepted</th><th class="r">Written</th><th class="r">Max RSS</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="r">574</td><td class="r">13,000</td><td class="r">13,000</td><td class="r">61.3 MB</td></tr>
+          <tr><td>2</td><td class="r">578</td><td class="r">11,000</td><td class="r">11,000</td><td class="r">58.1 MB</td></tr>
+          <tr><td>3</td><td class="r">578</td><td class="r">11,000</td><td class="r">11,000</td><td class="r">62.2 MB</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>A graceful stop drains the queue: in a test the real binary receives <code>SIGTERM</code> with 3,000 queued spans and an open live-tail connection, and all 3,000 end up on disk. A crash can lose at most one queue of acknowledged-but-uncommitted spans; clients that need durability pass <code>?wait=true</code>.</p>
+
+    <h2><span class="num">III.</span>Reading traces</h2>
+    <p>Storage never waits for a parent span. The tree is assembled at query time from whatever has arrived: orphans stay visible and attach when their parent shows up, and cycles are broken. A trace shuffled 200 times assembles to the same tree. Table III lists read latency over HTTP at 1,017,547 spans in 24,201 traces.</p>
+    <div class="tbl">
+      <span class="tcap">Table III · Query latency at 1.02 M spans (3 server runs)</span>
+      <table>
+        <thead><tr><th>Request</th><th class="r">p50</th><th class="r">p99</th></tr></thead>
+        <tbody>
+          <tr><td>Open a random trace</td><td class="r"><b>0.38 ms</b></td><td class="r">0.74 ms</td></tr>
+          <tr><td>Open the 10,000-span trace</td><td class="r">40.37 ms</td><td class="r">47.46 ms</td></tr>
+          <tr><td>List page, errors first, by cost</td><td class="r">4.62 ms</td><td class="r">6.61 ms</td></tr>
+          <tr><td>Filter traces by tool</td><td class="r">272.77 ms</td><td class="r">302.99 ms</td></tr>
+          <tr><td>Full statistics</td><td class="r">2,283.87 ms</td><td class="r">2,348.26 ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The last two rows are full scans and are the main weakness of a single SQLite file; a columnar store behind the same <code>store</code> interface is the planned fix.</p>
+
+    <h2><span class="num">IV.</span>Failure detectors</h2>
+    <p>Five rule-based detectors run per agent: repeated near-identical tool calls (loop), edit → failing test → edit cycles (rework), error streaks, no progress (stuck) and token burn (budget). Every finding links to the spans that triggered it. Thresholds were tuned on a training split of a 300-trace fault-injection corpus and scored once on the held-out half.</p>
+    <div class="tbl">
+      <span class="tcap">Table IV · Held-out split, 150 synthetic traces</span>
+      <table>
+        <thead><tr><th>Detector</th><th class="r">Precision</th><th class="r">Recall</th><th class="r">F1</th></tr></thead>
+        <tbody>
+          <tr><td>error streak</td><td class="r">1.000</td><td class="r">1.000</td><td class="r">1.000</td></tr>
+          <tr><td>budget burn</td><td class="r">0.840</td><td class="r">0.913</td><td class="r">0.875</td></tr>
+          <tr><td>rework</td><td class="r">0.952</td><td class="r">0.769</td><td class="r">0.851</td></tr>
+          <tr><td>loop</td><td class="r">0.571</td><td class="r">1.000</td><td class="r">0.727</td></tr>
+          <tr><td>stuck</td><td class="r">0.500</td><td class="r">0.647</td><td class="r">0.564</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Macro-F1 is 0.803. The corpus is synthetic and written by the same author as the detectors, so these scores measure the modelled patterns, not accuracy on real runs.</p>
+  </div>
+
+  <figure id="fig2">
+    <div class="figbox">
+      <div class="rgrid" aria-live="off">
+        <div class="stat">Run<b id="r-run">216 / 216</b></div>
+        <div class="stat">Task<b id="r-task" class="mono">top_k</b></div>
+        <div class="stat">Arm<b id="r-arm">A</b></div>
+        <div class="stat">Result<b id="r-res" class="c-green">passed</b></div>
+        <div class="stat">Tokens this run<b id="r-tok">3,367</b></div>
+        <div class="stat">Spent<b id="r-spent" class="c-blue">¥1.4157</b></div>
+        <div class="stat">Pass so far A · B · C<b id="r-pass">71/72 · 72/72 · 72/72</b></div>
+        <div class="stat">Mean tokens A · B · C<b id="r-mean">4.6k · 7.5k · 8.1k</b></div>
+        <div class="stat">Rewrites of solution.py<b id="r-rw">0</b></div>
+      </div>
+      <div class="status" id="r-status">[216/216] top_k A passed=True tokens=3367 spent ¥1.4157/4.5</div>
+      <div class="legend">
+        <span><i style="background:var(--band)"></i>repetition</span>
+        <span><i style="background:var(--teal)"></i>A single</span>
+        <span><i style="background:var(--amber)"></i>B restate</span>
+        <span><i style="background:var(--violet)"></i>C team</span>
+        <span><i style="background:linear-gradient(90deg,var(--teal),var(--amber),var(--coral))"></i>spend, colored by run cost</span>
+      </div>
+      <div class="chartwrap"><svg id="replay" viewBox="0 0 1000 330" role="img" aria-label="Replay of 216 experiment runs: cumulative spend and tokens per run over 66 minutes"></svg></div>
+      <div class="controls">
+        <button type="button" id="r-play">Pause</button>
+        <input type="range" id="r-scrub" min="1" max="216" value="216" aria-label="Scrub through runs">
+        <span class="t" id="r-time">66:00</span>
+      </div>
+    </div>
+    <figcaption><b>Fig. 2.</b> Replay of the real experiment (qwen3.8-flash, 2026-11-22). Top: cumulative spend; segments are colored by the mean tokens of the last 6 runs (teal &lt; 6k, amber &lt; 15k, coral above). The dashed line is the fake-provider dry-run estimate for the whole experiment, ¥0.41; the real run passed it at run 68 and finished at ¥1.42 against a ¥4.50 hard cap. Bottom: tokens per run by arm. The only failure is <code>camel_to_snake</code> in arm A, which hit the 12-call limit after 3 rewrites. Data: <code>results/experiment/real-qwen3.8-flash/runs.jsonl</code>.</figcaption>
+  </figure>
+
+  <div class="cols">
+    <h2><span class="num">V.</span>Harness experiment</h2>
+    <p>"Agent = Model + Harness" suggests that, with the model fixed, cheap harness changes should matter. We tested two on 24 Python tasks with hidden tests: arm B adds a step where the model restates the task before coding, and arm C splits the work between a planner, a coder and a reviewer. Hypotheses, task set, analysis and a ¥4.50 cap were committed in <code>PREREG.md</code> before any real call; the cap is checked in code before every call.</p>
+    <div class="tbl">
+      <span class="tcap">Table V · Results, 72 runs per arm</span>
+      <table>
+        <thead><tr><th>Arm</th><th class="r">Pass rate</th><th class="r">95 % CI</th><th class="r">Tokens/run</th><th class="r">Rework</th></tr></thead>
+        <tbody>
+          <tr><td class="armA">A single agent</td><td class="r">0.986</td><td class="r">[0.958, 1.000]</td><td class="r">4,620</td><td class="r">0.15</td></tr>
+          <tr><td class="armB">B restate first</td><td class="r">1.000</td><td class="r">[1.000, 1.000]</td><td class="r">7,523</td><td class="r">0.31</td></tr>
+          <tr><td class="armC">C planner/coder/reviewer</td><td class="r">1.000</td><td class="r">[1.000, 1.000]</td><td class="r">8,141</td><td class="r">0.18</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl">
+      <span class="tcap">Table VI · Preregistered tests (paired bootstrap over tasks)</span>
+      <table>
+        <thead><tr><th>Hypothesis</th><th>Estimate</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>H1 · B passes more than A</td><td>+0.014 [0, +0.042]</td><td><span class="tag inc">inconclusive</span></td></tr>
+          <tr><td>H2 · C passes more than A</td><td>+0.014 [0, +0.042]</td><td><span class="tag inc">inconclusive</span></td></tr>
+          <tr><td>H3a · B/A tokens ≤ 1.3</td><td>1.67 [1.47, 1.91]</td><td><span class="tag no">not supported</span></td></tr>
+          <tr><td>H3b · C/A tokens &gt; 1.5</td><td>1.62 [1.42, 1.86]</td><td><span class="tag part">point estimate only</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The preregistration named a ceiling effect as a likely outcome, and it happened: the single agent already solves 98.6 % of the tasks, so neither change can show a benefit and both only add cost. Restating the task did not reduce rework here; descriptively it rose from 0.15 to 0.31 rewrites per run. A fair test of the restate idea needs harder, multi-file tasks.</p>
+
+    <h2><span class="num">VI.</span>Limitations</h2>
+    <ul>
+      <li>All measurements come from one laptop over localhost (Apple M2, 8 cores).</li>
+      <li>The importer was tested on synthetic transcripts; unknown shapes are counted in its parse statistics instead of dropped.</li>
+      <li>OTLP is accepted as JSON only, and the server has no authentication; it binds to 127.0.0.1.</li>
+      <li>The experiment used one model and one family of easy tasks.</li>
+    </ul>
+
+    <h2><span class="num">VII.</span>Conclusion</h2>
+    <p>Treating agent runs as traces works with ordinary backend tools: a bounded queue, one batching writer and query-time assembly handle 1 M spans on a laptop, and the same traces made a small harness study cheap to run and easy to audit. Next steps are harder tasks for the experiment, hand-labeled real runs for the detectors, and a columnar store for aggregates.</p>
+
+    <h2><span class="num"></span>References</h2>
+    <div class="refs"><ol>
+      <li>Loupe source and results, <a href="https://github.com/xungirl/loupe" target="_blank" rel="noopener">github.com/xungirl/loupe</a>: <code>BENCHMARK.md</code>, <code>results/bench/summary.md</code>.</li>
+      <li>Experiment preregistration and report: <code>PREREG.md</code>, <code>results/experiment/real-qwen3.8-flash/report.json</code>.</li>
+      <li>Detector evaluation: <code>results/detectors/test.txt</code>.</li>
+      <li>OpenTelemetry semantic conventions for generative AI systems, <a href="https://opentelemetry.io/docs/specs/semconv/gen-ai/" target="_blank" rel="noopener">opentelemetry.io/docs/specs/semconv/gen-ai</a>.</li>
+    </ol></div>
+  </div>
+
+  <div class="foot">Every number on this page comes from a file in the repository listed in the references. Figures are drawn in the browser from that data.</div>
+</div>
+
+<script>
+const RUNS = [[12,"fizzbuzz","B",1,4066,4,0,0.0044,0],[17,"fizzbuzz","A",1,2372,3,0,0.0066,0],[25,"fizzbuzz","C",1,3417,5,0,0.01,0],[33,"palindrome","A",1,3149,4,0,0.0128,0],[41,"palindrome","B",1,3306,4,0,0.0161,0],[54,"palindrome","C",1,5246,7,0,0.021,0],[73,"roman_to_int","B",1,13340,10,0,0.0331,0],[80,"roman_to_int","A",1,3176,4,0,0.036,0],[91,"roman_to_int","C",1,4116,5,0,0.0402,0],[107,"int_to_roman","C",1,5643,6,0,0.0459,0],[122,"int_to_roman","B",1,6924,6,0,0.0527,0],[132,"int_to_roman","A",1,5270,5,0,0.0578,0],[147,"merge_intervals","B",1,5264,5,0,0.0631,0],[172,"merge_intervals","C",1,10145,9,0,0.0733,0],[179,"merge_intervals","A",1,3800,4,0,0.0769,0],[207,"two_sum","A",1,20260,12,2,0.0956,0],[256,"two_sum","C",1,26050,13,3,0.1212,0],[268,"two_sum","B",1,5214,5,0,0.1265,0],[276,"brackets","A",1,3395,4,0,0.1296,0],[290,"brackets","B",1,5239,5,0,0.1349,0],[303,"brackets","C",1,6495,7,0,0.1412,0],[322,"word_freq","C",1,6830,6,0,0.1482,0],[337,"word_freq","B",1,6035,5,0,0.1545,0],[345,"word_freq","A",1,3559,4,0,0.1578,0],[351,"flatten","A",1,3409,4,0,0.161,0],[362,"flatten","C",1,4357,6,0,0.1651,0],[380,"flatten","B",1,10079,8,1,0.1747,0],[386,"chunk","A",1,3958,5,0,0.1783,0],[399,"chunk","B",1,4938,5,0,0.1832,0],[408,"chunk","C",1,2997,5,0,0.1861,0],[414,"rle_encode","A",1,3416,4,0,0.1892,0],[425,"rle_encode","B",1,4659,5,0,0.1938,0],[437,"rle_encode","C",1,5152,6,0,0.1988,0],[443,"rle_decode","A",1,3682,4,0,0.2023,0],[458,"rle_decode","C",1,5567,6,0,0.2079,0],[487,"rle_decode","B",1,19387,13,0,0.2254,0],[502,"caesar","C",1,5187,6,0,0.2305,0],[515,"caesar","B",1,5475,5,0,0.2361,0],[521,"caesar","A",1,3121,4,0,0.239,0],[528,"anagrams","A",1,3389,4,0,0.2421,0],[541,"anagrams","B",1,4934,5,0,0.247,0],[556,"anagrams","C",1,5097,6,0,0.252,0],[563,"binary_search","A",1,3514,4,0,0.2553,0],[575,"binary_search","B",1,3964,4,0,0.2595,0],[587,"binary_search","C",1,4183,5,0,0.2639,0],[600,"transpose","B",1,4690,5,0,0.2685,0],[606,"transpose","A",1,3176,4,0,0.2713,0],[615,"transpose","C",1,3417,5,0,0.2748,0],[623,"spiral","A",1,3950,4,0,0.2787,0],[636,"spiral","B",1,5722,5,0,0.2846,0],[652,"spiral","C",1,10046,9,0,0.294,0],[663,"common_prefix","B",1,4585,5,0,0.2985,0],[670,"common_prefix","A",1,3199,4,0,0.3014,0],[681,"common_prefix","C",1,3027,5,0,0.3044,0],[699,"parse_duration","C",1,6581,6,0,0.3112,0],[708,"parse_duration","A",1,5363,5,0,0.3164,0],[753,"parse_duration","B",1,27465,13,4,0.3424,0],[762,"lru_cache","A",1,3810,4,0,0.3461,0],[777,"lru_cache","B",1,6010,5,0,0.3522,0],[798,"lru_cache","C",1,9333,9,0,0.3612,0],[810,"moving_average","C",1,3585,5,0,0.3648,0],[817,"moving_average","A",1,3685,4,0,0.3684,0],[832,"moving_average","B",1,8337,7,0,0.3763,0],[842,"dedupe","C",1,4478,6,0,0.3806,0],[849,"dedupe","B",1,3015,4,0,0.3836,0],[855,"dedupe","A",1,3229,4,0,0.3865,0],[875,"camel_to_snake","A",1,15352,12,3,0.4003,0],[921,"camel_to_snake","C",1,22934,13,0,0.4226,0],[936,"camel_to_snake","B",1,6803,6,0,0.4293,0],[947,"top_k","B",1,4891,5,0,0.4341,0],[959,"top_k","C",1,4674,6,0,0.4386,0],[966,"top_k","A",1,3367,4,0,0.4416,0],[970,"fizzbuzz","A",1,2372,3,0,0.4439,1],[981,"fizzbuzz","B",1,3967,4,0,0.4481,1],[991,"fizzbuzz","C",1,4696,6,0,0.4526,1],[1000,"palindrome","A",1,3149,4,0,0.4554,1],[1008,"palindrome","B",1,3283,4,0,0.4587,1],[1018,"palindrome","C",1,3114,5,0,0.4618,1],[1031,"roman_to_int","C",1,5309,6,0,0.467,1],[1051,"roman_to_int","A",1,14473,12,1,0.4796,1],[1063,"roman_to_int","B",1,5213,5,0,0.4848,1],[1078,"int_to_roman","B",1,6808,6,0,0.4915,1],[1086,"int_to_roman","A",1,4063,4,0,0.4956,1],[1105,"int_to_roman","C",1,8593,8,1,0.504,1],[1112,"merge_intervals","A",1,3798,4,0,0.5076,1],[1125,"merge_intervals","B",1,5374,5,0,0.513,1],[1145,"merge_intervals","C",1,8371,8,0,0.5214,1],[1187,"two_sum","B",1,27208,13,4,0.5473,1],[1198,"two_sum","A",1,6793,6,1,0.5538,1],[1246,"two_sum","C",1,20480,12,0,0.575,1],[1257,"brackets","C",1,3977,5,0,0.5791,1],[1264,"brackets","A",1,3275,4,0,0.5821,1],[1275,"brackets","B",1,5368,6,0,0.5873,1],[1283,"word_freq","A",1,3381,4,0,0.5904,1],[1298,"word_freq","B",1,5677,5,0,0.5961,1],[1308,"word_freq","C",1,4472,6,0,0.6004,1],[1316,"flatten","A",1,3413,4,0,0.6036,1],[1329,"flatten","C",1,5097,6,0,0.6086,1],[1347,"flatten","B",1,10067,8,1,0.6181,1],[1356,"chunk","C",1,3085,5,0,0.6211,1],[1371,"chunk","B",1,7924,7,1,0.6287,1],[1377,"chunk","A",1,3958,5,0,0.6323,1],[1383,"rle_encode","A",1,3409,4,0,0.6354,1],[1394,"rle_encode","B",1,4685,5,0,0.6401,1],[1405,"rle_encode","C",1,4044,5,0,0.6443,1],[1412,"rle_decode","A",1,3434,4,0,0.6474,1],[1423,"rle_decode","B",1,5117,5,0,0.6526,1],[1437,"rle_decode","C",1,5248,6,0,0.6577,1],[1448,"caesar","C",1,4052,5,0,0.6619,1],[1452,"caesar","A",1,2338,3,0,0.6641,1],[1462,"caesar","B",1,5426,5,0,0.6697,1],[1476,"anagrams","C",1,5678,6,0,0.6753,1],[1483,"anagrams","A",1,3396,4,0,0.6784,1],[1496,"anagrams","B",1,5531,5,0,0.684,1],[1513,"binary_search","C",1,7476,7,0,0.6914,1],[1520,"binary_search","A",1,3540,4,0,0.6947,1],[1532,"binary_search","B",1,5660,5,0,0.7005,1],[1542,"transpose","C",1,3238,5,0,0.7038,1],[1554,"transpose","B",1,5038,5,0,0.7087,1],[1559,"transpose","A",1,3176,4,0,0.7116,1],[1571,"spiral","C",1,5435,6,0,0.717,1],[1580,"spiral","A",1,3950,4,0,0.7209,1],[1593,"spiral","B",1,5895,5,0,0.7271,1],[1604,"common_prefix","C",1,3353,5,0,0.7305,1],[1610,"common_prefix","A",1,3199,4,0,0.7334,1],[1621,"common_prefix","B",1,4556,5,0,0.7378,1],[1663,"parse_duration","C",1,25338,14,4,0.7623,1],[1673,"parse_duration","A",1,5418,5,0,0.7676,1],[1713,"parse_duration","B",1,26354,13,3,0.7925,1],[1721,"lru_cache","A",1,3747,4,0,0.7961,1],[1743,"lru_cache","C",1,6864,5,0,0.8039,1],[1761,"lru_cache","B",1,8028,6,0,0.812,1],[1772,"moving_average","C",1,3653,5,0,0.8157,1],[1789,"moving_average","B",1,5752,5,0,0.8215,1],[1796,"moving_average","A",1,3672,4,0,0.8251,1],[1805,"dedupe","B",1,4622,5,0,0.8296,1],[1813,"dedupe","A",1,3281,4,0,0.8325,1],[1823,"dedupe","C",1,3299,5,0,0.8358,1],[1902,"camel_to_snake","C",1,58178,21,1,0.8902,1],[1933,"camel_to_snake","B",1,28775,13,2,0.9178,1],[1968,"camel_to_snake","A",0,21671,12,3,0.9384,1],[1979,"top_k","B",1,4830,5,0,0.9432,1],[2013,"top_k","C",1,13815,11,0,0.9572,1],[2020,"top_k","A",1,3367,4,0,0.9602,1],[2030,"fizzbuzz","C",1,3616,5,0,0.9638,2],[2043,"fizzbuzz","B",1,4130,4,0,0.9683,2],[2048,"fizzbuzz","A",1,2373,3,0,0.9706,2],[2055,"palindrome","A",1,3527,4,0,0.9737,2],[2138,"palindrome","B",1,3267,4,0,0.977,2],[2149,"palindrome","C",1,4303,6,0,0.9811,2],[2236,"roman_to_int","B",1,5453,5,0,0.9866,2],[2253,"roman_to_int","C",1,9719,9,0,0.9955,2],[2262,"roman_to_int","A",1,3527,4,0,0.9988,2],[2270,"int_to_roman","A",1,4076,4,0,1.003,2],[2290,"int_to_roman","B",1,11411,8,0,1.0138,2],[2303,"int_to_roman","C",1,6704,7,0,1.0203,2],[2317,"merge_intervals","C",1,5954,6,0,1.0263,2],[2324,"merge_intervals","A",1,3810,4,0,1.0299,2],[2339,"merge_intervals","B",1,7983,7,0,1.0374,2],[2369,"two_sum","C",1,11739,6,0,1.0503,2],[2466,"two_sum","B",1,10003,7,1,1.0602,2],[2473,"two_sum","A",1,3462,4,0,1.0634,2],[2486,"brackets","B",1,5409,5,0,1.0689,2],[2497,"brackets","C",1,3955,5,0,1.0731,2],[2504,"brackets","A",1,3277,4,0,1.0761,2],[2590,"word_freq","C",1,4999,6,0,1.081,2],[2672,"word_freq","A",1,3382,4,0,1.0841,2],[2686,"word_freq","B",1,5960,5,0,1.0902,2],[2775,"flatten","C",1,6198,7,0,1.0961,2],[2789,"flatten","B",1,5443,5,0,1.1017,2],[2796,"flatten","A",1,3414,4,0,1.1049,2],[2882,"chunk","C",1,4483,6,0,1.1093,2],[2894,"chunk","B",1,4902,5,0,1.1141,2],[2973,"chunk","A",1,2882,4,0,1.1167,2],[2984,"rle_encode","B",1,4681,5,0,1.1213,2],[2990,"rle_encode","A",1,3409,4,0,1.1245,2],[3000,"rle_encode","C",1,3666,5,0,1.1282,2],[3006,"rle_decode","A",1,3438,4,0,1.1313,2],[3018,"rle_decode","B",1,5290,5,0,1.1367,2],[3032,"rle_decode","C",1,6755,7,0,1.1432,2],[3043,"caesar","B",1,4953,5,0,1.1481,2],[3048,"caesar","A",1,3121,4,0,1.151,2],[3061,"caesar","C",1,5447,6,0,1.1564,2],[3153,"anagrams","C",1,6821,8,0,1.1631,2],[3255,"anagrams","B",1,18783,13,5,1.1802,2],[3261,"anagrams","A",1,3375,4,0,1.1832,2],[3372,"binary_search","C",1,22038,14,1,1.2039,2],[3379,"binary_search","A",1,3539,4,0,1.2072,2],[3400,"binary_search","B",1,10567,8,0,1.2175,2],[3405,"transpose","A",1,3177,4,0,1.2204,2],[3417,"transpose","B",1,4947,5,0,1.2253,2],[3427,"transpose","C",1,4150,6,0,1.2291,2],[3435,"spiral","A",1,3950,4,0,1.233,2],[3448,"spiral","B",1,5341,5,0,1.2385,2],[3462,"spiral","C",1,5549,6,0,1.2442,2],[3468,"common_prefix","A",1,3199,4,0,1.2471,2],[3479,"common_prefix","B",1,4380,5,0,1.2514,2],[3491,"common_prefix","C",1,4757,6,0,1.2561,2],[3531,"parse_duration","C",1,27251,14,1,1.2816,2],[3546,"parse_duration","B",1,7676,6,0,1.2893,2],[3556,"parse_duration","A",1,5333,5,0,1.2944,2],[3580,"lru_cache","C",1,10609,8,1,1.305,2],[3596,"lru_cache","B",1,6294,5,0,1.3116,2],[3605,"lru_cache","A",1,3745,4,0,1.3151,2],[3696,"moving_average","C",1,6350,7,0,1.3212,2],[3709,"moving_average","B",1,5303,5,0,1.3266,2],[3716,"moving_average","A",1,3508,4,0,1.3298,2],[3724,"dedupe","B",1,4569,5,0,1.3343,2],[3734,"dedupe","C",1,3164,5,0,1.3374,2],[3741,"dedupe","A",1,3280,4,0,1.3404,2],[3772,"camel_to_snake","A",1,21600,12,1,1.361,2],[3803,"camel_to_snake","B",1,14586,7,0,1.3758,2],[3930,"camel_to_snake","C",1,28116,17,1,1.4038,2],[3942,"top_k","C",1,4362,6,0,1.4079,2],[3953,"top_k","B",1,4836,5,0,1.4126,2],[3960,"top_k","A",1,3367,4,0,1.4157,2]]; // [t_seconds, task, arm, passed, tokens, llm_calls, rewrites, cumulative_cny, rep]
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const fmt = n => n.toLocaleString('en-US');
+
+/* ---------- Fig. 1: animated flow ---------- */
+const C = { blue: 'var(--blue)', teal: 'var(--teal)', amber: 'var(--amber)', coral: 'var(--coral)', violet: 'var(--violet)', green: 'var(--green)' };
+const SOFT = { blue: 'var(--blue-soft)', teal: 'var(--teal-soft)', amber: 'var(--amber-soft)', coral: 'var(--coral-soft)', violet: 'var(--violet-soft)', green: 'var(--teal-soft)' };
+const zones = [
+  { x: 20, y: 22, w: 1170, h: 128, label: 'ZONE 1 · span sources' },
+  { x: 20, y: 212, w: 1170, h: 292, label: 'ZONE 2 · ingest + storage · server/internal' },
+  { x: 185, y: 556, w: 1005, h: 132, label: 'ZONE 3 · read path' },
+];
+const nodes = [
+  { id: 's1', x: 30, y: 50, w: 250, h: 82, c: 'blue', t: 'Claude Code hooks', code: 'importers/claude_hook.py', d: 'hook JSON on stdin → spans',
+    tip: ['Claude Code hook adapter', ['claude_hook.py', 'PreToolUse', 'SubagentStop'], 'Claude Code runs it on each hook event; it turns the event into spans and posts them to Loupe. Standard library only.'] },
+  { id: 's2', x: 330, y: 50, w: 250, h: 82, c: 'blue', t: 'Python SDK', code: 'sdk/python/loupe_sdk', d: 'context manager, batched export',
+    tip: ['Tracing SDK', ['loupe_sdk', 'OTLP/HTTP JSON'], 'Wraps model and tool calls of a hand-written agent loop and exports them in batches with OpenTelemetry attribute names.'] },
+  { id: 's3', x: 630, y: 50, w: 250, h: 82, c: 'blue', t: 'Any OTel exporter', code: 'POST /v1/traces', d: 'gen_ai.* attributes mapped',
+    tip: ['OTLP/HTTP JSON', ['otlp.Decode', 'mapSpan'], 'Any OpenTelemetry exporter set to JSON can point here; GenAI attributes become model, token and tool fields.'] },
+  { id: 's4', x: 930, y: 50, w: 250, h: 82, c: 'blue', t: 'Transcript importer', code: 'loupe import-claude', d: 'JSONL sessions → agent trees',
+    tip: ['Claude Code transcript importer', ['claudeimport', '48.6 MB/s'], 'Reads session JSONL, pairs tool_use with tool_result, turns sidechains into subagents, and reports every line it cannot parse.'] },
+  { id: 'n1', x: 30, y: 240, w: 250, h: 90, c: 'blue', t: '1. HTTP ingest', code: 'handleNativeIngest', d: 'gzip, 413 body limit, OTLP decode',
+    tip: ['HTTP handlers', ['api/ingest.go', 'handleOTLPIngest', 'submit()'], 'Reads the body with a size limit, decodes native or OTLP JSON and hands the spans to the pipeline. Handlers never wait on SQLite.'] },
+  { id: 'd1', kind: 'diamond', cx: 420, cy: 285, rw: 82, rh: 56, c: 'amber', t: '2. queue full?', code: 'Submit · CAS' ,
+    tip: ['Capacity check', ['Pipeline.Submit', 'queued.CompareAndSwap'], 'Reserves room for the whole request in one compare-and-swap loop, so concurrent handlers can never push the queue past its bound.'] },
+  { id: 'n2', x: 570, y: 240, w: 250, h: 90, c: 'blue', t: '3. Bounded queue', code: 'QueueSpans = 50,000', d: 'counted in spans, not requests',
+    tip: ['Bounded queue', ['ingest/pipeline.go', 'QueueDepth()'], 'The bound is in spans, so one huge request cannot sneak past it. Queue depth and rejections are exported to /metrics.'] },
+  { id: 'n3', x: 900, y: 240, w: 270, h: 90, c: 'blue', t: '4. Batch writer', code: 'run() · 2,000 spans / 50 ms', d: 'one goroutine owns the writes',
+    tip: ['Batching writer', ['run()', 'write(batch)', 'MaxBatch 2,000'], 'Collects queued requests until 2,000 spans or 50 ms, then commits them in one transaction. Batching is what lifts throughput 2.49×.'] },
+  { id: 'r', x: 300, y: 400, w: 240, h: 80, c: 'coral', t: '429 Too Many Requests', code: 'Retry-After: 1', d: 'reject fast, memory stays bounded',
+    tip: ['Backpressure', ['StatusTooManyRequests', 'Retry-After'], 'When the reservation fails the handler answers at once. Under 30× overload memory stayed at 58–62 MB and every accepted span was written.'] },
+  { id: 'n4', x: 900, y: 400, w: 270, h: 90, c: 'green', t: '5. SQLite (WAL)', code: 'InsertSpans · INSERT OR IGNORE', d: 'duplicate span IDs dropped',
+    tip: ['Storage', ['store.InsertSpans', 'traceDelta'], 'One write connection and a read pool. INSERT OR IGNORE makes retries idempotent; per-trace summaries are updated in the same transaction.'] },
+  { id: 'n5', x: 570, y: 400, w: 250, h: 90, c: 'green', t: '6. Live broker', code: 'live.Broker.Publish', d: 'fan-out after commit',
+    tip: ['Live tail', ['Broker.Publish', 'Subscribe(traceID)'], 'Committed spans fan out to SSE subscribers. A slow subscriber drops events and counts them instead of slowing the writer.'] },
+  { id: 'n6', x: 900, y: 580, w: 270, h: 90, c: 'violet', t: '7. Assemble', code: 'assemble.Build', d: 'late and out-of-order spans',
+    tip: ['Trace assembly', ['assemble.Build', 'buildAgents'], 'Builds the span tree and the agent tree at query time. Orphans stay visible until their parent arrives; cycles are broken.'] },
+  { id: 'n7', x: 570, y: 580, w: 250, h: 90, c: 'violet', t: '8. Detectors', code: 'RunDetection → detect.Run', d: 'loop · rework · stuck · budget',
+    tip: ['Failure detectors', ['detectLoop', 'detectRework', 'detectStuck'], 'Run on settled traces. Each finding stores the span IDs that triggered it, so the UI can highlight them in the waterfall.'] },
+  { id: 'n8', x: 200, y: 580, w: 270, h: 90, c: 'violet', t: '9. Web UI', code: 'waterfall · agent tree', d: 'React + TypeScript, no chart library',
+    tip: ['Web UI', ['Sessions', 'Live', 'Findings', 'Insights'], 'Sessions list, trace waterfall, multi-agent tree, live tail, findings and token/cost insights.'] },
+];
+const edges = [
+  { d: 'M155 132 V240', c: 'blue' },
+  { d: 'M455 132 V186 H155', c: 'blue' },
+  { d: 'M755 132 V186 H455', c: 'blue' },
+  { d: 'M1055 132 V186 H755', c: 'blue' },
+  { d: 'M280 285 H338', c: 'blue' },
+  { d: 'M502 285 H570', c: 'blue', label: 'no', lx: 536, ly: 268 },
+  { d: 'M420 341 V400', c: 'coral', label: 'yes', lx: 452, ly: 372 },
+  { d: 'M300 440 H8 V91 H30', c: 'amber', label: '↺ client retries after backoff', lx: 140, ly: 512 },
+  { d: 'M820 285 H900', c: 'blue' },
+  { d: 'M1035 330 V400', c: 'blue', label: 'COMMIT', lx: 1035, ly: 366 },
+  { d: 'M900 445 H820', c: 'green', label: 'onCommit', lx: 860, ly: 428 },
+  { d: 'M695 490 V532 H335 V580', c: 'green', label: 'SSE live tail', lx: 520, ly: 532 },
+  { d: 'M1035 490 V580', c: 'violet', label: 'GET /api/v1/traces/{id}', lx: 1035, ly: 535 },
+  { d: 'M900 625 H820', c: 'violet' },
+  { d: 'M570 625 H470', c: 'violet', label: 'findings', lx: 520, ly: 608 },
+];
+const walk = ['s2', 'n1', 'd1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8'];
+
+function pill(g, x, y, text, c, soft) {
+  const w = text.length * 7.1 + 18;
+  const p = el('g', { class: 'edge-pill' }, g);
+  el('rect', { x: x - w / 2, y: y - 11, width: w, height: 22, rx: 11, fill: soft, stroke: c }, p);
+  const t = el('text', { x, y: y + 4, 'text-anchor': 'middle', fill: c }, p); t.textContent = text;
+}
+function buildFlow() {
+  const svg = document.getElementById('flow');
+  const defs = el('defs', {}, svg);
+  for (const k of Object.keys(C)) {
+    const m = el('marker', { id: 'ar-' + k, viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
+    el('path', { d: 'M0 0 L10 5 L0 10 z', fill: C[k] }, m);
+  }
+  for (const z of zones) {
+    const g = el('g', { class: 'zone' }, svg);
+    el('rect', { x: z.x, y: z.y, width: z.w, height: z.h, rx: 18 }, g);
+    const pw = z.label.length * 7.3 + 22, pg = el('g', { class: 'zone-pill' }, svg);
+    el('rect', { x: z.x + 22, y: z.y - 12, width: pw, height: 24, rx: 12 }, pg);
+    const t = el('text', { x: z.x + 22 + pw / 2, y: z.y + 4, 'text-anchor': 'middle' }, pg); t.textContent = z.label;
+  }
+  const eg = el('g', {}, svg);
+  edges.forEach((e, i) => {
+    const g = el('g', { class: 'edge' }, eg);
+    const last = e.d === 'M155 132 V240' || !e.d.startsWith('M455 132') && !e.d.startsWith('M755 132') && !e.d.startsWith('M1055 132');
+    el('path', { id: 'e' + i, class: 'line', d: e.d, stroke: C[e.c], 'marker-end': last ? `url(#ar-${e.c})` : '' }, g);
+    if (!reduce) {
+      const dot = el('circle', { r: 4.2, fill: C[e.c], stroke: 'var(--card)', 'stroke-width': 1.5 }, g);
+      const am = el('animateMotion', { dur: (2.2 + (i % 4) * 0.35) + 's', repeatCount: 'indefinite', begin: (i * 0.23) + 's' }, dot);
+      el('mpath', { href: '#e' + i }, am);
+    }
+  });
+  const lg = el('g', {}, svg);
+  edges.forEach(e => { if (e.label) pill(lg, e.lx, e.ly, e.label, C[e.c], SOFT[e.c]); });
+  const ng = el('g', {}, svg);
+  for (const n of nodes) {
+    const g = el('g', { class: 'node', id: 'node-' + n.id, tabindex: 0, role: 'button', 'aria-label': n.t }, ng);
+    if (n.kind === 'diamond') {
+      const pts = `${n.cx},${n.cy - n.rh} ${n.cx + n.rw},${n.cy} ${n.cx},${n.cy + n.rh} ${n.cx - n.rw},${n.cy}`;
+      el('polygon', { class: 'halo', points: pts, stroke: C[n.c] }, g);
+      el('polygon', { points: pts, fill: SOFT[n.c], stroke: C[n.c], 'stroke-width': 2 }, g);
+      const t = el('text', { class: 'title', x: n.cx, y: n.cy - 3, 'text-anchor': 'middle' }, g); t.textContent = n.t;
+      const c = el('text', { class: 'code', x: n.cx, y: n.cy + 15, 'text-anchor': 'middle', fill: C[n.c] }, g); c.textContent = n.code;
+    } else {
+      el('rect', { class: 'halo', x: n.x - 3, y: n.y - 3, width: n.w + 6, height: n.h + 6, rx: 15, stroke: C[n.c] }, g);
+      el('rect', { class: 'body', x: n.x, y: n.y, width: n.w, height: n.h, rx: 12 }, g);
+      el('rect', { x: n.x, y: n.y, width: n.w, height: 5, rx: 2.5, fill: C[n.c] }, g);
+      const t = el('text', { class: 'title', x: n.x + 16, y: n.y + 30 }, g); t.textContent = n.t;
+      const c = el('text', { class: 'code', x: n.x + 16, y: n.y + 51, fill: C[n.c] }, g); c.textContent = n.code;
+      if (n.d) { const d = el('text', { class: 'desc', x: n.x + 16, y: n.y + 70 }, g); d.textContent = n.d; }
+    }
+    const show = () => showTip(n);
+    g.addEventListener('mouseenter', show); g.addEventListener('focus', show);
+    g.addEventListener('click', show);
+    g.addEventListener('mouseleave', hideTip); g.addEventListener('blur', hideTip);
+  }
+  if (!reduce) document.getElementById('flowscroll').classList.add('flow-on');
+}
+const tip = document.getElementById('tip');
+function showTip(n) {
+  const [title, chips, text] = n.tip;
+  tip.innerHTML = '';
+  const h = document.createElement('h4'); h.textContent = title; tip.appendChild(h);
+  const cw = document.createElement('div'); cw.className = 'chips';
+  chips.forEach(c => { const s = document.createElement('span'); s.className = 'chip'; s.textContent = c; cw.appendChild(s); });
+  tip.appendChild(cw);
+  const p = document.createElement('div'); p.textContent = text; tip.appendChild(p);
+  const box = document.querySelector('#fig1 .figbox').getBoundingClientRect();
+  const nodeEl = document.getElementById('node-' + n.id).getBoundingClientRect();
+  tip.hidden = false;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let left = nodeEl.left - box.left + nodeEl.width / 2 - tw / 2;
+  left = Math.max(12, Math.min(left, box.width - tw - 12));
+  let top = nodeEl.bottom - box.top + 8;
+  if (top + th > box.height - 8) top = nodeEl.top - box.top - th - 8;
+  tip.style.left = left + 'px'; tip.style.top = Math.max(8, top) + 'px';
+}
+function hideTip() { tip.hidden = true; }
+buildFlow();
+if (!reduce) {
+  let wi = 0;
+  setInterval(() => {
+    document.querySelectorAll('.node.active').forEach(n => n.classList.remove('active'));
+    document.getElementById('node-' + walk[wi]).classList.add('active');
+    wi = (wi + 1) % walk.length;
+  }, 1300);
+}
+
+/* ---------- Fig. 2: experiment replay ---------- */
+const ARMC = { A: 'var(--teal)', B: 'var(--amber)', C: 'var(--violet)' };
+const T_END = 3960, X0 = 56, X1 = 952, TOP0 = 26, TOP1 = 190, BOT0 = 214, BOT1 = 296;
+const sx = t => X0 + (t / T_END) * (X1 - X0);
+const syS = v => TOP1 - (v / 1.6) * (TOP1 - TOP0);
+const syT = v => BOT1 - (v / 60000) * (BOT1 - BOT0);
+const costColor = tok => tok < 6000 ? 'var(--teal)' : tok < 15000 ? 'var(--amber)' : 'var(--coral)';
+const rs = document.getElementById('replay');
+function buildReplayStatic() {
+  // repetition bands
+  for (let rep = 0; rep < 3; rep++) {
+    const rr = RUNS.filter(r => r[8] === rep);
+    const a = rep === 0 ? 0 : RUNS[RUNS.indexOf(rr[0]) - 1][0], b = rr[rr.length - 1][0];
+    if (rep !== 1) el('rect', { x: sx(a), y: TOP0, width: sx(b) - sx(a), height: BOT1 - TOP0, fill: 'var(--band)' }, rs);
+    const t = el('text', { class: 'lbl', x: (sx(a) + sx(b)) / 2, y: TOP0 + 13, 'text-anchor': 'middle' }, rs); t.textContent = 'repetition ' + (rep + 1);
+  }
+  const g = el('g', { class: 'grid axis' }, rs);
+  [0, 0.4, 0.8, 1.2, 1.6].forEach(v => {
+    el('line', { x1: X0, x2: X1, y1: syS(v), y2: syS(v) }, g);
+    const t = el('text', { x: X1 + 8, y: syS(v) + 4 }, g); t.textContent = '¥' + v.toFixed(1);
+  });
+  [0, 30000, 60000].forEach(v => {
+    el('line', { x1: X0, x2: X1, y1: syT(v), y2: syT(v) }, g);
+    const t = el('text', { x: X1 + 8, y: syT(v) + 4 }, g); t.textContent = (v / 1000) + 'k';
+  });
+  for (let m = 0; m <= 60; m += 10) {
+    const t = el('text', { x: sx(m * 60), y: BOT1 + 20, 'text-anchor': 'middle' }, g); t.textContent = m + ' min';
+  }
+  const a1 = el('text', { class: 'lbl', x: X0 - 8, y: TOP0 + 4, 'text-anchor': 'end' }, rs); a1.textContent = 'spend';
+  const a2 = el('text', { class: 'lbl', x: X0 - 8, y: BOT0 + 4, 'text-anchor': 'end' }, rs); a2.textContent = 'tokens';
+  // dry-run estimate threshold
+  el('line', { x1: X0, x2: X1, y1: syS(0.4075), y2: syS(0.4075), stroke: 'var(--teal)', 'stroke-dasharray': '6 5', 'stroke-width': 1.4 }, rs);
+  const th = el('text', { class: 'lbl', x: X0 + 6, y: syS(0.4075) - 6 }, rs); th.textContent = 'dry-run estimate ¥0.41';
+  // events
+}
+const failIdx = RUNS.findIndex(r => !r[3]), crossIdx = RUNS.findIndex(r => r[7] > 0.4075);
+const events = [];
+function addEvent(idx, color, text, y) {
+  const g = el('g', {}), x = sx(RUNS[idx][0]);
+  el('line', { x1: x, x2: x, y1: TOP0, y2: BOT1, stroke: color, 'stroke-width': 1.5 }, g);
+  const t = el('text', { class: 'lbl', x: x + 6, y }, g); t.textContent = text; t.setAttribute('style', 'fill:' + color);
+  events.push([idx, g]); return g;
+}
+const dyn = el('g', {}, rs);
+const segs = [], bars = [];
+let prev = [0, 0];
+RUNS.forEach((r, i) => {
+  const x = sx(r[0]), y = syS(r[7]);
+  const win = RUNS.slice(Math.max(0, i - 5), i + 1), avg = win.reduce((s, w) => s + w[4], 0) / win.length; // rolling mean of 6 runs
+  segs.push(el('line', { x1: sx(prev[0]), y1: syS(prev[1]), x2: x, y2: y, stroke: costColor(avg), 'stroke-width': 3, 'stroke-linecap': 'round' }, dyn));
+  bars.push(el('rect', { x: x - 1.6, width: 3.2, y: syT(r[4]), height: BOT1 - syT(r[4]), fill: ARMC[r[2]], rx: 1 }, dyn));
+  prev = [r[0], r[7]];
+});
+buildReplayStatic();
+rs.appendChild(dyn);
+rs.appendChild(addEvent(crossIdx, 'var(--teal)', 'passes dry-run estimate', TOP0 + 30));
+rs.appendChild(addEvent(failIdx, 'var(--coral)', 'A fails camel_to_snake', TOP0 + 30));
+const head = el('circle', { r: 5, fill: 'var(--blue)', stroke: 'var(--card)', 'stroke-width': 2 }, rs);
+
+const $ = id => document.getElementById(id);
+function render(k) { // show runs 1..k
+  for (let i = 0; i < RUNS.length; i++) { const on = i < k; segs[i].style.display = on ? '' : 'none'; bars[i].style.display = on ? '' : 'none'; }
+  events.forEach(([idx, g]) => g.style.display = idx < k ? '' : 'none');
+  const r = RUNS[k - 1];
+  head.setAttribute('cx', sx(r[0])); head.setAttribute('cy', syS(r[7]));
+  const done = RUNS.slice(0, k);
+  const by = a => done.filter(x => x[2] === a);
+  const pass = a => `${by(a).filter(x => x[3]).length}/${by(a).length}`;
+  const mean = a => { const xs = by(a); return xs.length ? (xs.reduce((s, x) => s + x[4], 0) / xs.length / 1000).toFixed(1) + 'k' : '–'; };
+  $('r-run').textContent = `${k} / 216`;
+  $('r-task').textContent = r[1];
+  $('r-arm').textContent = { A: 'A · single', B: 'B · restate', C: 'C · team' }[r[2]];
+  $('r-arm').style.color = ARMC[r[2]];
+  $('r-res').textContent = r[3] ? 'passed' : 'failed';
+  $('r-res').className = r[3] ? 'c-green' : 'c-coral';
+  $('r-tok').textContent = fmt(r[4]);
+  $('r-spent').textContent = '¥' + r[7].toFixed(4);
+  $('r-pass').textContent = `${pass('A')} · ${pass('B')} · ${pass('C')}`;
+  $('r-mean').textContent = `${mean('A')} · ${mean('B')} · ${mean('C')}`;
+  $('r-rw').textContent = r[6];
+  let note = '';
+  if (!r[3]) note = '\n→ hit the 12-call limit after ' + r[6] + ' rewrites; the only failed run of 216';
+  else if (r[4] > 15000) note = '\n→ expensive run: ' + r[5] + ' model calls';
+  else if (k === 68) note = '\n→ spend passes the dry-run estimate for the whole experiment';
+  $('r-status').textContent = `[${k}/216] ${r[1]} ${r[2]} passed=${r[3] ? 'True' : 'False'} tokens=${r[4]} spent ¥${r[7].toFixed(4)}/4.5${note}`;
+  const mm = Math.floor(r[0] / 60), ss = String(r[0] % 60).padStart(2, '0');
+  $('r-time').textContent = `${mm}:${ss}`;
+  $('r-scrub').value = k;
+}
+render(216);
+let k = 216, timer = null, started = false;
+const STEP_MS = 115;
+function tick() {
+  k = k >= 216 ? 1 : k + 1;
+  render(k);
+  if (k === 216) { stop(); setTimeout(() => { if (!userPaused) play(); }, 2600); }
+}
+let userPaused = false;
+function play() { if (timer) return; timer = setInterval(tick, STEP_MS); $('r-play').textContent = 'Pause'; }
+function stop() { clearInterval(timer); timer = null; $('r-play').textContent = 'Play'; }
+$('r-play').addEventListener('click', () => { if (timer) { userPaused = true; stop(); } else { userPaused = false; if (k >= 216) k = 0; play(); } });
+$('r-scrub').addEventListener('input', e => { userPaused = true; stop(); k = +e.target.value; render(k); });
+if (reduce) { $('r-play').textContent = 'Play'; }
+else {
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (en.isIntersecting && !started) { started = true; k = 0; play(); }
+  }), { threshold: 0.35 });
+  io.observe(document.getElementById('fig2'));
+}
+
+/* ---------- small count-ups and bars ---------- */
+const barIO = new IntersectionObserver(es => es.forEach(en => {
+  if (!en.isIntersecting) return;
+  en.target.querySelectorAll('.fill').forEach(f => f.style.width = (f.dataset.w * 100) + '%');
+  barIO.disconnect();
+}), { threshold: 0.3 });
+document.querySelectorAll('#bars .fill').forEach(f => f.style.width = reduce ? (f.dataset.w * 100) + '%' : '0%');
+if (reduce) document.querySelectorAll('#bars .fill').forEach(f => f.style.width = (f.dataset.w * 100) + '%');
+else barIO.observe(document.getElementById('bars'));
+</script>
+</body></html>
