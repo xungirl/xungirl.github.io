@@ -663,3 +663,5 @@ body:not([data-source="replay"]) .opts-note { display: none; }
 
 .iphone { padding-bottom: 120px; }
 @media (max-width: 833px) { .iphone { padding-bottom: 80px; } }
+
+.hero-slogan { margin: 4px 0 26px; font-size: clamp(20px, 2.4vw, 28px); font-weight: 600; letter-spacing: -.01em; color: #EAF6F6; }
