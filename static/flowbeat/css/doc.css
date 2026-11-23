@@ -1,0 +1,68 @@
+/* Flowbeat text pages (privacy policy, support). Light and dark follow the system. */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+  --bg: #ffffff; --fg: #1d1d1f; --fg-2: #6e6e73; --line: #d2d2d7; --tile: #f5f5f7; --link: #0066cc;
+  --mint: #0FB5AB;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #000000; --fg: #f5f5f7; --fg-2: #a1a1a6; --line: #424245; --tile: #161617; --link: #2997ff; --mint: #19E6D9; }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 var(--font); letter-spacing: -.01em; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.doc-wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+.doc-top { position: sticky; top: 0; z-index: 2; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); border-bottom: 1px solid var(--line); }
+.doc-top .doc-wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; gap: 12px; }
+.doc-top a { color: var(--fg); font-size: 14px; }
+.doc-top > .doc-wrap > a { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 17px; }
+.doc-top img { border-radius: 6px; }
+.doc-top nav { display: flex; gap: 18px; }
+
+main.doc-wrap { padding-top: 40px; padding-bottom: 64px; }
+h1 { font-size: 40px; line-height: 1.1; letter-spacing: -.02em; margin: 0 0 12px; }
+h2 { font-size: 24px; line-height: 1.25; margin: 40px 0 12px; }
+h3 { font-size: 19px; margin: 28px 0 8px; }
+h1 + p em, .lede { color: var(--fg-2); font-style: normal; font-size: 15px; }
+p, ul, ol { margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+strong { font-weight: 600; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 56px 0; }
+code { font: 0.9em ui-monospace, "SF Mono", Menlo, monospace; background: var(--tile); padding: 1px 5px; border-radius: 5px; }
+
+table { width: 100%; border-collapse: collapse; margin: 8px 0 20px; font-size: 14px; line-height: 1.45; display: block; overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-weight: 600; background: var(--tile); }
+
+.card { background: var(--tile); border-radius: 18px; padding: 22px 24px; margin: 20px 0; }
+.card h2 { margin-top: 0; }
+.contact { font-size: 20px; font-weight: 600; }
+details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+details summary { cursor: pointer; font-weight: 600; list-style: none; position: relative; padding-right: 28px; }
+details summary::-webkit-details-marker { display: none; }
+details summary::after { content: "+"; position: absolute; right: 4px; top: -2px; font-size: 22px; font-weight: 400; color: var(--mint); }
+details[open] summary::after { content: "–"; }
+details > :not(summary) { margin-top: 10px; color: var(--fg); }
+
+.doc-foot { border-top: 1px solid var(--line); color: var(--fg-2); font-size: 13px; padding: 24px 0 40px; }
+.doc-foot a { color: var(--fg-2); }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  h1 { font-size: 30px; }
+  .doc-top nav { gap: 12px; }
+}
+
+/* Phones: each table row becomes a card, with the column name above each value. */
+@media (max-width: 640px) {
+  table, tbody, tr, td { display: block; width: 100%; }
+  thead { display: none; }
+  tr { background: var(--tile); border-radius: 14px; padding: 6px 14px; margin-bottom: 12px; }
+  td { border: 0; padding: 6px 0; }
+  td + td { border-top: 1px solid var(--line); }
+  td[data-label]::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 600; color: var(--fg-2); text-transform: uppercase; letter-spacing: .02em; }
+  td:first-child { font-weight: 600; }
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flowbeat Support</title>
+<meta name="description" content="Help and contact for Flowbeat (心流), the focus estimate app for Apple Watch and iPhone.">
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32.png">
+<link rel="apple-touch-icon" href="../img/icon-180.png">
+<link rel="stylesheet" href="../css/doc.css">
+</head>
+<body>
+<header class="doc-top"><div class="doc-wrap"><a href="../"><img src="../img/mark-128.png" alt="" width="24" height="24">Flowbeat</a><nav><a href="#en">English</a><a href="#zh" lang="zh-Hans">中文</a><a href="../privacy/">Privacy</a></nav></div></header>
+<main class="doc-wrap">
+
+<article id="en">
+<h1>Flowbeat Support</h1>
+<p class="lede">Flowbeat shows a live 0–100 focus estimate on your Apple Watch, computed from your heart rate and wrist motion. The iPhone app keeps every session and shows your trends.</p>
+
+<div class="card">
+  <h2>Contact</h2>
+  <p>Questions, bug reports or feedback:</p>
+  <p class="contact"><a href="mailto:xungirl1024@163.com">xungirl1024@163.com</a></p>
+  <p class="lede">Please include your watch model, watchOS version and app version (start screen → ⓘ). I usually reply within a few days.</p>
+</div>
+
+<h2>Requirements</h2>
+<ul>
+  <li>Apple Watch with watchOS 10 or later. The watch app works on its own.</li>
+  <li>iPhone with iOS 17 or later, for history, trends, notes and export.</li>
+</ul>
+
+<h2>Common questions</h2>
+<details><summary>How is the focus score calculated?</summary>
+<p>During the first 60 seconds of a session Flowbeat learns your resting heart rate. After that, every second, it lowers the score when your wrist moves (fidgeting) and when your heart rate rises above that resting level. The score is smoothed so it doesn’t jump around. If you label moments as “Focused” or “Distracted”, the watch can learn a personal adjustment from your own labels.</p></details>
+<details><summary>The score seems wrong. Is something broken?</summary>
+<p>The score is an estimate, not a measurement of attention. Sit still during the 60-second calibration, wear the watch snugly, and give it a few sessions. Labeling moments helps the personal model. Walking pauses scoring instead of counting as distraction.</p></details>
+<details><summary>Start is greyed out / no heart rate.</summary>
+<p>Flowbeat needs permission to read heart rate. On iPhone: Health app → Sharing → Apps → Flowbeat, and turn on Heart Rate and Workouts. On Apple Watch: Settings → Health. Then tap “Check again” on the start screen.</p></details>
+<details><summary>Why does a workout start?</summary>
+<p>A “Mind &amp; Body” workout is the way watchOS lets an app read heart rate every few seconds and keep running while your wrist is down. The workout is discarded when the session ends; it is not saved to Health or Fitness.</p></details>
+<details><summary>My session didn’t show up on the iPhone.</summary>
+<p>Sessions transfer in the background after you tap End. Keep the watch near the iPhone with Bluetooth on and open Flowbeat on the iPhone. Sessions that didn’t arrive are resent automatically later.</p></details>
+<details><summary>Is my heart rate uploaded anywhere?</summary>
+<p>No. Flowbeat has no account and no server. If iCloud is on, sessions sync to your own private iCloud database, with heart rate removed first. See the <a href="../privacy/">privacy policy</a>.</p></details>
+<details><summary>How do I delete my data?</summary>
+<p>Delete a session in the iPhone app to remove it from the iPhone and iCloud. Deleting the app removes its data from that device. You can export everything as CSV or JSON from the iPhone app’s Settings first.</p></details>
+
+<p class="lede"><strong>Flowbeat is not a medical device.</strong> It does not diagnose, treat or monitor any health condition.</p>
+</article>
+
+<hr>
+
+<article id="zh" lang="zh-Hans">
+<h1>心流 · 帮助与支持</h1>
+<p class="lede">心流根据你的心率和手腕动作，在 Apple Watch 上实时显示 0–100 的专注估计。iPhone 端保存每一次专注记录，并显示你的趋势。</p>
+
+<div class="card">
+  <h2>联系方式</h2>
+  <p>问题、bug 反馈或建议：</p>
+  <p class="contact"><a href="mailto:xungirl1024@163.com">xungirl1024@163.com</a></p>
+  <p class="lede">请附上手表型号、watchOS 版本和 app 版本（开始页 → ⓘ）。一般几天内回复。</p>
+</div>
+
+<h2>系统要求</h2>
+<ul>
+  <li>Apple Watch，watchOS 10 或更高版本。手表端可以单独使用。</li>
+  <li>iPhone，iOS 17 或更高版本，用于历史记录、趋势、备注和导出。</li>
+</ul>
+
+<h2>常见问题</h2>
+<details><summary>专注分数是怎么算的？</summary>
+<p>每次专注的前 60 秒，心流会记下你的静息心率。之后每秒钟，手腕在动（小动作）或心率高于静息水平时，分数会降低。分数经过平滑，不会忽高忽低。如果你标记「专注」或「走神」，手表会根据你自己的标记学一个个人修正。</p></details>
+<details><summary>分数看起来不准，是坏了吗？</summary>
+<p>分数是估计，不是对注意力的测量。校准的 60 秒里请保持静止，表带戴紧一点，多用几次。标记得越多，个人模型越贴合你。起身走动时会暂停计分，不算走神。</p></details>
+<details><summary>开始按钮是灰的 / 没有心率</summary>
+<p>心流需要读取心率的权限。iPhone 上：「健康」App → 共享 → App → 心流，打开心率和体能训练。Apple Watch 上：设置 → 健康。然后在开始页点「再检查一次」。</p></details>
+<details><summary>为什么会启动一个体能训练？</summary>
+<p>watchOS 只有在「身心」类体能训练期间，才允许 app 每隔几秒读一次心率，并在你放下手腕后继续运行。专注结束时这次体能训练会被丢弃，不会存进「健康」或「健身」。</p></details>
+<details><summary>专注记录没有出现在 iPhone 上</summary>
+<p>点「结束」后，记录会在后台传到 iPhone。让手表靠近 iPhone、打开蓝牙，并打开 iPhone 上的心流。没传过去的记录之后会自动重传。</p></details>
+<details><summary>我的心率会上传到哪里吗？</summary>
+<p>不会。心流没有账号，也没有服务器。如果打开了 iCloud，记录会同步到你自己的 iCloud 私有数据库，同步前已去掉心率。详见<a href="../privacy/#zh">隐私政策</a>。</p></details>
+<details><summary>怎么删除我的数据？</summary>
+<p>在 iPhone app 里删除一条记录，会同时从 iPhone 和 iCloud 删除。删除 app 会删除该设备上的数据。删除前可以在 iPhone app 的设置里把全部记录导出为 CSV 或 JSON。</p></details>
+
+<p class="lede"><strong>心流不是医疗设备。</strong>它不做任何诊断、治疗，也不监测任何健康状况。</p>
+</article>
+
+</main>
+<footer class="doc-foot"><div class="doc-wrap"><a href="../">Flowbeat</a> · <a href="../privacy/">Privacy</a> · <a href="https://github.com/xungirl/Flowbeat">GitHub</a> · Not a medical device.</div></footer>
+</body>
+</html>
