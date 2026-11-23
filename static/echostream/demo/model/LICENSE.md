@@ -10,4 +10,6 @@ few anonymous KuaiRec users (by their dataset id), and models trained on the dat
 KuaiRec is © its authors and licensed under **CC BY-SA 4.0**
 (https://creativecommons.org/licenses/by-sa/4.0/). This derived data is shared under the same license,
 CC BY-SA 4.0. Changes: captions truncated to 80 characters; numbers quantized as described in
-manifest.json; English category names hand-written by the echostream author.
+manifest.json; English category names hand-written by the echostream author;
+titles_en.json (added by scripts/translate_titles.py, not by the exporter) holds English machine
+translations of the captions, made with Qwen (qwen3.8-flash), shared under the same license.
